@@ -330,7 +330,6 @@
           <div style="margin-bottom: 4px;">
             <img src="./ALLCON-Logo.jpg" alt="ALLCON Logo" style="height: 44px; width: auto; max-width: 260px; object-fit: contain;" onerror="this.onerror=null; this.outerHTML='<div class=\'print-header-banner\' style=\'font-weight: 900; font-size: 20pt; padding: 4px 12px; display: inline-block; letter-spacing: 2px;\'>ALLCON</div>';">
           </div>
-          <div style="font-size: 8pt; color: #334155; text-transform: uppercase; font-weight: bold; margin-top: 2px;">FABRICATION & ENGINEERING (PTY) LTD.</div>
           <div style="font-size: 8.5pt; color: #000000; text-transform: uppercase; font-weight: bold; margin-top: 6px;">PROJECT TRANSMITTAL</div>
         </td>
         <td style="vertical-align: top; text-align: right; width: 40%;">
@@ -382,7 +381,6 @@
     </table>
 
     <!-- LINKED AC SCHEDULE -->
-    <div style="font-size: 9pt; font-weight: bold; margin-bottom: 4px; color: #000000; text-transform: uppercase;">JOB IDs &amp; LINKED AC DRAWING SCHEDULE</div>
     <div id="print-job-groups-container" style="margin-bottom: 12px;"></div>
 
   </div>
@@ -606,6 +604,10 @@
               <p class="text-xs text-red-600 dark:text-red-400 font-medium">${st.jobTitle}</p>
             </div>
           </div>
+          <div class="grid grid-cols-1 gap-1 text-xs text-zinc-600 dark:text-zinc-300 bg-zinc-50 dark:bg-zinc-800/50 p-2.5 rounded-lg border border-zinc-200 dark:border-zinc-700/50">
+            ${st.phone ? `<div><strong>Phone:</strong> <a href="tel:${st.phone}" class="text-red-600 hover:underline">${st.phone}</a></div>` : ''}
+            ${st.email ? `<div><strong>Email:</strong> <a href="mailto:${st.email}" class="text-red-600 hover:underline">${st.email}</a></div>` : ''}
+          </div>
         </div>
       `).join('');
     }
@@ -775,7 +777,7 @@
                 <tbody>${acRows || '<tr><td colspan="2">&nbsp;</td></tr>'}</tbody>
               </table>
 
-              <!-- SEPARATION GAP BETWEEN AC TABLE AND MATERIAL/SUPPLIER TABLE AS REQUESTED -->
+              <!-- SEPARATION GAP BETWEEN AC TABLE AND MATERIAL/SUPPLIER TABLE -->
               <div style="height: 10px; font-size: 0; line-height: 0;">&nbsp;</div>
 
               <table style="width: 100%; table-layout: fixed; margin-top: 0 !important;">
