@@ -28,7 +28,7 @@
       border-color: #3f3f46 !important;
     }
 
-    /* Form Text Inputs: Lighter grey than the frame background */
+    /* Form Text Inputs */
     html.dark input, 
     html.dark textarea, 
     html.dark select {
@@ -64,43 +64,59 @@
         margin: 10mm;
       }
 
-      body {
+      /* STRICT WHITE BACKGROUND OVERRIDE FOR PRINTING */
+      html, body {
         background-color: #ffffff !important;
         color: #000000 !important;
         margin: 0 !important;
         padding: 0 !important;
       }
 
-      /* Hide web portal UI */
+      /* Hide web portal UI completely */
       header, main, nav, button, .builder-frame {
         display: none !important;
       }
 
       /* Display print template exclusively */
+      #print-template, #print-template * {
+        display: block;
+        background-color: transparent !important;
+        color: #000000 !important;
+      }
+
       #print-template {
         display: block !important;
         width: 100% !important;
         font-family: Arial, sans-serif !important;
-        font-size: 10pt;
-        color: #000000 !important;
+        font-size: 9pt;
       }
 
-      /* Table Print Formatting */
-      table {
+      .print-header-banner {
+        background-color: #dc2626 !important;
+        color: #ffffff !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+
+      .print-table-header {
+        background-color: #f1f5f9 !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+
+      /* Table Print Layout */
+      #print-template table {
+        display: table !important;
         width: 100% !important;
         border-collapse: collapse !important;
         table-layout: fixed !important;
       }
 
-      th, td {
+      #print-template tr { display: table-row !important; }
+      #print-template th, #print-template td { 
+        display: table-cell !important;
         word-wrap: break-word;
         overflow-wrap: break-word;
-      }
-
-      /* Force background color/image graphics printing */
-      * {
-        -webkit-print-color-adjust: exact !important;
-        print-color-adjust: exact !important;
       }
     }
   </style>
@@ -112,7 +128,6 @@
     <div class="max-w-7xl mx-auto px-4 py-3 flex flex-col sm:flex-row justify-between items-center gap-4">
       
       <div class="flex items-center gap-4">
-        <!-- ALLCON Logo Image Container -->
         <div class="bg-white p-1 rounded flex items-center justify-center h-12 min-w-[120px]">
           <img src="./ALLCON-Logo.jpg" alt="ALLCON Logo" class="h-10 w-auto object-contain" onerror="this.onerror=null; this.outerHTML='<div class=\'bg-red-600 text-white font-black px-3 py-1 rounded text-xl tracking-wider\'>ALLCON</div>';">
         </div>
@@ -122,7 +137,6 @@
       </div>
       
       <div class="flex items-center gap-5">
-        <!-- Theme Switcher -->
         <div class="flex items-center gap-2 bg-zinc-900 p-1.5 rounded-full border border-zinc-700">
           <span class="text-[10px] font-bold px-1 text-zinc-400 dark:text-zinc-500">LIGHT</span>
           <button id="theme-toggle" onclick="toggleDarkMode()" class="w-12 h-6 bg-zinc-600 dark:bg-red-600 rounded-full p-1 transition-colors duration-200 focus:outline-none flex items-center">
@@ -131,7 +145,6 @@
           <span class="text-[10px] font-bold px-1 text-zinc-500 dark:text-red-500">DARK</span>
         </div>
 
-        <!-- Navigation Tabs -->
         <nav class="flex bg-zinc-900 p-1 rounded-lg border border-zinc-800 text-xs font-semibold">
           <button id="tab-suppliers" onclick="switchTab('suppliers')" class="px-3 py-1.5 rounded-md text-zinc-400 hover:text-white">Suppliers</button>
           <button id="tab-generator" onclick="switchTab('generator')" class="px-3 py-1.5 rounded-md bg-red-600 text-white">Info Sheet Builder</button>
@@ -144,10 +157,18 @@
   <!-- MAIN APPLICATION CONTAINER -->
   <main class="max-w-7xl mx-auto px-4 py-6 flex-grow w-full">
 
-    <!-- VIEW 1: SUPPLIERS -->
+    <!-- VIEW 1: SUPPLIERS DIRECTORY -->
     <section id="view-suppliers" class="hidden">
-      <div class="bg-white dark:bg-zinc-900 p-4 rounded-xl border border-zinc-300 dark:border-zinc-800 mb-6">
-        <input type="text" placeholder="Search suppliers..." class="w-full p-2.5 rounded-lg text-sm">
+      <div class="bg-white dark:bg-zinc-900 p-4 rounded-xl border border-zinc-300 dark:border-zinc-800 mb-6 flex flex-col md:flex-row justify-between items-center gap-4">
+        <div class="w-full md:w-1/2 relative">
+          <i class="fa-solid fa-magnifying-glass absolute left-3 top-3 text-zinc-400"></i>
+          <input type="text" id="supplier-search" onkeyup="renderSuppliers()" placeholder="Search suppliers by name, category, services, or contact person..." class="w-full pl-9 pr-4 py-2 rounded-lg text-sm border border-zinc-300 dark:border-zinc-700">
+        </div>
+        <div class="text-xs text-zinc-500 font-semibold" id="supplier-count">Showing 0 Suppliers</div>
+      </div>
+
+      <div id="suppliers-list-container" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <!-- Supplier cards dynamically inserted here -->
       </div>
     </section>
 
@@ -225,6 +246,45 @@
           </div>
         </div>
 
+        <!-- SUPPLIER ALLOCATION SECTION -->
+        <div class="builder-section p-4 rounded-xl border border-zinc-300 dark:border-zinc-700 mb-6 bg-zinc-100 dark:bg-zinc-900">
+          <h3 class="text-xs font-bold uppercase mb-3 text-red-600 dark:text-red-400"><i class="fa-solid fa-truck-field mr-2"></i>Allocated Suppliers</h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+            <div>
+              <label class="block font-semibold mb-1 text-zinc-700 dark:text-zinc-300">1. Material (Plates)</label>
+              <input type="text" id="supp-1" placeholder="Enter Supplier Name" class="w-full p-2 rounded-lg">
+            </div>
+            <div>
+              <label class="block font-semibold mb-1 text-zinc-700 dark:text-zinc-300">2. Material (Structural)</label>
+              <input type="text" id="supp-2" placeholder="Enter Supplier Name" class="w-full p-2 rounded-lg">
+            </div>
+            <div>
+              <label class="block font-semibold mb-1 text-zinc-700 dark:text-zinc-300">3. Laser Cutting & Bending</label>
+              <input type="text" id="supp-3" placeholder="Enter Supplier Name" class="w-full p-2 rounded-lg">
+            </div>
+            <div>
+              <label class="block font-semibold mb-1 text-zinc-700 dark:text-zinc-300">4. Machining / Turning</label>
+              <input type="text" id="supp-4" placeholder="Enter Supplier Name" class="w-full p-2 rounded-lg">
+            </div>
+            <div>
+              <label class="block font-semibold mb-1 text-zinc-700 dark:text-zinc-300">5. Fasteners & Hardware</label>
+              <input type="text" id="supp-5" placeholder="Enter Supplier Name" class="w-full p-2 rounded-lg">
+            </div>
+            <div>
+              <label class="block font-semibold mb-1 text-zinc-700 dark:text-zinc-300">6. Surface Coating / HDG</label>
+              <input type="text" id="supp-6" placeholder="Enter Supplier Name" class="w-full p-2 rounded-lg">
+            </div>
+            <div>
+              <label class="block font-semibold mb-1 text-zinc-700 dark:text-zinc-300">7. Freight / Transport</label>
+              <input type="text" id="supp-7" placeholder="Enter Supplier Name" class="w-full p-2 rounded-lg">
+            </div>
+            <div>
+              <label class="block font-semibold mb-1 text-zinc-700 dark:text-zinc-300">8. Miscellaneous</label>
+              <input type="text" id="supp-8" placeholder="Enter Supplier Name" class="w-full p-2 rounded-lg">
+            </div>
+          </div>
+        </div>
+
         <div class="flex justify-end">
           <button onclick="triggerPrintPDF()" class="bg-red-600 hover:bg-red-700 text-white font-bold px-6 py-3 rounded-lg text-sm flex items-center gap-2 shadow-md transition">
             <i class="fa-solid fa-print"></i> Generate / Print Official PDF Transmittal Sheet
@@ -233,82 +293,90 @@
       </div>
     </section>
 
-    <!-- VIEW 3: STAFF -->
+    <!-- VIEW 3: STAFF DIRECTORY -->
     <section id="view-staff" class="hidden">
-      <div class="bg-white dark:bg-zinc-900 rounded-xl p-4">
-        <p class="text-sm">Staff Directory Desk</p>
+      <div class="bg-white dark:bg-zinc-900 p-4 rounded-xl border border-zinc-300 dark:border-zinc-800 mb-6 flex flex-col md:flex-row justify-between items-center gap-4">
+        <div class="w-full md:w-1/2 relative">
+          <i class="fa-solid fa-magnifying-glass absolute left-3 top-3 text-zinc-400"></i>
+          <input type="text" id="staff-search" onkeyup="renderStaff()" placeholder="Search staff by name, surname, job title, phone, or email..." class="w-full pl-9 pr-4 py-2 rounded-lg text-sm border border-zinc-300 dark:border-zinc-700">
+        </div>
+        <div class="text-xs text-zinc-500 font-semibold" id="staff-count">Showing 0 Staff Members</div>
+      </div>
+
+      <div id="staff-list-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <!-- Staff cards dynamically inserted here -->
       </div>
     </section>
 
   </main>
 
-  <!-- NATIVE PRINT / PDF TEMPLATE -->
+  <!-- PRINT TEMPLATE -->
   <div id="print-template">
     
-    <!-- HEADER WITH ACTUAL ALLCON LOGO JPG -->
-    <table style="width: 100%; border-bottom: 2px solid #dc2626; padding-bottom: 10px; margin-bottom: 15px;">
+    <!-- HEADER -->
+    <table style="width: 100%; border-bottom: 2px solid #dc2626; padding-bottom: 8px; margin-bottom: 12px;">
       <tr>
         <td style="vertical-align: top; width: 60%;">
           <div style="margin-bottom: 4px;">
-            <img src="./ALLCON-Logo.jpg" alt="ALLCON Logo" style="height: 48px; width: auto; max-width: 260px; object-fit: contain;" onerror="this.onerror=null; this.outerHTML='<div style=\'background-color: #dc2626; color: #ffffff; font-weight: 900; font-size: 22pt; padding: 4px 12px; display: inline-block; letter-spacing: 2px;\'>ALLCON</div>';">
+            <img src="./ALLCON-Logo.jpg" alt="ALLCON Logo" style="height: 44px; width: auto; max-width: 260px; object-fit: contain;" onerror="this.onerror=null; this.outerHTML='<div class=\'print-header-banner\' style=\'font-weight: 900; font-size: 20pt; padding: 4px 12px; display: inline-block; letter-spacing: 2px;\'>ALLCON</div>';">
           </div>
-          <div style="font-size: 8pt; font-weight: bold; color: #000000; text-transform: uppercase; margin-top: 4px;">FABRICATION &amp; ENGINEERING (PTY) LTD.</div>
-          <div style="font-size: 8.5pt; color: #4b5563; text-transform: uppercase; font-weight: bold; margin-top: 2px;">Project Info Sheet Transmittal</div>
+          <div style="font-size: 8pt; font-weight: bold; color: #000000; text-transform: uppercase; margin-top: 2px;">FABRICATION &amp; ENGINEERING (PTY) LTD.</div>
+          <div style="font-size: 8.5pt; color: #334155; text-transform: uppercase; font-weight: bold; margin-top: 2px;">PROJECT INFO SHEET TRANSMITTAL</div>
         </td>
         <td style="vertical-align: top; text-align: right; width: 40%;">
-          <div style="font-size: 10pt; font-weight: bold; color: #000000; margin-bottom: 8px;">
-            PO Number: <span id="print-out-po" style="border-bottom: 1.5px solid #000000; padding-bottom: 2px; min-width: 150px; display: inline-block; text-align: left; padding-left: 6px;"></span>
+          <div style="font-size: 10pt; font-weight: bold; color: #000000; margin-bottom: 6px;">
+            PO Number: <span id="print-out-po" style="border-bottom: 1.5px solid #000000; padding-bottom: 2px; min-width: 140px; display: inline-block; text-align: left; padding-left: 6px;"></span>
           </div>
-          <div style="font-size: 8.5pt; color: #4b5563;" id="print-out-gen-date"></div>
+          <div style="font-size: 8.5pt; color: #334155;" id="print-out-gen-date"></div>
         </td>
       </tr>
     </table>
 
     <!-- METADATA TABLE -->
-    <table style="width: 100%; border-collapse: collapse; margin-bottom: 15px; font-size: 8.5pt; border: 1px solid #94a3b8;">
-      <tr style="background-color: #f1f5f9;">
-        <td style="padding: 6px 8px; font-weight: bold; width: 20%; border: 1px solid #94a3b8;">CLIENT:</td>
-        <td style="padding: 6px 8px; width: 30%; border: 1px solid #94a3b8;" id="print-out-client">N/A</td>
-        <td style="padding: 6px 8px; font-weight: bold; width: 22%; border: 1px solid #94a3b8;">TARGET COMPLETION:</td>
-        <td style="padding: 6px 8px; width: 28%; font-weight: bold; color: #dc2626; border: 1px solid #94a3b8;" id="print-out-comp-date">N/A</td>
+    <table style="width: 100%; border-collapse: collapse; margin-bottom: 12px; font-size: 8.5pt; border: 1px solid #64748b;">
+      <tr class="print-table-header">
+        <td style="padding: 5px 8px; font-weight: bold; width: 20%; border: 1px solid #64748b;">CLIENT:</td>
+        <td style="padding: 5px 8px; width: 30%; border: 1px solid #64748b;" id="print-out-client">N/A</td>
+        <td style="padding: 5px 8px; font-weight: bold; width: 22%; border: 1px solid #64748b;">TARGET COMPLETION:</td>
+        <td style="padding: 5px 8px; width: 28%; font-weight: bold; color: #dc2626; border: 1px solid #64748b;" id="print-out-comp-date">N/A</td>
       </tr>
       <tr>
-        <td style="padding: 6px 8px; font-weight: bold; border: 1px solid #94a3b8; background-color: #f1f5f9;">PROJECT NAME:</td>
-        <td style="padding: 6px 8px; border: 1px solid #94a3b8;" id="print-out-project">N/A</td>
-        <td style="padding: 6px 8px; font-weight: bold; border: 1px solid #94a3b8; background-color: #f1f5f9;">TECHNICAL BUYER:</td>
-        <td style="padding: 6px 8px; border: 1px solid #94a3b8;" id="print-out-buyer">N/A</td>
+        <td style="padding: 5px 8px; font-weight: bold; border: 1px solid #64748b;" class="print-table-header">PROJECT NAME:</td>
+        <td style="padding: 5px 8px; border: 1px solid #64748b;" id="print-out-project">N/A</td>
+        <td style="padding: 5px 8px; font-weight: bold; border: 1px solid #64748b;" class="print-table-header">TECHNICAL BUYER:</td>
+        <td style="padding: 5px 8px; border: 1px solid #64748b;" id="print-out-buyer">N/A</td>
       </tr>
     </table>
 
     <!-- INCLUSIONS & EXCLUSIONS -->
-    <div style="font-size: 8.5pt; margin-bottom: 15px; background-color: #f8fafc; padding: 8px 10px; border: 1px solid #94a3b8; border-radius: 4px;">
+    <div style="font-size: 8.5pt; margin-bottom: 12px; padding: 6px 8px; border: 1px solid #64748b;">
       <div style="margin-bottom: 4px;"><strong>Inclusions:</strong> <span id="print-out-inclusions">None specified</span></div>
       <div><strong>Exclusions:</strong> <span id="print-out-exclusions">None specified</span></div>
     </div>
 
     <!-- LINKED AC SCHEDULE -->
-    <div style="font-size: 9pt; font-weight: bold; margin-bottom: 6px; color: #000000;">JOB IDs &amp; LINKED AC DRAWING SCHEDULE</div>
-    <div id="print-job-groups-container" style="margin-bottom: 15px;"></div>
+    <div style="font-size: 9pt; font-weight: bold; margin-bottom: 4px; color: #000000;">JOB IDs &amp; LINKED AC DRAWING SCHEDULE</div>
+    <div id="print-job-groups-container" style="margin-bottom: 12px;"></div>
 
     <!-- PO REGISTER TABLE -->
-    <div style="font-size: 9pt; font-weight: bold; margin-bottom: 6px; color: #000000;">PURCHASE ORDER ALLOCATION REGISTER</div>
-    <table style="width: 100%; border-collapse: collapse; font-size: 8pt; border: 1px solid #94a3b8;">
+    <div style="font-size: 9pt; font-weight: bold; margin-bottom: 4px; color: #000000;">PURCHASE ORDER ALLOCATION REGISTER</div>
+    <table style="width: 100%; border-collapse: collapse; font-size: 8pt; border: 1px solid #64748b;">
       <thead>
-        <tr style="background-color: #f1f5f9;">
-          <th style="padding: 6px; border: 1px solid #94a3b8; text-align: left; width: 35%;">Category</th>
-          <th style="padding: 6px; border: 1px solid #94a3b8; text-align: left; width: 35%;">Allocated Supplier Name</th>
-          <th style="padding: 6px; border: 1px solid #94a3b8; text-align: left; width: 30%;">Purchase Order No. (PO)</th>
+        <tr class="print-table-header">
+          <th style="padding: 5px; border: 1px solid #64748b; text-align: left; width: 35%;">Category</th>
+          <th style="padding: 5px; border: 1px solid #64748b; text-align: left; width: 35%;">Allocated Supplier Name</th>
+          <th style="padding: 5px; border: 1px solid #64748b; text-align: left; width: 30%;">Purchase Order No. (PO)</th>
         </tr>
       </thead>
       <tbody>
-        <tr><td style="padding: 6px; border: 1px solid #94a3b8; font-weight: bold;">1. Material (Plates)</td><td style="border: 1px solid #94a3b8;"></td><td style="padding: 6px; border: 1px solid #94a3b8; color: #64748b;">PO-</td></tr>
-        <tr><td style="padding: 6px; border: 1px solid #94a3b8; font-weight: bold;">2. Material (Structural)</td><td style="border: 1px solid #94a3b8;"></td><td style="padding: 6px; border: 1px solid #94a3b8; color: #64748b;">PO-</td></tr>
-        <tr><td style="padding: 6px; border: 1px solid #94a3b8; font-weight: bold;">3. Laser Cutting &amp; Bending</td><td style="border: 1px solid #94a3b8;"></td><td style="padding: 6px; border: 1px solid #94a3b8; color: #64748b;">PO-</td></tr>
-        <tr><td style="padding: 6px; border: 1px solid #94a3b8; font-weight: bold;">4. Machining / Turning</td><td style="border: 1px solid #94a3b8;"></td><td style="padding: 6px; border: 1px solid #94a3b8; color: #64748b;">PO-</td></tr>
-        <tr><td style="padding: 6px; border: 1px solid #94a3b8; font-weight: bold;">5. Fasteners &amp; Hardware</td><td style="border: 1px solid #94a3b8;"></td><td style="padding: 6px; border: 1px solid #94a3b8; color: #64748b;">PO-</td></tr>
-        <tr><td style="padding: 6px; border: 1px solid #94a3b8; font-weight: bold;">6. Surface Coating / HDG</td><td style="border: 1px solid #94a3b8;"></td><td style="padding: 6px; border: 1px solid #94a3b8; color: #64748b;">PO-</td></tr>
-        <tr><td style="padding: 6px; border: 1px solid #94a3b8; font-weight: bold;">7. Freight / Transport</td><td style="border: 1px solid #94a3b8;"></td><td style="padding: 6px; border: 1px solid #94a3b8; color: #64748b;">PO-</td></tr>
-        <tr><td style="padding: 6px; border: 1px solid #94a3b8; font-weight: bold;">8. Miscellaneous</td><td style="border: 1px solid #94a3b8;"></td><td style="padding: 6px; border: 1px solid #94a3b8; color: #64748b;">PO-</td></tr>
+        <tr><td style="padding: 5px; border: 1px solid #64748b; font-weight: bold;">1. Material (Plates)</td><td style="padding: 5px; border: 1px solid #64748b;" id="print-supp-1"></td><td style="padding: 5px; border: 1px solid #64748b; color: #64748b;">PO-</td></tr>
+        <tr><td style="padding: 5px; border: 1px solid #64748b; font-weight: bold;">2. Material (Structural)</td><td style="padding: 5px; border: 1px solid #64748b;" id="print-supp-2"></td><td style="padding: 5px; border: 1px solid #64748b; color: #64748b;">PO-</td></tr>
+        <tr><td style="padding: 5px; border: 1px solid #64748b; font-weight: bold;">3. Laser Cutting &amp; Bending</td><td style="padding: 5px; border: 1px solid #64748b;" id="print-supp-3"></td><td style="padding: 5px; border: 1px solid #64748b; color: #64748b;">PO-</td></tr>
+        <tr><td style="padding: 5px; border: 1px solid #64748b; font-weight: bold;">4. Machining / Turning</td><td style="padding: 5px; border: 1px solid #64748b;" id="print-supp-4"></td><td style="padding: 5px; border: 1px solid #64748b; color: #64748b;">PO-</td></tr>
+        <tr><td style="padding: 5px; border: 1px solid #64748b; font-weight: bold;">5. Fasteners &amp; Hardware</td><td style="padding: 5px; border: 1px solid #64748b;" id="print-supp-5"></td><td style="padding: 5px; border: 1px solid #64748b; color: #64748b;">PO-</td></tr>
+        <tr><td style="padding: 5px; border: 1px solid #64748b; font-weight: bold;">6. Surface Coating / HDG</td><td style="padding: 5px; border: 1px solid #64748b;" id="print-supp-6"></td><td style="padding: 5px; border: 1px solid #64748b; color: #64748b;">PO-</td></tr>
+        <tr><td style="padding: 5px; border: 1px solid #64748b; font-weight: bold;">7. Freight / Transport</td><td style="padding: 5px; border: 1px solid #64748b;" id="print-supp-7"></td><td style="padding: 5px; border: 1px solid #64748b; color: #64748b;">PO-</td></tr>
+        <tr><td style="padding: 5px; border: 1px solid #64748b; font-weight: bold;">8. Miscellaneous</td><td style="padding: 5px; border: 1px solid #64748b;" id="print-supp-8"></td><td style="padding: 5px; border: 1px solid #64748b; color: #64748b;">PO-</td></tr>
       </tbody>
     </table>
   </div>
@@ -316,10 +384,151 @@
   <script>
     let jobDataMap = {};
 
+    // SAMPLE SUPPLIER REGISTRY DATA
+    const sampleSuppliers = [
+      {
+        status: "APPROVED",
+        supplierName: "Vaal Laser & Profile Works",
+        category: "Laser Cutting & Bending",
+        pocName: "Johan Coetzee",
+        pocEmail: "johan@vaallaser.co.za",
+        pocPhone: "+27 16 931 2000",
+        servicesOffered: "Fiber laser cutting (up to 25mm steel), CNC plate bending, beveling.",
+        logistics: "Delivery included (Vaal Triangle & Gauteng)",
+        paymentTerms: "30 Days Account",
+        standardEta: "3 - 5 Working Days",
+        address: "14 Platinum Street, Vanderbijlpark, 1900",
+        notes: "Preferred supplier for heavy structural gussets and base plates."
+      },
+      {
+        status: "APPROVED",
+        supplierName: "Macsteel Industrial Supplies",
+        category: "Material (Plates & Structural)",
+        pocName: "Sarah Jenkins",
+        pocEmail: "sjenkins@macsteel.co.za",
+        pocPhone: "+27 11 871 0000",
+        servicesOffered: "S355JR Plate, I-Beams, Channels, Equal Angels, Hollow Sections.",
+        logistics: "Ex-Works / Delivery via Macsteel Fleet",
+        paymentTerms: "60 Days Account",
+        standardEta: "2 Working Days",
+        address: "55 Steel Road, Roodekop, Germiston",
+        notes: "Mill test certificates required on all orders."
+      },
+      {
+        status: "PENDING REVIEW",
+        supplierName: "Apex Galvanizers (Pty) Ltd",
+        category: "Surface Coating / HDG",
+        pocName: "David Naidoo",
+        pocEmail: "david@apexgalv.co.za",
+        pocPhone: "+27 11 902 4411",
+        servicesOffered: "Hot Dip Galvanizing SANS 121 / ISO 1461, Sandblasting, Duplex Coating.",
+        logistics: "Supplier Collection & Dropoff Available",
+        paymentTerms: "COD / 30 Days",
+        standardEta: "4 - 7 Working Days",
+        address: "8 Industry Road, Alrode, Alberton",
+        notes: "Check bath size dimensions for oversize structures (>12m)."
+      }
+    ];
+
+    // SAMPLE STAFF REGISTRY DATA
+    const sampleStaff = [
+      { name: "Hendrik", surname: "Venter", jobTitle: "Senior Fabrication Engineer", phone: "+27 82 455 1010", email: "hventer@allcon.co.za" },
+      { name: "Liezel", surname: "Marais", jobTitle: "Technical Buyer & Procurement", phone: "+27 83 912 3044", email: "lmarais@allcon.co.za" },
+      { name: "Kobus", surname: "De Wet", jobTitle: "Workshop Manager", phone: "+27 79 112 8890", email: "kdewet@allcon.co.za" },
+      { name: "Thabo", surname: "Mokoena", jobTitle: "QC & NDT Inspector", phone: "+27 71 884 5521", email: "tmokoena@allcon.co.za" }
+    ];
+
     document.addEventListener("DOMContentLoaded", () => {
       document.getElementById('meta-date-gen').valueAsDate = new Date();
+      renderSuppliers();
+      renderStaff();
     });
 
+    // RENDER SUPPLIERS
+    function renderSuppliers() {
+      const query = (document.getElementById('supplier-search')?.value || '').toLowerCase();
+      const container = document.getElementById('suppliers-list-container');
+      
+      const filtered = sampleSuppliers.filter(s => 
+        s.supplierName.toLowerCase().includes(query) ||
+        s.category.toLowerCase().includes(query) ||
+        s.pocName.toLowerCase().includes(query) ||
+        s.servicesOffered.toLowerCase().includes(query)
+      );
+
+      document.getElementById('supplier-count').innerText = `Showing ${filtered.length} Suppliers`;
+
+      if (filtered.length === 0) {
+        container.innerHTML = `<div class="col-span-2 text-center p-8 text-zinc-500">No suppliers found matching your query.</div>`;
+        return;
+      }
+
+      container.innerHTML = filtered.map(s => `
+        <div class="bg-white dark:bg-zinc-900 border border-zinc-300 dark:border-zinc-800 rounded-xl p-5 shadow-sm hover:shadow-md transition">
+          <div class="flex justify-between items-start mb-3">
+            <div>
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded text-white ${s.status === 'APPROVED' ? 'bg-emerald-600' : 'bg-amber-600'}">${s.status}</span>
+              <h3 class="text-base font-bold mt-1 text-zinc-900 dark:text-zinc-100">${s.supplierName}</h3>
+              <p class="text-xs text-red-600 dark:text-red-400 font-semibold">${s.category}</p>
+            </div>
+          </div>
+          
+          <div class="grid grid-cols-1 gap-1.5 text-xs text-zinc-600 dark:text-zinc-300 my-3 bg-zinc-50 dark:bg-zinc-800/50 p-3 rounded-lg border border-zinc-200 dark:border-zinc-700/50">
+            <div><strong>POC Name:</strong> ${s.pocName}</div>
+            <div><strong>POC Email:</strong> <a href="mailto:${s.pocEmail}" class="text-red-600 hover:underline">${s.pocEmail}</a></div>
+            <div><strong>POC Phone:</strong> <a href="tel:${s.pocPhone}" class="text-red-600 hover:underline">${s.pocPhone}</a></div>
+            <div><strong>Services Offered:</strong> ${s.servicesOffered}</div>
+            <div><strong>Logistics:</strong> ${s.logistics}</div>
+            <div><strong>Payment Terms:</strong> ${s.paymentTerms} | <strong>Standard ETA:</strong> ${s.standardEta}</div>
+            <div><strong>Address:</strong> ${s.address}</div>
+          </div>
+
+          ${s.notes ? `<div class="text-[11px] italic text-zinc-500 dark:text-zinc-400"><strong>Notes:</strong> ${s.notes}</div>` : ''}
+        </div>
+      `).join('');
+    }
+
+    // RENDER STAFF
+    function renderStaff() {
+      const query = (document.getElementById('staff-search')?.value || '').toLowerCase();
+      const container = document.getElementById('staff-list-container');
+
+      const filtered = sampleStaff.filter(st => 
+        st.name.toLowerCase().includes(query) ||
+        st.surname.toLowerCase().includes(query) ||
+        st.jobTitle.toLowerCase().includes(query) ||
+        st.email.toLowerCase().includes(query) ||
+        st.phone.toLowerCase().includes(query)
+      );
+
+      document.getElementById('staff-count').innerText = `Showing ${filtered.length} Staff Members`;
+
+      if (filtered.length === 0) {
+        container.innerHTML = `<div class="col-span-3 text-center p-8 text-zinc-500">No staff members found matching your search.</div>`;
+        return;
+      }
+
+      container.innerHTML = filtered.map(st => `
+        <div class="bg-white dark:bg-zinc-900 border border-zinc-300 dark:border-zinc-800 rounded-xl p-4 shadow-sm hover:shadow-md transition">
+          <div class="flex items-center gap-3 mb-3">
+            <div class="w-10 h-10 rounded-full bg-red-600 text-white flex items-center justify-center font-black text-sm">
+              ${st.name.charAt(0)}${st.surname.charAt(0)}
+            </div>
+            <div>
+              <h3 class="text-sm font-bold text-zinc-900 dark:text-zinc-100">${st.name} ${st.surname}</h3>
+              <p class="text-xs text-red-600 dark:text-red-400 font-medium">${st.jobTitle}</p>
+            </div>
+          </div>
+
+          <div class="space-y-1 text-xs text-zinc-600 dark:text-zinc-300 border-t border-zinc-200 dark:border-zinc-800 pt-2">
+            <div><i class="fa-solid fa-phone mr-2 text-zinc-400"></i><a href="tel:${st.phone}" class="hover:underline">${st.phone}</a></div>
+            <div><i class="fa-solid fa-envelope mr-2 text-zinc-400"></i><a href="mailto:${st.email}" class="hover:underline text-red-600 dark:text-red-400">${st.email}</a></div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // BUILDER FUNCTIONS
     function addLinkedACLine() {
       const jobId = document.getElementById('input-job-id').value.trim();
       const acNum = document.getElementById('input-ac-num').value.trim();
@@ -384,22 +593,22 @@
     }
 
     function triggerPrintPDF() {
-      const client = document.getElementById('meta-client').value.trim();
-      const project = document.getElementById('meta-project').value.trim();
+      document.getElementById('print-out-po').innerText = document.getElementById('meta-po-number').value.trim() || "";
+      document.getElementById('print-out-client').innerText = document.getElementById('meta-client').value.trim() || "N/A";
+      document.getElementById('print-out-project').innerText = document.getElementById('meta-project').value.trim() || "N/A";
+      
       const dateGen = document.getElementById('meta-date-gen').value;
-      const dateComp = document.getElementById('meta-date-comp').value;
-      const buyer = document.getElementById('meta-buyer').value.trim();
-      const poNum = document.getElementById('meta-po-number').value.trim();
-
-      document.getElementById('print-out-po').innerText = poNum || "";
-      document.getElementById('print-out-client').innerText = client || "N/A";
-      document.getElementById('print-out-project').innerText = project || "N/A";
       document.getElementById('print-out-gen-date').innerText = dateGen ? `Generated: ${dateGen}` : "";
-      document.getElementById('print-out-comp-date').innerText = dateComp || "N/A";
-      document.getElementById('print-out-buyer').innerText = buyer || "N/A";
+      document.getElementById('print-out-comp-date').innerText = document.getElementById('meta-date-comp').value || "N/A";
+      document.getElementById('print-out-buyer').innerText = document.getElementById('meta-buyer').value.trim() || "N/A";
       
       document.getElementById('print-out-inclusions').innerText = document.getElementById('meta-inclusions').value.trim() || "None specified";
       document.getElementById('print-out-exclusions').innerText = document.getElementById('meta-exclusions').value.trim() || "None specified";
+
+      for (let i = 1; i <= 8; i++) {
+        const suppValue = document.getElementById(`supp-${i}`).value.trim();
+        document.getElementById(`print-supp-${i}`).innerText = suppValue || "";
+      }
 
       const printGroupsContainer = document.getElementById('print-job-groups-container');
       printGroupsContainer.innerHTML = '';
@@ -408,16 +617,16 @@
       if (jobKeys.length > 0) {
         jobKeys.forEach(jobId => {
           let rowsHtml = jobDataMap[jobId].map(item => `
-            <tr style="border-bottom: 1px solid #94a3b8;">
-              <td style="padding: 5px 8px; font-weight: bold; color: #dc2626; width: 30%; border: 1px solid #94a3b8;">${item.num}</td>
-              <td style="padding: 5px 8px; border: 1px solid #94a3b8;">${item.title || '&nbsp;'}</td>
+            <tr style="border-bottom: 1px solid #64748b;">
+              <td style="padding: 4px 6px; font-weight: bold; color: #dc2626; width: 30%; border: 1px solid #64748b;">${item.num}</td>
+              <td style="padding: 4px 6px; border: 1px solid #64748b;">${item.title || '&nbsp;'}</td>
             </tr>
           `).join('');
 
           printGroupsContainer.innerHTML += `
-            <div style="margin-bottom: 8px;">
-              <div style="background-color: #111827; color: #ffffff; font-weight: bold; font-size: 8.5pt; padding: 4px 8px;">JOB ID: ${jobId}</div>
-              <table style="width: 100%; border-collapse: collapse; font-size: 8pt; border: 1px solid #94a3b8; table-layout: fixed;">
+            <div style="margin-bottom: 6px;">
+              <div style="background-color: #111827; color: #ffffff; font-weight: bold; font-size: 8pt; padding: 3px 6px;" class="print-header-banner">JOB ID: ${jobId}</div>
+              <table style="width: 100%; border-collapse: collapse; font-size: 8pt; border: 1px solid #64748b; table-layout: fixed;">
                 <tbody>${rowsHtml}</tbody>
               </table>
             </div>
