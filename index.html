@@ -32,7 +32,7 @@
       border-color: #3f3f46 !important;
     }
 
-    /* Form Text Inputs */
+    /* Form Text Inputs & Selects */
     html.dark input, 
     html.dark textarea, 
     html.dark select {
@@ -206,10 +206,6 @@
         <!-- METADATA FORM -->
         <div class="builder-section grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 bg-zinc-100 p-4 rounded-xl text-xs border border-zinc-200">
           <div>
-            <label class="block font-semibold mb-1 text-zinc-700 dark:text-zinc-300">Purchase Order (PO) Number</label>
-            <input type="text" id="meta-po-number" placeholder="e.g. PO-88392" class="w-full p-2.5 rounded-lg font-bold text-sm">
-          </div>
-          <div>
             <label class="block font-semibold mb-1 text-zinc-700 dark:text-zinc-300">Client Name</label>
             <input type="text" id="meta-client" placeholder="e.g. Sasol Synfuels" class="w-full p-2.5 rounded-lg text-sm">
           </div>
@@ -243,69 +239,49 @@
           </div>
         </div>
 
-        <!-- LINKED JOB ID & AC NUMBERS ALLOCATION -->
+        <!-- LINKED JOB ID & AC DRAWING SCHEDULE -->
         <div class="builder-section bg-red-950/20 p-4 rounded-xl border border-red-200 dark:border-zinc-700 mb-6">
-          <h3 class="text-xs font-bold uppercase mb-3 text-red-600 dark:text-red-400"><i class="fa-solid fa-diagram-project mr-2"></i>Job ID & AC Numbers Allocation</h3>
+          <h3 class="text-xs font-bold uppercase mb-3 text-red-600 dark:text-red-400"><i class="fa-solid fa-diagram-project mr-2"></i>Job ID &amp; AC Drawing Schedule (with Material, Supplier &amp; PO Mapping)</h3>
           
-          <div class="grid grid-cols-1 md:grid-cols-12 gap-3 items-end mb-4 bg-zinc-200 dark:bg-zinc-900 p-3 rounded-lg">
-            <div class="md:col-span-3">
-              <label class="block text-[11px] font-bold mb-1 text-zinc-700 dark:text-zinc-300">1. Target Job ID *</label>
-              <input type="text" id="input-job-id" placeholder="e.g. JOB-2026-9940" class="w-full p-2 rounded-lg text-xs font-bold">
+          <div class="grid grid-cols-1 md:grid-cols-12 gap-3 items-end mb-4 bg-zinc-200 dark:bg-zinc-900 p-3 rounded-lg text-xs">
+            <div class="md:col-span-2">
+              <label class="block font-bold mb-1 text-zinc-700 dark:text-zinc-300">Job ID *</label>
+              <input type="text" id="input-job-id" placeholder="e.g. 4720" class="w-full p-2 rounded-lg font-bold">
+            </div>
+            <div class="md:col-span-2">
+              <label class="block font-bold mb-1 text-zinc-700 dark:text-zinc-300">AC Number *</label>
+              <input type="text" id="input-ac-num" placeholder="e.g. AC2896" class="w-full p-2 rounded-lg font-bold">
+            </div>
+            <div class="md:col-span-2">
+              <label class="block font-bold mb-1 text-zinc-700 dark:text-zinc-300">Material Category</label>
+              <select id="input-ac-material" class="w-full p-2 rounded-lg">
+                <option value="Material (Plates)">Material (Plates)</option>
+                <option value="Material (Structural)">Material (Structural)</option>
+                <option value="Laser Cutting &amp; Bending">Laser Cutting & Bending</option>
+                <option value="Machining / Turning">Machining / Turning</option>
+                <option value="Fasteners &amp; Hardware">Fasteners & Hardware</option>
+                <option value="Surface Coating / HDG">Surface Coating / HDG</option>
+                <option value="Freight / Transport">Freight / Transport</option>
+                <option value="Miscellaneous">Miscellaneous</option>
+              </select>
             </div>
             <div class="md:col-span-3">
-              <label class="block text-[11px] font-bold mb-1 text-zinc-700 dark:text-zinc-300">2. AC Number *</label>
-              <input type="text" id="input-ac-num" placeholder="e.g. AC-4010-01" class="w-full p-2 rounded-lg text-xs font-bold">
+              <label class="block font-bold mb-1 text-zinc-700 dark:text-zinc-300">Supplier Name</label>
+              <select id="input-ac-supplier" class="w-full p-2 rounded-lg">
+                <option value="">-- Select Supplier --</option>
+              </select>
             </div>
-            <div class="md:col-span-5">
-              <label class="block text-[11px] font-bold mb-1 text-zinc-700 dark:text-zinc-300">3. Portion / Drawing Title</label>
-              <input type="text" id="input-ac-title" placeholder="e.g. Main Base Frame Assembly" class="w-full p-2 rounded-lg text-xs">
+            <div class="md:col-span-2">
+              <label class="block font-bold mb-1 text-zinc-700 dark:text-zinc-300">PO Number</label>
+              <input type="text" id="input-ac-po" placeholder="e.g. PO-88392" class="w-full p-2 rounded-lg font-bold">
             </div>
             <div class="md:col-span-1">
-              <button onclick="addLinkedACLine()" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold p-2 rounded-lg text-xs transition"><i class="fa-solid fa-plus mr-1"></i> Add</button>
+              <button onclick="addLinkedACLine()" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold p-2 rounded-lg transition"><i class="fa-solid fa-plus mr-1"></i> Add</button>
             </div>
           </div>
 
           <div id="grouped-ac-container" class="space-y-4">
             <div class="text-xs text-zinc-400 italic">No Job IDs or AC Numbers linked yet.</div>
-          </div>
-        </div>
-
-        <!-- SUPPLIER ALLOCATION SECTION -->
-        <div class="builder-section p-4 rounded-xl border border-zinc-300 dark:border-zinc-700 mb-6 bg-zinc-100 dark:bg-zinc-900">
-          <h3 class="text-xs font-bold uppercase mb-3 text-red-600 dark:text-red-400"><i class="fa-solid fa-truck-field mr-2"></i>Allocated Suppliers</h3>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
-            <div>
-              <label class="block font-semibold mb-1 text-zinc-700 dark:text-zinc-300">1. Material (Plates)</label>
-              <input type="text" id="supp-1" placeholder="Enter Supplier Name" class="w-full p-2 rounded-lg">
-            </div>
-            <div>
-              <label class="block font-semibold mb-1 text-zinc-700 dark:text-zinc-300">2. Material (Structural)</label>
-              <input type="text" id="supp-2" placeholder="Enter Supplier Name" class="w-full p-2 rounded-lg">
-            </div>
-            <div>
-              <label class="block font-semibold mb-1 text-zinc-700 dark:text-zinc-300">3. Laser Cutting & Bending</label>
-              <input type="text" id="supp-3" placeholder="Enter Supplier Name" class="w-full p-2 rounded-lg">
-            </div>
-            <div>
-              <label class="block font-semibold mb-1 text-zinc-700 dark:text-zinc-300">4. Machining / Turning</label>
-              <input type="text" id="supp-4" placeholder="Enter Supplier Name" class="w-full p-2 rounded-lg">
-            </div>
-            <div>
-              <label class="block font-semibold mb-1 text-zinc-700 dark:text-zinc-300">5. Fasteners & Hardware</label>
-              <input type="text" id="supp-5" placeholder="Enter Supplier Name" class="w-full p-2 rounded-lg">
-            </div>
-            <div>
-              <label class="block font-semibold mb-1 text-zinc-700 dark:text-zinc-300">6. Surface Coating / HDG</label>
-              <input type="text" id="supp-6" placeholder="Enter Supplier Name" class="w-full p-2 rounded-lg">
-            </div>
-            <div>
-              <label class="block font-semibold mb-1 text-zinc-700 dark:text-zinc-300">7. Freight / Transport</label>
-              <input type="text" id="supp-7" placeholder="Enter Supplier Name" class="w-full p-2 rounded-lg">
-            </div>
-            <div>
-              <label class="block font-semibold mb-1 text-zinc-700 dark:text-zinc-300">8. Miscellaneous</label>
-              <input type="text" id="supp-8" placeholder="Enter Supplier Name" class="w-full p-2 rounded-lg">
-            </div>
           </div>
         </div>
 
@@ -386,32 +362,6 @@
     <div style="font-size: 9pt; font-weight: bold; margin-bottom: 4px; color: #000000;">JOB IDs &amp; LINKED AC DRAWING SCHEDULE</div>
     <div id="print-job-groups-container" style="margin-bottom: 12px;"></div>
 
-    <!-- PO REGISTER TABLE -->
-    <div style="font-size: 9pt; font-weight: bold; margin-bottom: 4px; color: #000000;">PURCHASE ORDER ALLOCATION REGISTER</div>
-    <table style="width: 100%;">
-      <colgroup>
-        <col style="width: 32%;">
-        <col style="width: 50%;">
-        <col style="width: 18%;">
-      </colgroup>
-      <thead>
-        <tr class="print-table-header">
-          <th style="text-align: left; font-weight: bold;">Category</th>
-          <th style="text-align: left; font-weight: bold;">Allocated Supplier Name</th>
-          <th style="text-align: left; font-weight: bold;">PO No.</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr><td style="font-weight: bold;">1. Material (Plates)</td><td id="print-supp-1"></td><td style="color: #475569;">PO-</td></tr>
-        <tr><td style="font-weight: bold;">2. Material (Structural)</td><td id="print-supp-2"></td><td style="color: #475569;">PO-</td></tr>
-        <tr><td style="font-weight: bold;">3. Laser Cutting &amp; Bending</td><td id="print-supp-3"></td><td style="color: #475569;">PO-</td></tr>
-        <tr><td style="font-weight: bold;">4. Machining / Turning</td><td id="print-supp-4"></td><td style="color: #475569;">PO-</td></tr>
-        <tr><td style="font-weight: bold;">5. Fasteners &amp; Hardware</td><td id="print-supp-5"></td><td style="color: #475569;">PO-</td></tr>
-        <tr><td style="font-weight: bold;">6. Surface Coating / HDG</td><td id="print-supp-6"></td><td style="color: #475569;">PO-</td></tr>
-        <tr><td style="font-weight: bold;">7. Freight / Transport</td><td id="print-supp-7"></td><td style="color: #475569;">PO-</td></tr>
-        <tr><td style="font-weight: bold;">8. Miscellaneous</td><td id="print-supp-8"></td><td style="color: #475569;">PO-</td></tr>
-      </tbody>
-    </table>
   </div>
 
   <script>
@@ -504,6 +454,7 @@
           notes: r['notes'] || ''
         }));
         renderSuppliers();
+        populateSupplierDropdown();
       } catch (err) {
         console.error("Failed to load Suppliers data:", err);
       }
@@ -513,6 +464,20 @@
       document.getElementById('meta-date-gen').valueAsDate = new Date();
       loadLiveData();
     });
+
+    // POPULATE BUILDER SUPPLIER DROPDOWN
+    function populateSupplierDropdown() {
+      const select = document.getElementById('input-ac-supplier');
+      if (!select) return;
+
+      const sortedNames = liveSupplierData
+        .map(s => s.supplierName)
+        .filter(Boolean)
+        .sort((a, b) => a.localeCompare(b));
+
+      select.innerHTML = `<option value="">-- Select Supplier --</option>` + 
+        sortedNames.map(name => `<option value="${name}">${name}</option>`).join('');
+    }
 
     // HELPER FOR BADGE COLORS
     function getStatusBadgeClass(status) {
@@ -623,7 +588,9 @@
     function addLinkedACLine() {
       const jobId = document.getElementById('input-job-id').value.trim();
       const acNum = document.getElementById('input-ac-num').value.trim();
-      const acTitle = document.getElementById('input-ac-title').value.trim();
+      const material = document.getElementById('input-ac-material').value;
+      const supplier = document.getElementById('input-ac-supplier').value;
+      const poNum = document.getElementById('input-ac-po').value.trim();
 
       if (!jobId) return alert('Please enter a Job ID.');
       if (!acNum) return alert('Please enter an AC Number.');
@@ -632,10 +599,16 @@
         jobDataMap[jobId] = [];
       }
 
-      jobDataMap[jobId].push({ num: acNum, title: acTitle });
+      jobDataMap[jobId].push({ 
+        num: acNum, 
+        material: material, 
+        supplier: supplier, 
+        po: poNum 
+      });
 
       document.getElementById('input-ac-num').value = '';
-      document.getElementById('input-ac-title').value = '';
+      document.getElementById('input-ac-po').value = '';
+      document.getElementById('input-ac-supplier').value = '';
       
       renderGroupedACTable();
     }
@@ -661,9 +634,11 @@
       jobKeys.forEach(jobId => {
         let rowsHtml = jobDataMap[jobId].map((item, idx) => `
           <tr class="border-b border-zinc-200 dark:border-zinc-800 text-xs">
-            <td class="p-2 font-bold text-red-600 dark:text-red-400 w-1/3">${item.num}</td>
-            <td class="p-2">${item.title}</td>
-            <td class="p-2 text-right w-16">
+            <td class="p-2 font-bold text-red-600 dark:text-red-400 w-1/5">${item.num}</td>
+            <td class="p-2 w-1/4 text-zinc-700 dark:text-zinc-300">${item.material}</td>
+            <td class="p-2 w-1/3">${item.supplier || '<span class="text-zinc-400 italic">None selected</span>'}</td>
+            <td class="p-2 font-semibold w-1/5">${item.po ? (item.po.startsWith('PO-') ? item.po : 'PO-' + item.po) : '<span class="text-zinc-400 italic">--</span>'}</td>
+            <td class="p-2 text-right w-12">
               <button onclick="removeACItem('${jobId}', ${idx})" class="text-red-500 hover:underline">Remove</button>
             </td>
           </tr>
@@ -673,9 +648,18 @@
           <div class="bg-zinc-100 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 rounded-lg overflow-hidden">
             <div class="bg-zinc-900 text-white text-xs font-bold px-3 py-2 flex justify-between items-center">
               <span><i class="fa-solid fa-folder-closed mr-2 text-red-500"></i>JOB ID: ${jobId}</span>
-              <span class="text-[10px] bg-red-600 px-2 py-0.5 rounded">${jobDataMap[jobId].length} AC Numbers</span>
+              <span class="text-[10px] bg-red-600 px-2 py-0.5 rounded">${jobDataMap[jobId].length} AC Entries</span>
             </div>
             <table class="w-full text-left border-collapse">
+              <thead>
+                <tr class="bg-zinc-200 dark:bg-zinc-900 text-[11px] text-zinc-600 dark:text-zinc-400 border-b border-zinc-300 dark:border-zinc-700">
+                  <th class="p-2">AC Number</th>
+                  <th class="p-2">Material</th>
+                  <th class="p-2">Supplier Name</th>
+                  <th class="p-2">PO</th>
+                  <th class="p-2 text-right">Action</th>
+                </tr>
+              </thead>
               <tbody>${rowsHtml}</tbody>
             </table>
           </div>
@@ -695,32 +679,42 @@
       document.getElementById('print-out-inclusions').innerText = document.getElementById('meta-inclusions').value.trim() || "None specified";
       document.getElementById('print-out-exclusions').innerText = document.getElementById('meta-exclusions').value.trim() || "None specified";
 
-      for (let i = 1; i <= 8; i++) {
-        const suppValue = document.getElementById(`supp-${i}`).value.trim();
-        document.getElementById(`print-supp-${i}`).innerText = suppValue || "";
-      }
-
       const printGroupsContainer = document.getElementById('print-job-groups-container');
       printGroupsContainer.innerHTML = '';
 
       const jobKeys = Object.keys(jobDataMap);
       if (jobKeys.length > 0) {
         jobKeys.forEach(jobId => {
-          let rowsHtml = jobDataMap[jobId].map(item => `
-            <tr>
-              <td style="font-weight: bold; color: #dc2626;">${item.num}</td>
-              <td>${item.title || '&nbsp;'}</td>
-            </tr>
-          `).join('');
+          let rowsHtml = jobDataMap[jobId].map(item => {
+            const formattedPo = item.po ? (item.po.startsWith('PO-') ? item.po : 'PO-' + item.po) : '';
+            return `
+              <tr>
+                <td style="font-weight: bold; color: #dc2626; width: 22%;">${item.num}</td>
+                <td style="width: 28%;">${item.material}</td>
+                <td style="width: 33%;">${item.supplier || '&nbsp;'}</td>
+                <td style="font-weight: bold; width: 17%;">${formattedPo}</td>
+              </tr>
+            `;
+          }).join('');
 
           printGroupsContainer.innerHTML += `
-            <div style="margin-bottom: 6px;">
+            <div style="margin-bottom: 8px;">
               <div style="background-color: #111827; color: #ffffff; font-weight: bold; font-size: 8pt; padding: 3px 6px;" class="print-header-banner">JOB ID: ${jobId}</div>
               <table style="width: 100%;">
                 <colgroup>
-                  <col style="width: 32%;">
-                  <col style="width: 68%;">
+                  <col style="width: 22%;">
+                  <col style="width: 28%;">
+                  <col style="width: 33%;">
+                  <col style="width: 17%;">
                 </colgroup>
+                <thead>
+                  <tr class="print-table-header" style="font-size: 8pt;">
+                    <th style="text-align: left; font-weight: bold;">AC Number</th>
+                    <th style="text-align: left; font-weight: bold;">Material</th>
+                    <th style="text-align: left; font-weight: bold;">Supplier Name</th>
+                    <th style="text-align: left; font-weight: bold;">PO</th>
+                  </tr>
+                </thead>
                 <tbody>${rowsHtml}</tbody>
               </table>
             </div>
