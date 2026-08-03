@@ -71,7 +71,7 @@
         padding: 0 !important;
       }
 
-      /* Hide web portal header, tabs, and interactive forms */
+      /* Hide web portal UI */
       header, main, nav, button, .builder-frame {
         display: none !important;
       }
@@ -96,6 +96,12 @@
         word-wrap: break-word;
         overflow-wrap: break-word;
       }
+
+      /* Force background color/image graphics printing */
+      * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
     }
   </style>
 </head>
@@ -106,9 +112,9 @@
     <div class="max-w-7xl mx-auto px-4 py-3 flex flex-col sm:flex-row justify-between items-center gap-4">
       
       <div class="flex items-center gap-4">
-        <!-- Brand Logo Block -->
-        <div class="bg-red-600 text-white font-black px-3 py-1 rounded text-xl tracking-wider">
-          ALLCON
+        <!-- ALLCON Logo Image Container -->
+        <div class="bg-white p-1 rounded flex items-center justify-center h-12 min-w-[120px]">
+          <img src="./ALLCON-Logo.jpg" alt="ALLCON Logo" class="h-10 w-auto object-contain" onerror="this.onerror=null; this.outerHTML='<div class=\'bg-red-600 text-white font-black px-3 py-1 rounded text-xl tracking-wider\'>ALLCON</div>';">
         </div>
         <div>
           <h1 class="text-xl font-black tracking-wider text-white uppercase">KERF Portal</h1>
@@ -239,11 +245,13 @@
   <!-- NATIVE PRINT / PDF TEMPLATE -->
   <div id="print-template">
     
-    <!-- HEADER WITH Crisp HTML LOGO & WRITABLE PO LINE -->
+    <!-- HEADER WITH ACTUAL ALLCON LOGO JPG -->
     <table style="width: 100%; border-bottom: 2px solid #dc2626; padding-bottom: 10px; margin-bottom: 15px;">
       <tr>
         <td style="vertical-align: top; width: 60%;">
-          <div style="background-color: #dc2626; color: #ffffff; font-weight: 900; font-size: 22pt; padding: 4px 12px; display: inline-block; letter-spacing: 2px; text-align: center;">ALLCON</div>
+          <div style="margin-bottom: 4px;">
+            <img src="./ALLCON-Logo.jpg" alt="ALLCON Logo" style="height: 48px; width: auto; max-width: 260px; object-fit: contain;" onerror="this.onerror=null; this.outerHTML='<div style=\'background-color: #dc2626; color: #ffffff; font-weight: 900; font-size: 22pt; padding: 4px 12px; display: inline-block; letter-spacing: 2px;\'>ALLCON</div>';">
+          </div>
           <div style="font-size: 8pt; font-weight: bold; color: #000000; text-transform: uppercase; margin-top: 4px;">FABRICATION &amp; ENGINEERING (PTY) LTD.</div>
           <div style="font-size: 8.5pt; color: #4b5563; text-transform: uppercase; font-weight: bold; margin-top: 2px;">Project Info Sheet Transmittal</div>
         </td>
@@ -376,7 +384,6 @@
     }
 
     function triggerPrintPDF() {
-      // 1. Populate text fields into the print template
       const client = document.getElementById('meta-client').value.trim();
       const project = document.getElementById('meta-project').value.trim();
       const dateGen = document.getElementById('meta-date-gen').value;
@@ -420,7 +427,6 @@
         printGroupsContainer.innerHTML = `<div style="font-size: 8.5pt; color: #64748b; font-style: italic;">No Job IDs or AC Numbers allocated.</div>`;
       }
 
-      // 2. Open Native Browser Print / Save-as-PDF Dialog
       window.print();
     }
 
