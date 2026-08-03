@@ -277,7 +277,7 @@
     document.getElementById('meta-date-gen').valueAsDate = new Date();
 
     document.addEventListener("DOMContentLoaded", () => {
-      if (API_URL && API_URL !== "https://script.google.com/macros/s/AKfycby1YcJXrsyUuhJLDUFv3YbcUqRkTW3YzSl-f4gUxdMhjENZzIGBkvJl4d5h121vukoc/exec") {
+      if (API_URL && API_URL !== "YOUR_GOOGLE_APPS_SCRIPT_URL_HERE") {
         fetchSuppliers();
       } else {
         document.getElementById('supplier-grid').innerHTML = `
