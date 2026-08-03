@@ -12,16 +12,20 @@
     tailwind.config = { darkMode: 'class' }
   </script>
   <style>
-    /* Custom Obsidian Styles */
+    /* Absolute Dark Mode Body & HTML Fix */
+    html.dark, html.dark body {
+      background-color: #0b0b0c !important;
+      color: #f4f4f5 !important;
+    }
     .bg-obsidian-900 { background-color: #0b0b0c !important; }
     .bg-obsidian-800 { background-color: #141416 !important; }
     .bg-obsidian-700 { background-color: #1f1f22 !important; }
     .bg-obsidian-600 { background-color: #2a2a2e !important; }
 
-    /* Text Inputs / Textareas Dynamic Styling */
+    /* Inputs dynamic styling */
     input, textarea, select {
-      background-color: #3f3f46 !important; /* Lighter Grey */
-      color: #ffffff !important;           /* White Text */
+      background-color: #3f3f46 !important;
+      color: #ffffff !important;
       border-color: #52525b !important;
     }
     input::placeholder, textarea::placeholder {
@@ -29,18 +33,18 @@
     }
     input:focus, textarea:focus, select:focus {
       outline: none;
-      border-color: #dc2626 !important; /* Red Focus Accent */
+      border-color: #dc2626 !important;
       ring: 1px #dc2626;
     }
   </style>
 </head>
-<body class="bg-zinc-100 dark:bg-obsidian-900 text-zinc-900 dark:text-zinc-100 font-sans min-h-screen flex flex-col transition-colors duration-200">
+<body class="bg-zinc-200 dark:bg-obsidian-900 text-zinc-900 dark:text-zinc-100 font-sans min-h-screen flex flex-col transition-colors duration-200">
 
   <!-- HEADER -->
   <header class="bg-black text-white shadow-lg border-b-4 border-red-600">
     <div class="max-w-7xl mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
       
-      <!-- ALLCON LOGO BRANDING -->
+      <!-- BRANDING -->
       <div class="flex items-center gap-4">
         <div class="bg-red-600 text-white border-b-4 border-black px-4 py-1.5 inline-block text-center shadow-md">
           <div class="font-black text-2xl tracking-wider leading-none">ALLCON</div>
@@ -49,13 +53,13 @@
           </div>
         </div>
         <div>
-          <h1 class="text-xl font-extrabold tracking-tight text-white">KERF <span class="text-xs font-normal text-zinc-400">v1.0</span></h1>
+          <h1 class="text-xl font-extrabold tracking-tight text-white">KERF <span class="text-xs font-normal text-zinc-400">v1.1</span></h1>
           <p class="text-xs text-zinc-400">Technical Procurement & Info Sheet Transmittal Portal</p>
         </div>
       </div>
       
       <div class="flex items-center gap-5">
-        <!-- CLEAR DARK / LIGHT MODE SWITCH TOGGLE -->
+        <!-- DARK / LIGHT TOGGLE SWITCH -->
         <div class="flex items-center gap-2 bg-zinc-900 p-1.5 rounded-full border border-zinc-700">
           <span class="text-[10px] font-bold px-1 text-zinc-400 dark:text-zinc-500">LIGHT</span>
           <button id="theme-toggle" onclick="toggleDarkMode()" class="w-12 h-6 bg-zinc-600 dark:bg-red-600 rounded-full p-1 transition-colors duration-200 focus:outline-none flex items-center">
@@ -93,22 +97,10 @@
       <div id="supplier-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
     </section>
 
-    <!-- VIEW 2: INFO SHEET & PDF TRANSMITTAL BUILDER -->
+    <!-- VIEW 2: INFO SHEET BUILDER -->
     <section id="view-generator" class="hidden">
       <div class="bg-white dark:bg-obsidian-800 rounded-xl shadow-sm border border-zinc-300 dark:border-zinc-800 p-6 mb-6">
         <h2 class="text-lg font-bold mb-4 text-red-600 dark:text-red-500"><i class="fa-solid fa-file-pdf mr-2"></i>Project Info Sheet Transmittal Builder</h2>
-        
-        <!-- MULTIPLE JOB IDs SECTION -->
-        <div class="bg-red-950/20 dark:bg-obsidian-700 p-4 rounded-lg border border-red-200 dark:border-zinc-700 mb-6">
-          <h3 class="text-xs font-bold uppercase mb-2 text-red-600 dark:text-red-400">Job ID Reference Allocation (Multiple Allowed)</h3>
-          <div class="flex gap-3 items-center mb-3">
-            <input type="text" id="input-job-id" placeholder="e.g. JOB-2026-9940 or Revision ID" class="flex-grow p-2 rounded text-xs font-bold">
-            <button onclick="addJobIDLine()" class="bg-red-600 text-white font-bold px-4 py-2 rounded text-xs hover:bg-red-700 transition"><i class="fa-solid fa-plus mr-1"></i> Add Job ID</button>
-          </div>
-          <div id="job-id-tags" class="flex flex-wrap gap-2">
-            <span class="text-xs text-zinc-400 italic">No Job IDs added yet.</span>
-          </div>
-        </div>
 
         <!-- METADATA FORM -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 bg-zinc-100 dark:bg-obsidian-700 p-4 rounded-lg text-xs border border-zinc-200 dark:border-zinc-700">
@@ -138,43 +130,45 @@
           </div>
         </div>
 
-        <!-- INCLUSIONS & EXCLUSIONS (SCOPE REMOVED) -->
+        <!-- INCLUSIONS & EXCLUSIONS -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6 text-xs">
           <div>
             <label class="block font-semibold mb-1 text-zinc-700 dark:text-zinc-300">Inclusions</label>
-            <textarea id="meta-inclusions" rows="4" placeholder="e.g. Material supply, laser cutting, CNC turning..." class="w-full p-2 rounded"></textarea>
+            <textarea id="meta-inclusions" rows="3" placeholder="e.g. Material supply, laser cutting, CNC turning..." class="w-full p-2 rounded"></textarea>
           </div>
           <div>
             <label class="block font-semibold mb-1 text-zinc-700 dark:text-zinc-300">Exclusions</label>
-            <textarea id="meta-exclusions" rows="4" placeholder="e.g. Site erection, transport to site, NDT..." class="w-full p-2 rounded"></textarea>
+            <textarea id="meta-exclusions" rows="3" placeholder="e.g. Site erection, transport to site, NDT..." class="w-full p-2 rounded"></textarea>
           </div>
         </div>
 
-        <!-- AC NUMBERS ENTRY -->
+        <!-- LINKED JOB ID & AC NUMBERS ALLOCATION BUILDER -->
         <div class="bg-red-950/20 dark:bg-obsidian-700 p-4 rounded-lg border border-red-200 dark:border-zinc-700 mb-6">
-          <h3 class="text-xs font-bold uppercase mb-3 text-red-600 dark:text-red-400">AC Numbers & Drawings Allocation</h3>
-          <div class="grid grid-cols-1 md:grid-cols-12 gap-3 items-end">
+          <h3 class="text-xs font-bold uppercase mb-3 text-red-600 dark:text-red-400"><i class="fa-solid fa-diagram-project mr-2"></i>Job ID & AC Numbers Allocation</h3>
+          
+          <div class="grid grid-cols-1 md:grid-cols-12 gap-3 items-end mb-4 bg-zinc-200 dark:bg-obsidian-800 p-3 rounded">
             <div class="md:col-span-3">
-              <label class="block text-xs font-semibold mb-1 text-zinc-700 dark:text-zinc-300">AC Number *</label>
+              <label class="block text-[11px] font-bold mb-1 text-zinc-700 dark:text-zinc-300">1. Target Job ID *</label>
+              <input type="text" id="input-job-id" placeholder="e.g. JOB-2026-9940" class="w-full p-2 rounded text-xs font-bold">
+            </div>
+            <div class="md:col-span-3">
+              <label class="block text-[11px] font-bold mb-1 text-zinc-700 dark:text-zinc-300">2. AC Number *</label>
               <input type="text" id="input-ac-num" placeholder="e.g. AC-4010-01" class="w-full p-2 rounded text-xs font-bold">
             </div>
-            <div class="md:col-span-8">
-              <label class="block text-xs font-semibold mb-1 text-zinc-700 dark:text-zinc-300">Portion / Drawing Reference Title</label>
-              <input type="text" id="input-ac-title" placeholder="e.g. Main Base Frame Assembly & Platework" class="w-full p-2 rounded text-xs">
+            <div class="md:col-span-5">
+              <label class="block text-[11px] font-bold mb-1 text-zinc-700 dark:text-zinc-300">3. Portion / Drawing Title</label>
+              <input type="text" id="input-ac-title" placeholder="e.g. Main Base Frame Assembly" class="w-full p-2 rounded text-xs">
             </div>
             <div class="md:col-span-1">
-              <button onclick="addACLine()" class="w-full bg-red-600 text-white font-bold p-2 rounded text-xs hover:bg-red-700 transition"><i class="fa-solid fa-plus"></i></button>
+              <button onclick="addLinkedACLine()" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold p-2 rounded text-xs transition"><i class="fa-solid fa-plus mr-1"></i> Add</button>
             </div>
           </div>
-        </div>
 
-        <!-- AC LIST TABLE -->
-        <table class="w-full text-left text-xs mb-6 border-collapse">
-          <thead>
-            <tr class="bg-zinc-900 text-white uppercase"><th class="p-2">#</th><th class="p-2">AC Number</th><th class="p-2">Project Portion / Drawing Title</th><th class="p-2 text-right">Action</th></tr>
-          </thead>
-          <tbody id="ac-table-body" class="divide-y divide-zinc-200 dark:divide-zinc-800"></tbody>
-        </table>
+          <!-- DISPLAY GROUPED AC NUMBERS BY JOB ID -->
+          <div id="grouped-ac-container" class="space-y-4">
+            <div class="text-xs text-zinc-400 italic">No Job IDs or AC Numbers linked yet.</div>
+          </div>
+        </div>
 
         <!-- EXPORT BUTTON -->
         <div class="flex justify-end">
@@ -217,8 +211,7 @@
           <div style="font-size: 8pt; color: #52525b; text-transform: uppercase; margin-top: 4px; font-weight: bold;">KERF - Technical Procurement Info Sheet</div>
         </div>
         <div style="text-align: right;">
-          <div style="font-size: 11pt; font-weight: 800; color: #dc2626;" id="pdf-out-jobids"></div>
-          <div style="font-size: 9pt; font-weight: 700; color: #111827; margin-top: 2px;" id="pdf-out-po"></div>
+          <div style="font-size: 9pt; font-weight: 700; color: #111827;" id="pdf-out-po"></div>
           <div style="font-size: 8pt; color: #52525b; margin-top: 2px;" id="pdf-out-gen-date"></div>
         </div>
       </div>
@@ -245,21 +238,12 @@
         <div><strong>Exclusions:</strong> <span id="pdf-out-exclusions"></span></div>
       </div>
 
-      <!-- AC NUMBERS SCHEDULE -->
-      <div style="font-size: 10pt; font-weight: bold; margin-bottom: 6px; color: #111827;">AC NUMBERS & PROJECT ALLOCATIONS</div>
-      <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 9pt; border: 1px solid #cbd5e1;">
-        <thead>
-          <tr style="background-color: #111827; color: white;">
-            <th style="padding: 6px; width: 8%;">#</th>
-            <th style="padding: 6px; width: 25%;">AC NUMBER</th>
-            <th style="padding: 6px;">PORTION / DRAWING TITLE</th>
-          </tr>
-        </thead>
-        <tbody id="pdf-ac-rows"></tbody>
-      </table>
+      <!-- LINKED JOB IDs & AC NUMBERS SCHEDULE -->
+      <div style="font-size: 10pt; font-weight: bold; margin-bottom: 6px; color: #111827;">JOB IDs & LINKED AC DRAWING SCHEDULE</div>
+      <div id="pdf-job-groups-container"></div>
 
-      <!-- CATEGORIZED PO DOTTED WRITE-IN REGISTER -->
-      <div style="font-size: 10pt; font-weight: bold; margin-bottom: 6px; color: #111827;">PURCHASE ORDER ALLOCATION REGISTER</div>
+      <!-- CATEGORIZED PO REGISTER -->
+      <div style="font-size: 10pt; font-weight: bold; margin-top: 15px; margin-bottom: 6px; color: #111827;">PURCHASE ORDER ALLOCATION REGISTER</div>
       <table style="width: 100%; border-collapse: collapse; font-size: 8.5pt; border: 1px solid #cbd5e1;">
         <thead>
           <tr style="background-color: #f1f5f9;">
@@ -284,17 +268,14 @@
 
   <!-- JAVASCRIPT LOGIC -->
   <script>
-    // Paste your published Google Apps Script Web App URL here
     const API_URL = "YOUR_GOOGLE_APPS_SCRIPT_URL_HERE"; 
     
     let allSuppliers = [];
-    let jobIDList = [];
-    let acList = [];
+    // Data Structure: { "JOB-101": [ { num: "AC-01", title: "Frame" }, ... ] }
+    let jobDataMap = {}; 
 
-    // Set today's date on load
     document.getElementById('meta-date-gen').valueAsDate = new Date();
 
-    // Load Supplier Data on Startup
     document.addEventListener("DOMContentLoaded", () => {
       if (API_URL && API_URL !== "https://script.google.com/macros/s/AKfycby1YcJXrsyUuhJLDUFv3YbcUqRkTW3YzSl-f4gUxdMhjENZzIGBkvJl4d5h121vukoc/exec") {
         fetchSuppliers();
@@ -303,22 +284,19 @@
           <div class="col-span-full text-center py-10 text-zinc-400 border-2 border-dashed border-zinc-700 rounded-xl">
             <i class="fa-solid fa-link-slash text-2xl mb-2 text-red-500"></i>
             <p class="font-bold">Google Apps Script API URL Not Configured</p>
-            <p class="text-xs text-zinc-500">Please paste your deployed Web App URL into <code>const API_URL</code> in the script below.</p>
           </div>
         `;
       }
     });
 
-    // Fetch Suppliers mapped strictly to your exact sheet headers
     async function fetchSuppliers() {
       const grid = document.getElementById('supplier-grid');
-      grid.innerHTML = '<div class="col-span-full text-center py-10 text-zinc-400"><i class="fa-solid fa-circle-notch fa-spin mr-2 text-red-600"></i>Loading live directory from Google Sheets...</div>';
+      grid.innerHTML = '<div class="col-span-full text-center py-10 text-zinc-400"><i class="fa-solid fa-circle-notch fa-spin mr-2 text-red-600"></i>Loading live directory...</div>';
 
       try {
         const res = await fetch(API_URL);
         const data = await res.json();
 
-        // Map exact sheet header names to system properties
         allSuppliers = data.map(row => ({
           status: row["STATUS"] || "ACTIVE",
           name: row["SUPPLIER NAME"] || "Unnamed Supplier",
@@ -327,7 +305,6 @@
           pocEmail: row["POC EMAIL"] || "",
           pocPhone: row["POC PHONE"] || "",
           services: row["SERVICES OFFERED"] || "",
-          logistics: row["LOGISTICS"] || "",
           paymentTerms: row["PAYMENT TERMS"] || "",
           eta: row["STANDARD ETA"] || "",
           address: row["ADDRESS"] || "",
@@ -337,35 +314,22 @@
         renderSuppliers(allSuppliers);
       } catch (err) {
         console.error(err);
-        grid.innerHTML = `
-          <div class="col-span-full text-center py-8 text-red-500 font-bold">
-            <i class="fa-solid fa-triangle-exclamation mr-2"></i> Failed to pull data from sheet. Ensure Web App deployment access is set to "Anyone".
-          </div>
-        `;
       }
     }
 
-    // Render Cards with high-contrast Call & Email buttons in Dark Mode
     function renderSuppliers(suppliers) {
       const grid = document.getElementById('supplier-grid');
       grid.innerHTML = '';
 
-      if (suppliers.length === 0) {
-        grid.innerHTML = '<div class="col-span-full text-center py-8 text-zinc-400">No matching suppliers found.</div>';
-        return;
-      }
-
       suppliers.forEach(s => {
-        // Determine Status Badge Color
         const statusUpper = String(s.status).toUpperCase();
         const statusBg = statusUpper === 'ACTIVE' || statusUpper === 'APPROVED' 
           ? 'bg-emerald-950/80 text-emerald-400 border-emerald-800' 
           : 'bg-zinc-800 text-zinc-400 border-zinc-700';
 
         grid.innerHTML += `
-          <div class="bg-white dark:bg-obsidian-800 p-5 rounded-xl border border-zinc-200 dark:border-zinc-800 shadow-sm flex flex-col justify-between hover:border-red-600/50 transition duration-150">
+          <div class="bg-white dark:bg-obsidian-800 p-5 rounded-xl border border-zinc-300 dark:border-zinc-800 shadow-sm flex flex-col justify-between">
             <div>
-              <!-- Header Row -->
               <div class="flex justify-between items-start mb-2 gap-2">
                 <div>
                   <h3 class="font-black text-base text-zinc-900 dark:text-white leading-tight">${s.name}</h3>
@@ -374,29 +338,17 @@
                 <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-red-100 dark:bg-red-950/60 text-red-600 dark:text-red-400 border border-red-200 dark:border-red-900 shrink-0 uppercase">${s.category}</span>
               </div>
 
-              <!-- Point of Contact -->
               <div class="text-xs text-zinc-600 dark:text-zinc-300 mb-3 space-y-1 bg-zinc-100 dark:bg-obsidian-700 p-2.5 rounded border border-zinc-200 dark:border-zinc-700/50">
                 <p class="font-bold text-red-600 dark:text-red-400 mb-1"><i class="fa-solid fa-user-gear mr-1.5"></i> ${s.pocName}</p>
                 ${s.pocPhone ? `<p class="text-[11px]"><i class="fa-solid fa-phone mr-1.5 text-zinc-400"></i> ${s.pocPhone}</p>` : ''}
                 ${s.pocEmail ? `<p class="text-[11px] truncate"><i class="fa-solid fa-envelope mr-1.5 text-zinc-400"></i> ${s.pocEmail}</p>` : ''}
               </div>
 
-              <!-- Technical Details -->
               ${s.services ? `<p class="text-xs text-zinc-700 dark:text-zinc-300 mb-3"><strong class="text-zinc-900 dark:text-white">Services:</strong> ${s.services}</p>` : ''}
-
-              <!-- Terms Grid -->
-              <div class="grid grid-cols-2 gap-2 text-[10px] text-zinc-500 dark:text-zinc-400 mb-3">
-                ${s.paymentTerms ? `<div class="bg-zinc-50 dark:bg-obsidian-900 p-1.5 rounded border border-zinc-200 dark:border-zinc-800"><strong>Terms:</strong> ${s.paymentTerms}</div>` : ''}
-                ${s.eta ? `<div class="bg-zinc-50 dark:bg-obsidian-900 p-1.5 rounded border border-zinc-200 dark:border-zinc-800"><strong>ETA:</strong> ${s.eta}</div>` : ''}
-              </div>
-
-              ${s.address ? `<p class="text-[11px] text-zinc-500 dark:text-zinc-400 mb-2"><i class="fa-solid fa-location-dot mr-1"></i> ${s.address}</p>` : ''}
-              ${s.notes ? `<p class="text-[11px] italic text-zinc-400 dark:text-zinc-500 border-t border-zinc-100 dark:border-zinc-800 pt-2"><i class="fa-solid fa-circle-info mr-1"></i> ${s.notes}</p>` : ''}
             </div>
 
-            <!-- Quick Action Buttons (High-Contrast Fixed) -->
             <div class="flex gap-2 text-xs pt-4 mt-2 border-t border-zinc-200 dark:border-zinc-800">
-              ${s.pocPhone ? `<a href="tel:${s.pocPhone}" class="flex-1 text-center bg-zinc-700 dark:bg-zinc-700 hover:bg-zinc-600 dark:hover:bg-zinc-600 p-2 rounded text-white font-bold transition shadow-sm"><i class="fa-solid fa-phone mr-1"></i> Call</a>` : ''}
+              ${s.pocPhone ? `<a href="tel:${s.pocPhone}" class="flex-1 text-center bg-zinc-700 hover:bg-zinc-600 p-2 rounded text-white font-bold transition shadow-sm"><i class="fa-solid fa-phone mr-1"></i> Call</a>` : ''}
               ${s.pocEmail ? `<a href="mailto:${s.pocEmail}" class="flex-1 text-center bg-red-600 hover:bg-red-700 text-white p-2 rounded font-bold transition shadow-sm"><i class="fa-solid fa-envelope mr-1"></i> Email</a>` : ''}
             </div>
           </div>
@@ -404,75 +356,92 @@
       });
     }
 
-    // Live Filter & Search Logic
     function filterSuppliers() {
       const query = document.getElementById('supplier-search').value.toLowerCase();
       const selectedCat = document.getElementById('filter-category').value.toLowerCase();
 
       const filtered = allSuppliers.filter(s => {
-        const searchHaystack = `${s.name} ${s.category} ${s.pocName} ${s.services} ${s.notes} ${s.address}`.toLowerCase();
-        const matchesQuery = searchHaystack.includes(query);
-        const matchesCat = selectedCat === '' || s.category.toLowerCase().includes(selectedCat);
-
-        return matchesQuery && matchesCat;
+        const searchHaystack = `${s.name} ${s.category} ${s.pocName} ${s.services}`.toLowerCase();
+        return searchHaystack.includes(query) && (selectedCat === '' || s.category.toLowerCase().includes(selectedCat));
       });
 
       renderSuppliers(filtered);
     }
 
-    // JOB ID ALLOCATION LOGIC
-    function addJobIDLine() {
-      const input = document.getElementById('input-job-id');
-      const val = input.value.trim();
-      if (!val) return;
-      jobIDList.push(val);
-      input.value = '';
-      renderJobIDTags();
-    }
-
-    function renderJobIDTags() {
-      const container = document.getElementById('job-id-tags');
-      if (jobIDList.length === 0) {
-        container.innerHTML = `<span class="text-xs text-zinc-400 italic">No Job IDs added yet.</span>`;
-        return;
-      }
-      container.innerHTML = jobIDList.map((id, idx) => `
-        <span class="inline-flex items-center gap-1.5 bg-red-600 text-white text-xs font-bold px-2.5 py-1 rounded shadow">
-          ${id}
-          <button onclick="jobIDList.splice(${idx},1); renderJobIDTags();" class="hover:text-black"><i class="fa-solid fa-xmark"></i></button>
-        </span>
-      `).join('');
-    }
-
-    // AC LINES LOGIC
-    function addACLine() {
+    // RELATIONAL LINKED JOB ID & AC NUMBER LOGIC
+    function addLinkedACLine() {
+      const jobId = document.getElementById('input-job-id').value.trim();
       const acNum = document.getElementById('input-ac-num').value.trim();
       const acTitle = document.getElementById('input-ac-title').value.trim();
+
+      if (!jobId) return alert('Please enter a Job ID.');
       if (!acNum) return alert('Please enter an AC Number.');
-      acList.push({ num: acNum, title: acTitle || '' });
+
+      if (!jobDataMap[jobId]) {
+        jobDataMap[jobId] = [];
+      }
+
+      jobDataMap[jobId].push({ num: acNum, title: acTitle });
+
       document.getElementById('input-ac-num').value = '';
       document.getElementById('input-ac-title').value = '';
-      renderACTable();
+      
+      renderGroupedACTable();
     }
 
-    function renderACTable() {
-      const tbody = document.getElementById('ac-table-body');
-      tbody.innerHTML = '';
-      acList.forEach((item, index) => {
-        tbody.innerHTML += `
-          <tr>
-            <td class="p-2 font-bold">${index + 1}</td>
+    function removeACItem(jobId, index) {
+      if (jobDataMap[jobId]) {
+        jobDataMap[jobId].splice(index, 1);
+        if (jobDataMap[jobId].length === 0) {
+          delete jobDataMap[jobId];
+        }
+        renderGroupedACTable();
+      }
+    }
+
+    function renderGroupedACTable() {
+      const container = document.getElementById('grouped-ac-container');
+      const jobKeys = Object.keys(jobDataMap);
+
+      if (jobKeys.length === 0) {
+        container.innerHTML = `<span class="text-xs text-zinc-400 italic">No Job IDs or AC Numbers linked yet.</span>`;
+        return;
+      }
+
+      container.innerHTML = '';
+      jobKeys.forEach(jobId => {
+        let rowsHtml = jobDataMap[jobId].map((item, idx) => `
+          <tr class="border-b border-zinc-200 dark:border-zinc-800 text-xs">
             <td class="p-2 font-bold text-red-600 dark:text-red-400">${item.num}</td>
             <td class="p-2">${item.title}</td>
             <td class="p-2 text-right">
-              <button onclick="acList.splice(${index},1); renderACTable();" class="text-red-500 hover:underline">Remove</button>
+              <button onclick="removeACItem('${jobId}', ${idx})" class="text-red-500 hover:underline">Remove</button>
             </td>
           </tr>
+        `).join('');
+
+        container.innerHTML += `
+          <div class="bg-zinc-100 dark:bg-obsidian-800 border border-zinc-300 dark:border-zinc-700 rounded-lg overflow-hidden">
+            <div class="bg-zinc-900 text-white text-xs font-bold px-3 py-2 flex justify-between items-center">
+              <span><i class="fa-solid fa-folder-closed mr-2 text-red-500"></i>JOB ID: ${jobId}</span>
+              <span class="text-[10px] bg-red-600 px-2 py-0.5 rounded">${jobDataMap[jobId].length} AC Numbers</span>
+            </div>
+            <table class="w-full text-left">
+              <thead>
+                <tr class="text-[10px] uppercase bg-zinc-200 dark:bg-obsidian-700 text-zinc-600 dark:text-zinc-400">
+                  <th class="p-2">AC Number</th>
+                  <th class="p-2">Portion / Drawing Title</th>
+                  <th class="p-2 text-right">Action</th>
+                </tr>
+              </thead>
+              <tbody>${rowsHtml}</tbody>
+            </table>
+          </div>
         `;
       });
     }
 
-    // PDF GENERATION FUNCTION (CLEAN BLANK OUTPUTS)
+    // PDF GENERATION (GROUPED BY JOB ID)
     function generatePDF() {
       const client = document.getElementById('meta-client').value.trim();
       const project = document.getElementById('meta-project').value.trim();
@@ -480,10 +449,6 @@
       const dateComp = document.getElementById('meta-date-comp').value;
       const buyer = document.getElementById('meta-buyer').value.trim();
       const poNum = document.getElementById('meta-po-number').value.trim();
-
-      // Multiple Job IDs Output
-      const pdfJobIds = document.getElementById('pdf-out-jobids');
-      pdfJobIds.innerText = jobIDList.length > 0 ? jobIDList.join(" | ") : "";
 
       document.getElementById('pdf-out-po').innerText = poNum ? `PO: ${poNum}` : "";
       document.getElementById('pdf-out-client').innerText = client || "";
@@ -495,23 +460,33 @@
       document.getElementById('pdf-out-inclusions').innerText = document.getElementById('meta-inclusions').value.trim() || "";
       document.getElementById('pdf-out-exclusions').innerText = document.getElementById('meta-exclusions').value.trim() || "";
 
-      // AC Table output
-      const pdfAcRows = document.getElementById('pdf-ac-rows');
-      pdfAcRows.innerHTML = '';
-      if(acList.length > 0) {
-        acList.forEach((item, i) => {
-          pdfAcRows.innerHTML += `
-            <tr style="border-bottom: 1px solid #e2e8f0;">
-              <td style="padding: 6px;">${i + 1}</td>
-              <td style="padding: 6px; font-weight: bold; color: #dc2626;">${item.num}</td>
-              <td style="padding: 6px;">${item.title}</td>
+      // Build grouped AC schedule in PDF
+      const pdfGroupsContainer = document.getElementById('pdf-job-groups-container');
+      pdfGroupsContainer.innerHTML = '';
+
+      const jobKeys = Object.keys(jobDataMap);
+      if (jobKeys.length > 0) {
+        jobKeys.forEach(jobId => {
+          let rowsHtml = jobDataMap[jobId].map(item => `
+            <tr style="border-bottom: 1px solid #cbd5e1;">
+              <td style="padding: 5px; font-weight: bold; color: #dc2626; width: 30%;">${item.num}</td>
+              <td style="padding: 5px;">${item.title}</td>
             </tr>
+          `).join('');
+
+          pdfGroupsContainer.innerHTML += `
+            <div style="margin-bottom: 10px;">
+              <div style="background-color: #111827; color: white; font-weight: bold; font-size: 8.5pt; padding: 4px 8px;">JOB ID: ${jobId}</div>
+              <table style="width: 100%; border-collapse: collapse; font-size: 8.5pt; border: 1px solid #cbd5e1;">
+                <tbody>${rowsHtml}</tbody>
+              </table>
+            </div>
           `;
         });
       }
 
       const element = document.getElementById('pdf-template');
-      const fileNameId = jobIDList.length > 0 ? jobIDList[0] : (poNum || 'Transmittal');
+      const fileNameId = jobKeys.length > 0 ? jobKeys[0] : (poNum || 'Transmittal');
       
       html2pdf().set({
         margin: 10,
@@ -521,7 +496,7 @@
       }).from(element).save();
     }
 
-    // FIXED DARK / LIGHT TOGGLE SWITCH
+    // TOGGLE DARK / LIGHT MODE
     function toggleDarkMode() {
       const html = document.documentElement;
       const circle = document.getElementById('toggle-circle');
@@ -535,7 +510,6 @@
       }
     }
 
-    // NAVIGATION TABS SWITCH
     function switchTab(tab) {
       ['suppliers', 'generator', 'staff'].forEach(t => {
         document.getElementById(`view-${t}`).classList.add('hidden');
