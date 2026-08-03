@@ -13,34 +13,34 @@
   <style>
     /* Dark Mode Theme Overrides */
     html.dark, html.dark body {
-      background-color: #0b0b0c !important; /* Base obsidian background */
+      background-color: #0b0b0c !important;
       color: #f4f4f5 !important;
     }
 
-    /* Builder Main Frame: A few shades lighter than obsidian background */
+    /* Outer Frame: Dark grey, slightly lighter than obsidian body */
     html.dark .builder-frame {
       background-color: #1e1e24 !important;
       border-color: #3f3f46 !important;
     }
 
-    /* Sub-card Sections inside Builder */
+    /* Sub-sections inside frame */
     html.dark .builder-section {
       background-color: #27272a !important;
       border-color: #3f3f46 !important;
     }
 
-    /* Text Inputs: Lighter than the builder frame background */
+    /* Inputs: Lighter grey than the frame for distinct visibility */
     html.dark input, 
     html.dark textarea, 
     html.dark select {
-      background-color: #3f3f46 !important; /* Lighter grey for input fields */
+      background-color: #3f3f46 !important;
       color: #ffffff !important;
       border-color: #52525b !important;
     }
 
     html.dark input::placeholder, 
     html.dark textarea::placeholder {
-      color: #d4d4d8 !important; /* Crisp placeholder text */
+      color: #d4d4d8 !important;
     }
 
     html.dark input:focus, 
@@ -49,6 +49,24 @@
       outline: none;
       border-color: #dc2626 !important;
       box-shadow: 0 0 0 1px #dc2626;
+    }
+
+    /* Strict A4 PDF Container Styling (Prevents Clipping) */
+    #pdf-wrapper {
+      position: absolute;
+      left: 0;
+      top: 0;
+      visibility: hidden;
+      z-index: -9999;
+    }
+
+    #pdf-template {
+      width: 190mm !important;
+      box-sizing: border-box !important;
+      padding: 8mm !important;
+      background-color: #ffffff !important;
+      color: #111827 !important;
+      font-family: Arial, sans-serif !important;
     }
   </style>
 </head>
@@ -94,22 +112,13 @@
     <!-- VIEW 1: SUPPLIER DIRECTORY -->
     <section id="view-suppliers" class="hidden">
       <div class="bg-white dark:bg-zinc-900 p-4 rounded-xl shadow-sm border border-zinc-300 dark:border-zinc-800 mb-6 flex flex-col md:flex-row gap-3">
-        <input type="text" id="supplier-search" oninput="filterSuppliers()" placeholder="Search suppliers, materials, contacts..." class="flex-grow pl-4 pr-4 py-2 rounded-lg text-sm">
-        <select id="filter-category" onchange="filterSuppliers()" class="rounded-lg px-3 py-2 text-sm">
-          <option value="">All Categories</option>
-          <option value="Plates">Plates</option>
-          <option value="Structural">Structural</option>
-          <option value="Machining">Machining</option>
-          <option value="Laser Cutting">Laser Cutting</option>
-          <option value="Fasteners">Fasteners</option>
-        </select>
+        <input type="text" id="supplier-search" placeholder="Search suppliers..." class="flex-grow pl-4 pr-4 py-2 rounded-lg text-sm">
       </div>
       <div id="supplier-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
     </section>
 
-    <!-- VIEW 2: INFO SHEET BUILDER (GREY FRAME FIX) -->
+    <!-- VIEW 2: INFO SHEET BUILDER -->
     <section id="view-generator" class="block">
-      <!-- Main Outer Builder Frame: Styled via .builder-frame class for dark mode background -->
       <div class="builder-frame bg-white rounded-2xl shadow-xl border border-zinc-300 p-6 mb-6 transition-colors duration-200">
         <h2 class="text-xl font-bold mb-5 text-red-600 dark:text-red-500 flex items-center gap-2">
           <i class="fa-solid fa-file-pdf"></i> Project Info Sheet Builder
@@ -177,13 +186,11 @@
             </div>
           </div>
 
-          <!-- DISPLAY GROUPED AC NUMBERS -->
           <div id="grouped-ac-container" class="space-y-4">
             <div class="text-xs text-zinc-400 italic">No Job IDs or AC Numbers linked yet.</div>
           </div>
         </div>
 
-        <!-- EXPORT BUTTON -->
         <div class="flex justify-end">
           <button onclick="generatePDF()" class="bg-red-600 hover:bg-red-700 text-white font-bold px-6 py-3 rounded-lg text-sm flex items-center gap-2 shadow-md transition">
             <i class="fa-solid fa-file-pdf"></i> Download Official PDF Transmittal Sheet
@@ -194,32 +201,22 @@
 
     <!-- VIEW 3: STAFF DIRECTORY -->
     <section id="view-staff" class="hidden">
-      <div class="bg-white dark:bg-zinc-900 rounded-xl shadow-sm border border-zinc-300 dark:border-zinc-800 overflow-hidden">
-        <table class="w-full text-left text-sm">
-          <thead class="bg-zinc-900 text-white uppercase text-xs">
-            <tr><th class="p-4">Name</th><th class="p-4">Job Title</th><th class="p-4">Email</th><th class="p-4">Phone</th></tr>
-          </thead>
-          <tbody id="staff-table-body" class="divide-y divide-zinc-200 dark:divide-zinc-800">
-            <tr>
-              <td class="p-4 font-bold">Procurement Department</td>
-              <td class="p-4 text-zinc-500 dark:text-zinc-400">Technical Buyer Desk</td>
-              <td class="p-4 font-semibold text-red-600 dark:text-red-400">procurement@allcon.co.za</td>
-              <td class="p-4 text-zinc-500 dark:text-zinc-400">+27 (0)11 000 0000</td>
-            </tr>
-          </tbody>
-        </table>
+      <div class="bg-white dark:bg-zinc-900 rounded-xl shadow-sm border border-zinc-300 dark:border-zinc-800 p-4">
+        <p class="text-sm">Staff Directory Desk</p>
       </div>
     </section>
 
   </main>
 
-  <!-- HIDDEN PDF EXPORT CONTAINER -->
-  <div style="position: absolute; left: -9999px; top: -9999px;">
-    <div id="pdf-template" style="width: 180mm; min-height: 260mm; box-sizing: border-box; font-family: Arial, sans-serif; background-color: #ffffff; color: #111827; padding: 0; margin: 0;">
-      <table style="width: 100%; border-bottom: 2px solid #dc2626; padding-bottom: 6px; margin-bottom: 10px; table-layout: fixed;">
+  <!-- UNCLIPPED PDF TEMPLATE CONTAINER -->
+  <div id="pdf-wrapper">
+    <div id="pdf-template">
+      
+      <!-- LOGO & HEADER BANNER -->
+      <table style="width: 100%; border-bottom: 2px solid #dc2626; padding-bottom: 8px; margin-bottom: 12px; table-layout: fixed;">
         <tr>
           <td style="vertical-align: middle; width: 60%;">
-            <img id="pdf-logo-img" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 500 120' width='500' height='120'><rect width='500' height='120' fill='%23FF0000'/><text x='250' y='75' font-family='Arial, sans-serif' font-weight='900' font-size='72' fill='%23FFFFFF' text-anchor='middle' letter-spacing='2'>ALLCON</text><text x='250' y='105' font-family='Arial, sans-serif' font-weight='700' font-size='20' fill='%23000000' text-anchor='middle'>FABRICATION &amp; ENGINEERING (PTY) LTD.</text></svg>" alt="ALLCON Logo" style="max-height: 38px; width: auto; display: block; margin-bottom: 4px;">
+            <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 500 120' width='500' height='120'><rect width='500' height='120' fill='%23FF0000'/><text x='250' y='75' font-family='Arial, sans-serif' font-weight='900' font-size='72' fill='%23FFFFFF' text-anchor='middle' letter-spacing='2'>ALLCON</text><text x='250' y='105' font-family='Arial, sans-serif' font-weight='700' font-size='20' fill='%23000000' text-anchor='middle'>FABRICATION &amp; ENGINEERING (PTY) LTD.</text></svg>" alt="ALLCON Logo" style="height: 38px; width: auto; display: block; margin-bottom: 4px;">
             <div style="font-size: 8pt; color: #52525b; text-transform: uppercase; font-weight: bold;">Project Info Sheet Transmittal</div>
           </td>
           <td style="vertical-align: top; text-align: right; width: 40%;">
@@ -229,47 +226,51 @@
         </tr>
       </table>
 
-      <table style="width: 100%; border-collapse: collapse; margin-bottom: 10px; font-size: 8pt; border: 1px solid #cbd5e1; table-layout: fixed;">
+      <!-- METADATA GRID -->
+      <table style="width: 100%; border-collapse: collapse; margin-bottom: 12px; font-size: 8pt; border: 1px solid #cbd5e1; table-layout: fixed;">
         <tr style="background-color: #f8fafc;">
-          <td style="padding: 4px; font-weight: bold; width: 18%; border: 1px solid #cbd5e1;">CLIENT:</td>
-          <td style="padding: 4px; width: 32%; border: 1px solid #cbd5e1;" id="pdf-out-client"></td>
-          <td style="padding: 4px; font-weight: bold; width: 22%; border: 1px solid #cbd5e1;">COMPLETION DATE:</td>
-          <td style="padding: 4px; width: 28%; font-weight: bold; color: #dc2626; border: 1px solid #cbd5e1;" id="pdf-out-comp-date"></td>
+          <td style="padding: 5px; font-weight: bold; width: 22%; border: 1px solid #cbd5e1;">CLIENT:</td>
+          <td style="padding: 5px; width: 28%; border: 1px solid #cbd5e1;" id="pdf-out-client"></td>
+          <td style="padding: 5px; font-weight: bold; width: 22%; border: 1px solid #cbd5e1;">COMPLETION DATE:</td>
+          <td style="padding: 5px; width: 28%; font-weight: bold; color: #dc2626; border: 1px solid #cbd5e1;" id="pdf-out-comp-date"></td>
         </tr>
         <tr>
-          <td style="padding: 4px; font-weight: bold; border: 1px solid #cbd5e1;">PROJECT NAME:</td>
-          <td style="padding: 4px; border: 1px solid #cbd5e1;" id="pdf-out-project"></td>
-          <td style="padding: 4px; font-weight: bold; border: 1px solid #cbd5e1;">BUYER:</td>
-          <td style="padding: 4px; border: 1px solid #cbd5e1;" id="pdf-out-buyer"></td>
+          <td style="padding: 5px; font-weight: bold; border: 1px solid #cbd5e1;">PROJECT NAME:</td>
+          <td style="padding: 5px; border: 1px solid #cbd5e1;" id="pdf-out-project"></td>
+          <td style="padding: 5px; font-weight: bold; border: 1px solid #cbd5e1;">BUYER:</td>
+          <td style="padding: 5px; border: 1px solid #cbd5e1;" id="pdf-out-buyer"></td>
         </tr>
       </table>
 
-      <div style="font-size: 8pt; margin-bottom: 10px; background-color: #f8fafc; padding: 6px; border: 1px solid #cbd5e1; border-radius: 4px;">
-        <div style="margin-bottom: 3px;"><strong>Inclusions:</strong> <span id="pdf-out-inclusions"></span></div>
+      <!-- INCLUSIONS & EXCLUSIONS -->
+      <div style="font-size: 8pt; margin-bottom: 12px; background-color: #f8fafc; padding: 8px; border: 1px solid #cbd5e1; border-radius: 4px;">
+        <div style="margin-bottom: 4px;"><strong>Inclusions:</strong> <span id="pdf-out-inclusions"></span></div>
         <div><strong>Exclusions:</strong> <span id="pdf-out-exclusions"></span></div>
       </div>
 
+      <!-- SCHEDULE -->
       <div style="font-size: 8.5pt; font-weight: bold; margin-bottom: 4px; color: #111827;">JOB IDs & LINKED AC DRAWING SCHEDULE</div>
-      <div id="pdf-job-groups-container" style="margin-bottom: 10px;"></div>
+      <div id="pdf-job-groups-container" style="margin-bottom: 12px;"></div>
 
+      <!-- ALLOCATION REGISTER TABLE -->
       <div style="font-size: 8.5pt; font-weight: bold; margin-bottom: 4px; color: #111827;">PURCHASE ORDER ALLOCATION REGISTER</div>
       <table style="width: 100%; border-collapse: collapse; font-size: 7.5pt; border: 1px solid #cbd5e1; table-layout: fixed;">
         <thead>
           <tr style="background-color: #f1f5f9;">
-            <th style="padding: 4px; border: 1px solid #cbd5e1; text-align: left; width: 30%;">Category</th>
-            <th style="padding: 4px; border: 1px solid #cbd5e1; text-align: left; width: 35%;">Allocated Supplier Name</th>
-            <th style="padding: 4px; border: 1px solid #cbd5e1; text-align: left; width: 35%;">Purchase Order No. (PO)</th>
+            <th style="padding: 5px; border: 1px solid #cbd5e1; text-align: left; width: 35%;">Category</th>
+            <th style="padding: 5px; border: 1px solid #cbd5e1; text-align: left; width: 32%;">Allocated Supplier Name</th>
+            <th style="padding: 5px; border: 1px solid #cbd5e1; text-align: left; width: 33%;">Purchase Order No. (PO)</th>
           </tr>
         </thead>
         <tbody>
-          <tr><td style="padding: 4px; border: 1px solid #cbd5e1;">1. Material (Plates)</td><td style="border: 1px solid #cbd5e1;"></td><td style="padding: 4px; border: 1px solid #cbd5e1; color: #94a3b8;">PO- . . . . . . . . . . . . . . . . .</td></tr>
-          <tr><td style="padding: 4px; border: 1px solid #cbd5e1;">2. Material (Structural)</td><td style="border: 1px solid #cbd5e1;"></td><td style="padding: 4px; border: 1px solid #cbd5e1; color: #94a3b8;">PO- . . . . . . . . . . . . . . . . .</td></tr>
-          <tr><td style="padding: 4px; border: 1px solid #cbd5e1;">3. Laser Cutting & Bending</td><td style="border: 1px solid #cbd5e1;"></td><td style="padding: 4px; border: 1px solid #cbd5e1; color: #94a3b8;">PO- . . . . . . . . . . . . . . . . .</td></tr>
-          <tr><td style="padding: 4px; border: 1px solid #cbd5e1;">4. Machining / Turning</td><td style="border: 1px solid #cbd5e1;"></td><td style="padding: 4px; border: 1px solid #cbd5e1; color: #94a3b8;">PO- . . . . . . . . . . . . . . . . .</td></tr>
-          <tr><td style="padding: 4px; border: 1px solid #cbd5e1;">5. Fasteners & Hardware</td><td style="border: 1px solid #cbd5e1;"></td><td style="padding: 4px; border: 1px solid #cbd5e1; color: #94a3b8;">PO- . . . . . . . . . . . . . . . . .</td></tr>
-          <tr><td style="padding: 4px; border: 1px solid #cbd5e1;">6. Surface Coating / HDG</td><td style="border: 1px solid #cbd5e1;"></td><td style="padding: 4px; border: 1px solid #cbd5e1; color: #94a3b8;">PO- . . . . . . . . . . . . . . . . .</td></tr>
-          <tr><td style="padding: 4px; border: 1px solid #cbd5e1;">7. Freight / Transport</td><td style="border: 1px solid #cbd5e1;"></td><td style="padding: 4px; border: 1px solid #cbd5e1; color: #94a3b8;">PO- . . . . . . . . . . . . . . . . .</td></tr>
-          <tr><td style="padding: 4px; border: 1px solid #cbd5e1;">8. Miscellaneous</td><td style="border: 1px solid #cbd5e1;"></td><td style="padding: 4px; border: 1px solid #cbd5e1; color: #94a3b8;">PO- . . . . . . . . . . . . . . . . .</td></tr>
+          <tr><td style="padding: 5px; border: 1px solid #cbd5e1; font-weight: 600;">1. Material (Plates)</td><td style="border: 1px solid #cbd5e1;"></td><td style="padding: 5px; border: 1px solid #cbd5e1; color: #94a3b8;">PO-</td></tr>
+          <tr><td style="padding: 5px; border: 1px solid #cbd5e1; font-weight: 600;">2. Material (Structural)</td><td style="border: 1px solid #cbd5e1;"></td><td style="padding: 5px; border: 1px solid #cbd5e1; color: #94a3b8;">PO-</td></tr>
+          <tr><td style="padding: 5px; border: 1px solid #cbd5e1; font-weight: 600;">3. Laser Cutting & Bending</td><td style="border: 1px solid #cbd5e1;"></td><td style="padding: 5px; border: 1px solid #cbd5e1; color: #94a3b8;">PO-</td></tr>
+          <tr><td style="padding: 5px; border: 1px solid #cbd5e1; font-weight: 600;">4. Machining / Turning</td><td style="border: 1px solid #cbd5e1;"></td><td style="padding: 5px; border: 1px solid #cbd5e1; color: #94a3b8;">PO-</td></tr>
+          <tr><td style="padding: 5px; border: 1px solid #cbd5e1; font-weight: 600;">5. Fasteners & Hardware</td><td style="border: 1px solid #cbd5e1;"></td><td style="padding: 5px; border: 1px solid #cbd5e1; color: #94a3b8;">PO-</td></tr>
+          <tr><td style="padding: 5px; border: 1px solid #cbd5e1; font-weight: 600;">6. Surface Coating / HDG</td><td style="border: 1px solid #cbd5e1;"></td><td style="padding: 5px; border: 1px solid #cbd5e1; color: #94a3b8;">PO-</td></tr>
+          <tr><td style="padding: 5px; border: 1px solid #cbd5e1; font-weight: 600;">7. Freight / Transport</td><td style="border: 1px solid #cbd5e1;"></td><td style="padding: 5px; border: 1px solid #cbd5e1; color: #94a3b8;">PO-</td></tr>
+          <tr><td style="padding: 5px; border: 1px solid #cbd5e1; font-weight: 600;">8. Miscellaneous</td><td style="border: 1px solid #cbd5e1;"></td><td style="padding: 5px; border: 1px solid #cbd5e1; color: #94a3b8;">PO-</td></tr>
         </tbody>
       </table>
     </div>
@@ -346,6 +347,7 @@
     }
 
     function generatePDF() {
+      // 1. Map Inputs to PDF Template
       const client = document.getElementById('meta-client').value.trim();
       const project = document.getElementById('meta-project').value.trim();
       const dateGen = document.getElementById('meta-date-gen').value;
@@ -353,15 +355,15 @@
       const buyer = document.getElementById('meta-buyer').value.trim();
       const poNum = document.getElementById('meta-po-number').value.trim();
 
-      document.getElementById('pdf-out-po').innerText = poNum ? `PO: ${poNum}` : "";
-      document.getElementById('pdf-out-client').innerText = client || "";
-      document.getElementById('pdf-out-project').innerText = project || "";
+      document.getElementById('pdf-out-po').innerText = poNum ? `PO: ${poNum}` : "PO: -";
+      document.getElementById('pdf-out-client').innerText = client || "N/A";
+      document.getElementById('pdf-out-project').innerText = project || "N/A";
       document.getElementById('pdf-out-gen-date').innerText = dateGen ? `Generated: ${dateGen}` : "";
-      document.getElementById('pdf-out-comp-date').innerText = dateComp || "";
-      document.getElementById('pdf-out-buyer').innerText = buyer || "";
+      document.getElementById('pdf-out-comp-date').innerText = dateComp || "N/A";
+      document.getElementById('pdf-out-buyer').innerText = buyer || "N/A";
       
-      document.getElementById('pdf-out-inclusions').innerText = document.getElementById('meta-inclusions').value.trim() || "";
-      document.getElementById('pdf-out-exclusions').innerText = document.getElementById('meta-exclusions').value.trim() || "";
+      document.getElementById('pdf-out-inclusions').innerText = document.getElementById('meta-inclusions').value.trim() || "None specified";
+      document.getElementById('pdf-out-exclusions').innerText = document.getElementById('meta-exclusions').value.trim() || "None specified";
 
       const pdfGroupsContainer = document.getElementById('pdf-job-groups-container');
       pdfGroupsContainer.innerHTML = '';
@@ -389,18 +391,31 @@
         pdfGroupsContainer.innerHTML = `<div style="font-size: 8pt; color: #94a3b8; font-style: italic;">No Job IDs or AC Numbers allocated.</div>`;
       }
 
+      // 2. Render and Download PDF via html2pdf
+      const wrapper = document.getElementById('pdf-wrapper');
       const element = document.getElementById('pdf-template');
+      
+      wrapper.style.visibility = 'visible';
+
       const fileNameId = jobKeys.length > 0 ? jobKeys[0] : (poNum || 'Transmittal');
 
       const opt = {
-        margin: [10, 10, 10, 10], 
+        margin: [5, 5, 5, 5],
         filename: `ALLCON_InfoSheet_${fileNameId}.pdf`,
         image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2, useCORS: true, scrollX: 0, scrollY: 0, windowWidth: 750 },
+        html2canvas: { 
+          scale: 2, 
+          useCORS: true, 
+          scrollX: 0, 
+          scrollY: 0,
+          windowWidth: 800
+        },
         jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
       };
 
-      html2pdf().set(opt).from(element).save();
+      html2pdf().set(opt).from(element).save().then(() => {
+        wrapper.style.visibility = 'hidden';
+      });
     }
 
     function toggleDarkMode() {
