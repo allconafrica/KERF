@@ -117,7 +117,7 @@
         width: 100% !important;
         border-collapse: collapse !important;
         table-layout: fixed !important;
-        margin-bottom: 12px !important;
+        margin-bottom: 8px !important;
         border: 1px solid #000000 !important;
         box-sizing: border-box !important;
       }
@@ -207,11 +207,11 @@
         <div class="builder-section grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 bg-zinc-100 p-4 rounded-xl text-xs border border-zinc-200">
           <div>
             <label class="block font-semibold mb-1 text-zinc-700 dark:text-zinc-300">Client Name</label>
-            <input type="text" id="meta-client" placeholder="e.g. Sasol Synfuels" class="w-full p-2.5 rounded-lg text-sm">
+            <input type="text" id="meta-client" placeholder="e.g. NCP International" class="w-full p-2.5 rounded-lg text-sm">
           </div>
           <div>
             <label class="block font-semibold mb-1 text-zinc-700 dark:text-zinc-300">Project Name</label>
-            <input type="text" id="meta-project" placeholder="e.g. Conveyor Structure Overhaul" class="w-full p-2.5 rounded-lg text-sm">
+            <input type="text" id="meta-project" placeholder="e.g. SHANTA NEW - CHOCKEY BLOCKS" class="w-full p-2.5 rounded-lg text-sm">
           </div>
           <div>
             <label class="block font-semibold mb-1 text-zinc-700 dark:text-zinc-300">Date Info Sheet Generated</label>
@@ -219,7 +219,7 @@
           </div>
           <div>
             <label class="block font-semibold mb-1 text-red-600 dark:text-red-400">Target Completion Date</label>
-            <input type="date" id="meta-date-comp" class="w-full p-2.5 rounded-lg text-sm border-red-300 dark:border-red-900/50">
+            <input type="text" id="meta-date-comp" placeholder="e.g. 11 SEPT 2026" class="w-full p-2.5 rounded-lg text-sm border-red-300 dark:border-red-900/50">
           </div>
           <div>
             <label class="block font-semibold mb-1 text-zinc-700 dark:text-zinc-300">Technical Buyer</label>
@@ -231,62 +231,63 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6 text-xs">
           <div>
             <label class="block font-semibold mb-1 text-zinc-700 dark:text-zinc-300">Inclusions</label>
-            <textarea id="meta-inclusions" rows="3" placeholder="e.g. Material supply, laser cutting, CNC turning..." class="w-full p-2.5 rounded-lg text-sm"></textarea>
+            <textarea id="meta-inclusions" rows="3" placeholder="e.g. MATERIAL S355, FABRICATION, MACHINING..." class="w-full p-2.5 rounded-lg text-sm"></textarea>
           </div>
           <div>
             <label class="block font-semibold mb-1 text-zinc-700 dark:text-zinc-300">Exclusions</label>
-            <textarea id="meta-exclusions" rows="3" placeholder="e.g. Site erection, transport to site, NDT..." class="w-full p-2.5 rounded-lg text-sm"></textarea>
+            <textarea id="meta-exclusions" rows="3" placeholder="e.g. SAND BLAST & PAINT, MPI, WELDING..." class="w-full p-2.5 rounded-lg text-sm"></textarea>
           </div>
         </div>
 
         <!-- LINKED JOB ID & AC DRAWING SCHEDULE -->
         <div class="builder-section bg-red-950/20 p-4 rounded-xl border border-red-200 dark:border-zinc-700 mb-6">
-          <h3 class="text-xs font-bold uppercase mb-3 text-red-600 dark:text-red-400"><i class="fa-solid fa-diagram-project mr-2"></i>Job ID &amp; AC Drawing Schedule (AC Number | Drawing Reference | Material | Supplier | PO)</h3>
+          <h3 class="text-xs font-bold uppercase mb-3 text-red-600 dark:text-red-400"><i class="fa-solid fa-diagram-project mr-2"></i>Job ID Schedule Builder</h3>
           
           <div class="grid grid-cols-1 md:grid-cols-12 gap-3 items-end mb-4 bg-zinc-200 dark:bg-zinc-900 p-3 rounded-lg text-xs">
             <div class="md:col-span-2">
               <label class="block font-bold mb-1 text-zinc-700 dark:text-zinc-300">Job ID *</label>
-              <input type="text" id="input-job-id" placeholder="e.g. 4720" class="w-full p-2 rounded-lg font-bold">
+              <input type="text" id="input-job-id" placeholder="e.g. 5276" class="w-full p-2 rounded-lg font-bold">
             </div>
             <div class="md:col-span-2">
-              <label class="block font-bold mb-1 text-zinc-700 dark:text-zinc-300">AC Number *</label>
-              <input type="text" id="input-ac-num" placeholder="e.g. AC2896" class="w-full p-2 rounded-lg font-bold">
+              <label class="block font-bold mb-1 text-zinc-700 dark:text-zinc-300">AC Number</label>
+              <input type="text" id="input-ac-num" placeholder="e.g. AC2902" class="w-full p-2 rounded-lg font-bold">
+            </div>
+            <div class="md:col-span-3">
+              <label class="block font-bold mb-1 text-zinc-700 dark:text-zinc-300">Description</label>
+              <input type="text" id="input-ac-desc" placeholder="e.g. PINION" class="w-full p-2 rounded-lg">
             </div>
             <div class="md:col-span-2">
-              <label class="block font-bold mb-1 text-zinc-700 dark:text-zinc-300">Drawing Ref</label>
-              <input type="text" id="input-drawing-ref" placeholder="e.g. DRW-01" class="w-full p-2 rounded-lg">
-            </div>
-            <div class="md:col-span-2">
-              <label class="block font-bold mb-1 text-zinc-700 dark:text-zinc-300">Material Category</label>
-              <select id="input-ac-material" class="w-full p-2 rounded-lg">
-                <option value="">-- Select Material --</option>
-                <option value="Material (Plates)">Material (Plates)</option>
-                <option value="Material (Structural)">Material (Structural)</option>
-                <option value="Laser Cutting &amp; Bending">Laser Cutting &amp; Bending</option>
-                <option value="Machining / Turning">Machining / Turning</option>
-                <option value="Fasteners &amp; Hardware">Fasteners &amp; Hardware</option>
-                <option value="Surface Coating / HDG">Surface Coating / HDG</option>
-                <option value="Freight / Transport">Freight / Transport</option>
-                <option value="Miscellaneous">Miscellaneous</option>
+              <label class="block font-bold mb-1 text-zinc-700 dark:text-zinc-300">Category</label>
+              <select id="input-ac-category" class="w-full p-2 rounded-lg">
+                <option value="">-- Select Category --</option>
+                <option value="MATERIAL">MATERIAL</option>
+                <option value="MACHINING">MACHINING</option>
+                <option value="FABRICATION">FABRICATION</option>
+                <option value="COATING">COATING</option>
+                <option value="TRANSPORT">TRANSPORT</option>
               </select>
             </div>
-            <div class="md:col-span-2">
+            <div class="md:col-span-3">
+              <label class="block font-bold mb-1 text-zinc-700 dark:text-zinc-300">Sub-Category</label>
+              <input type="text" id="input-ac-subcategory" placeholder="e.g. STRUCTURAL" class="w-full p-2 rounded-lg">
+            </div>
+            <div class="md:col-span-3 mt-2">
               <label class="block font-bold mb-1 text-zinc-700 dark:text-zinc-300">Supplier Name</label>
               <select id="input-ac-supplier" class="w-full p-2 rounded-lg">
                 <option value="">-- Select Supplier --</option>
               </select>
             </div>
-            <div class="md:col-span-1">
-              <label class="block font-bold mb-1 text-zinc-700 dark:text-zinc-300">PO Num</label>
-              <input type="text" id="input-ac-po" placeholder="PO-88392" class="w-full p-2 rounded-lg font-bold">
+            <div class="md:col-span-3 mt-2">
+              <label class="block font-bold mb-1 text-zinc-700 dark:text-zinc-300">Purchase Order</label>
+              <input type="text" id="input-ac-po" placeholder="PO18008" class="w-full p-2 rounded-lg font-bold">
             </div>
-            <div class="md:col-span-1">
-              <button onclick="addLinkedACLine()" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold p-2 rounded-lg transition"><i class="fa-solid fa-plus mr-1"></i> Add</button>
+            <div class="md:col-span-2 mt-2">
+              <button onclick="addLinkedACLine()" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold p-2 rounded-lg transition"><i class="fa-solid fa-plus mr-1"></i> Add Entry</button>
             </div>
           </div>
 
           <div id="grouped-ac-container" class="space-y-4">
-            <div class="text-xs text-zinc-400 italic">No Job IDs or AC Numbers linked yet.</div>
+            <div class="text-xs text-zinc-400 italic">No Job IDs or entries added yet.</div>
           </div>
         </div>
 
@@ -325,16 +326,17 @@
           <div style="margin-bottom: 4px;">
             <img src="./ALLCON-Logo.jpg" alt="ALLCON Logo" style="height: 44px; width: auto; max-width: 260px; object-fit: contain;" onerror="this.onerror=null; this.outerHTML='<div class=\'print-header-banner\' style=\'font-weight: 900; font-size: 20pt; padding: 4px 12px; display: inline-block; letter-spacing: 2px;\'>ALLCON</div>';">
           </div>
-          <div style="font-size: 9pt; color: #334155; text-transform: uppercase; font-weight: bold; margin-top: 4px;">PROJECT INFO SHEET TRANSMITTAL</div>
+          <div style="font-size: 8pt; color: #334155; text-transform: uppercase; font-weight: bold; margin-top: 2px;">FABRICATION & ENGINEERING (PTY) LTD.</div>
+          <div style="font-size: 8.5pt; color: #000000; text-transform: uppercase; font-weight: bold; margin-top: 6px;">PROJECT TRANSMITTAL</div>
         </td>
         <td style="vertical-align: top; text-align: right; width: 40%;">
-          <div style="font-size: 8.5pt; color: #334155; font-weight: bold;" id="print-out-gen-date"></div>
+          <div style="font-size: 8.5pt; color: #000000; font-weight: bold;" id="print-out-gen-date"></div>
         </td>
       </tr>
     </table>
 
     <!-- METADATA TABLE -->
-    <table style="width: 100%;">
+    <table style="width: 100%; margin-bottom: 12px;">
       <colgroup>
         <col style="width: 18%;">
         <col style="width: 32%;">
@@ -342,29 +344,41 @@
         <col style="width: 28%;">
       </colgroup>
       <tbody>
-        <tr class="print-table-header">
+        <tr>
           <td style="font-weight: bold;">CLIENT:</td>
           <td id="print-out-client">N/A</td>
           <td style="font-weight: bold;">TARGET COMPLETION:</td>
-          <td style="font-weight: bold; color: #dc2626;" id="print-out-comp-date">N/A</td>
+          <td style="font-weight: bold;" id="print-out-comp-date">N/A</td>
         </tr>
         <tr>
-          <td style="font-weight: bold;" class="print-table-header">PROJECT NAME:</td>
+          <td style="font-weight: bold;">PROJECT NAME:</td>
           <td id="print-out-project">N/A</td>
-          <td style="font-weight: bold;" class="print-table-header">TECHNICAL BUYER:</td>
+          <td style="font-weight: bold;">TECHNICAL BUYER:</td>
           <td id="print-out-buyer">N/A</td>
         </tr>
       </tbody>
     </table>
 
     <!-- INCLUSIONS & EXCLUSIONS -->
-    <div style="font-size: 8.5pt; margin-bottom: 12px; padding: 6px 8px; border: 1px solid #000000; background-color: #ffffff; box-sizing: border-box;">
-      <div style="margin-bottom: 4px;"><strong>Inclusions:</strong> <span id="print-out-inclusions">None specified</span></div>
-      <div><strong>Exclusions:</strong> <span id="print-out-exclusions">None specified</span></div>
-    </div>
+    <table style="width: 100%; margin-bottom: 12px;">
+      <colgroup>
+        <col style="width: 18%;">
+        <col style="width: 82%;">
+      </colgroup>
+      <tbody>
+        <tr>
+          <td style="font-weight: bold;">Inclusions:</td>
+          <td id="print-out-inclusions">None specified</td>
+        </tr>
+        <tr>
+          <td style="font-weight: bold;">Exclusions:</td>
+          <td id="print-out-exclusions">None specified</td>
+        </tr>
+      </tbody>
+    </table>
 
     <!-- LINKED AC SCHEDULE -->
-    <div style="font-size: 9pt; font-weight: bold; margin-bottom: 4px; color: #000000;">JOB IDs &amp; LINKED AC DRAWING SCHEDULE</div>
+    <div style="font-size: 9pt; font-weight: bold; margin-bottom: 4px; color: #000000; text-transform: uppercase;">JOB IDs &amp; LINKED AC DRAWING SCHEDULE</div>
     <div id="print-job-groups-container" style="margin-bottom: 12px;"></div>
 
   </div>
@@ -374,7 +388,7 @@
     const STAFF_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSNynT5Snb9PgJp6ti3QpuHUr9fX8bGKEG10H8kjkbCna_ZfkEC7aM06QrwkjHwxR1n6uu3ZgvvaKu6/pub?gid=1666500445&single=true&output=csv";
     const SUPPLIERS_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSNynT5Snb9PgJp6ti3QpuHUr9fX8bGKEG10H8kjkbCna_ZfkEC7aM06QrwkjHwxR1n6uu3ZgvvaKu6/pub?gid=0&single=true&output=csv";
 
-    let jobDataMap = {};
+    let jobDataMap = {}; // Structure: { jobId: { acList: [], supList: [] } }
     let liveStaffData = [];
     let liveSupplierData = [];
 
@@ -420,7 +434,6 @@
 
     // LOAD DEDICATED DATA FROM INDIVIDUAL GOOGLE SHEET ENDPOINTS
     async function loadLiveData() {
-      // 1. Fetch Staff Directory Tab Data
       try {
         const staffRes = await fetch(STAFF_CSV_URL);
         const staffCsv = await staffRes.text();
@@ -438,7 +451,6 @@
         console.error("Failed to load Staff Directory data:", err);
       }
 
-      // 2. Fetch Suppliers Tab Data
       try {
         const suppRes = await fetch(SUPPLIERS_CSV_URL);
         const suppCsv = await suppRes.text();
@@ -466,11 +478,14 @@
     }
 
     document.addEventListener("DOMContentLoaded", () => {
-      document.getElementById('meta-date-gen').valueAsDate = new Date();
+      const today = new Date();
+      const yyyy = today.getFullYear();
+      const mm = String(today.getMonth() + 1).padStart(2, '0');
+      const dd = String(today.getDate()).padStart(2, '0');
+      document.getElementById('meta-date-gen').value = `${yyyy}-${mm}-${dd}`;
       loadLiveData();
     });
 
-    // POPULATE BUILDER SUPPLIER DROPDOWN (ALPHABETICALLY CATEGORISED BY FIRST LETTER)
     function populateSupplierDropdown() {
       const select = document.getElementById('input-ac-supplier');
       if (!select) return;
@@ -480,7 +495,6 @@
         .filter(Boolean)
         .sort((a, b) => a.localeCompare(b));
 
-      // Group by starting letter
       const groups = {};
       sortedNames.forEach(name => {
         const firstLetter = name.charAt(0).toUpperCase();
@@ -507,24 +521,17 @@
       select.innerHTML = html;
     }
 
-    // HELPER FOR BADGE COLORS
     function getStatusBadgeClass(status) {
       const cleanStatus = (status || '').toUpperCase().trim();
       switch (cleanStatus) {
-        case 'APPROVED':
-          return 'bg-blue-600';
-        case 'PREFERRED':
-          return 'bg-emerald-600';
-        case 'REJECTED':
-          return 'bg-red-600';
-        case 'PENDING NDA':
-          return 'bg-amber-500';
-        default:
-          return 'bg-zinc-600';
+        case 'APPROVED': return 'bg-blue-600';
+        case 'PREFERRED': return 'bg-emerald-600';
+        case 'REJECTED': return 'bg-red-600';
+        case 'PENDING NDA': return 'bg-amber-500';
+        default: return 'bg-zinc-600';
       }
     }
 
-    // RENDER SUPPLIERS
     function renderSuppliers() {
       const query = (document.getElementById('supplier-search')?.value || '').toLowerCase();
       const container = document.getElementById('suppliers-list-container');
@@ -545,7 +552,6 @@
 
       container.innerHTML = filtered.map(s => {
         const badgeClass = getStatusBadgeClass(s.status);
-
         return `
           <div class="bg-white dark:bg-zinc-900 border border-zinc-300 dark:border-zinc-800 rounded-xl p-5 shadow-sm hover:shadow-md transition">
             <div class="flex justify-between items-start mb-3">
@@ -555,24 +561,17 @@
                 <p class="text-xs text-red-600 dark:text-red-400 font-semibold">${s.category}</p>
               </div>
             </div>
-            
             <div class="grid grid-cols-1 gap-1.5 text-xs text-zinc-600 dark:text-zinc-300 my-3 bg-zinc-50 dark:bg-zinc-800/50 p-3 rounded-lg border border-zinc-200 dark:border-zinc-700/50">
               ${s.pocName ? `<div><strong>POC Name:</strong> ${s.pocName}</div>` : ''}
               ${s.pocEmail ? `<div><strong>POC Email:</strong> <a href="mailto:${s.pocEmail}" class="text-red-600 hover:underline">${s.pocEmail}</a></div>` : ''}
               ${s.pocPhone ? `<div><strong>POC Phone:</strong> <a href="tel:${s.pocPhone}" class="text-red-600 hover:underline">${s.pocPhone}</a></div>` : ''}
               ${s.servicesOffered ? `<div><strong>Services Offered:</strong> ${s.servicesOffered}</div>` : ''}
-              ${s.logistics ? `<div><strong>Logistics:</strong> ${s.logistics}</div>` : ''}
-              ${(s.paymentTerms || s.standardEta) ? `<div><strong>Payment Terms:</strong> ${s.paymentTerms} | <strong>Standard ETA:</strong> ${s.standardEta}</div>` : ''}
-              ${s.address ? `<div><strong>Address:</strong> ${s.address}</div>` : ''}
             </div>
-
-            ${s.notes ? `<div class="text-[11px] italic text-zinc-500 dark:text-zinc-400"><strong>Notes:</strong> ${s.notes}</div>` : ''}
           </div>
         `;
       }).join('');
     }
 
-    // RENDER STAFF
     function renderStaff() {
       const query = (document.getElementById('staff-search')?.value || '').toLowerCase();
       const container = document.getElementById('staff-list-container');
@@ -603,11 +602,6 @@
               <p class="text-xs text-red-600 dark:text-red-400 font-medium">${st.jobTitle}</p>
             </div>
           </div>
-
-          <div class="space-y-1 text-xs text-zinc-600 dark:text-zinc-300 border-t border-zinc-200 dark:border-zinc-800 pt-2">
-            ${st.phone ? `<div><i class="fa-solid fa-phone mr-2 text-zinc-400"></i><a href="tel:${st.phone}" class="hover:underline">${st.phone}</a></div>` : ''}
-            ${st.email ? `<div><i class="fa-solid fa-envelope mr-2 text-zinc-400"></i><a href="mailto:${st.email}" class="hover:underline text-red-600 dark:text-red-400">${st.email}</a></div>` : ''}
-          </div>
         </div>
       `).join('');
     }
@@ -616,39 +610,42 @@
     function addLinkedACLine() {
       const jobId = document.getElementById('input-job-id').value.trim();
       const acNum = document.getElementById('input-ac-num').value.trim();
-      const drawingRef = document.getElementById('input-drawing-ref').value.trim();
-      const material = document.getElementById('input-ac-material').value;
+      const description = document.getElementById('input-ac-desc').value.trim();
+      const category = document.getElementById('input-ac-category').value;
+      const subCategory = document.getElementById('input-ac-subcategory').value.trim();
       const supplier = document.getElementById('input-ac-supplier').value;
       const poNum = document.getElementById('input-ac-po').value.trim();
 
       if (!jobId) return alert('Please enter a Job ID.');
-      if (!acNum) return alert('Please enter an AC Number.');
 
       if (!jobDataMap[jobId]) {
-        jobDataMap[jobId] = [];
+        jobDataMap[jobId] = { acList: [], supList: [] };
       }
 
-      jobDataMap[jobId].push({ 
-        num: acNum, 
-        drawingRef: drawingRef,
-        material: material, 
-        supplier: supplier, 
-        po: poNum 
-      });
+      if (acNum || description) {
+        jobDataMap[jobId].acList.push({ num: acNum, desc: description });
+      }
+
+      if (category || supplier || poNum) {
+        jobDataMap[jobId].supList.push({ category, subCategory, supplier, po: poNum });
+      }
 
       document.getElementById('input-ac-num').value = '';
-      document.getElementById('input-drawing-ref').value = '';
-      document.getElementById('input-ac-po').value = '';
-      document.getElementById('input-ac-material').value = '';
+      document.getElementById('input-ac-desc').value = '';
+      document.getElementById('input-ac-category').value = '';
+      document.getElementById('input-ac-subcategory').value = '';
       document.getElementById('input-ac-supplier').value = '';
+      document.getElementById('input-ac-po').value = '';
       
       renderGroupedACTable();
     }
 
-    function removeACItem(jobId, index) {
+    function removeACItem(jobId, type, index) {
       if (jobDataMap[jobId]) {
-        jobDataMap[jobId].splice(index, 1);
-        if (jobDataMap[jobId].length === 0) delete jobDataMap[jobId];
+        jobDataMap[jobId][type].splice(index, 1);
+        if (jobDataMap[jobId].acList.length === 0 && jobDataMap[jobId].supList.length === 0) {
+          delete jobDataMap[jobId];
+        }
         renderGroupedACTable();
       }
     }
@@ -658,43 +655,58 @@
       const jobKeys = Object.keys(jobDataMap);
 
       if (jobKeys.length === 0) {
-        container.innerHTML = `<span class="text-xs text-zinc-400 italic">No Job IDs or AC Numbers linked yet.</span>`;
+        container.innerHTML = `<span class="text-xs text-zinc-400 italic">No Job IDs or entries added yet.</span>`;
         return;
       }
 
       container.innerHTML = '';
       jobKeys.forEach(jobId => {
-        let rowsHtml = jobDataMap[jobId].map((item, idx) => `
+        let acRows = jobDataMap[jobId].acList.map((item, idx) => `
           <tr class="border-b border-zinc-200 dark:border-zinc-800 text-xs">
-            <td class="p-2 font-bold text-red-600 dark:text-red-400 w-[11%]">${item.num}</td>
-            <td class="p-2 w-[29%] text-zinc-700 dark:text-zinc-300">${item.drawingRef || '<span class="text-zinc-400 italic">--</span>'}</td>
-            <td class="p-2 w-[22%] text-zinc-700 dark:text-zinc-300">${item.material || '<span class="text-zinc-400 italic">--</span>'}</td>
-            <td class="p-2 w-[22%]" title="${item.supplier || ''}">${item.supplier || '<span class="text-zinc-400 italic">--</span>'}</td>
-            <td class="p-2 font-semibold w-[10%]">${item.po ? (item.po.startsWith('PO-') ? item.po : 'PO-' + item.po) : '<span class="text-zinc-400 italic">--</span>'}</td>
-            <td class="p-2 text-right w-[6%]">
-              <button onclick="removeACItem('${jobId}', ${idx})" class="text-red-500 hover:underline">Remove</button>
-            </td>
+            <td class="p-2 font-bold text-red-600 dark:text-red-400 w-[30%]">${item.num || '--'}</td>
+            <td class="p-2 w-[60%] text-zinc-700 dark:text-zinc-300">${item.desc || '--'}</td>
+            <td class="p-2 text-right w-[10%]"><button onclick="removeACItem('${jobId}', 'acList', ${idx})" class="text-red-500 hover:underline">Remove</button></td>
+          </tr>
+        `).join('');
+
+        let supRows = jobDataMap[jobId].supList.map((item, idx) => `
+          <tr class="border-b border-zinc-200 dark:border-zinc-800 text-xs">
+            <td class="p-2 font-bold w-[25%]">${item.category || '--'}</td>
+            <td class="p-2 w-[25%]">${item.subCategory || '--'}</td>
+            <td class="p-2 w-[30%]">${item.supplier || '--'}</td>
+            <td class="p-2 w-[15%]">${item.po || '--'}</td>
+            <td class="p-2 text-right w-[5%]"><button onclick="removeACItem('${jobId}', 'supList', ${idx})" class="text-red-500 hover:underline">Remove</button></td>
           </tr>
         `).join('');
 
         container.innerHTML += `
-          <div class="bg-zinc-100 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 rounded-lg overflow-hidden">
-            <div class="bg-zinc-900 text-white text-xs font-bold px-3 py-2 flex justify-between items-center">
-              <span><i class="fa-solid fa-folder-closed mr-2 text-red-500"></i>JOB ID: ${jobId}</span>
-              <span class="text-[10px] bg-red-600 px-2 py-0.5 rounded">${jobDataMap[jobId].length} AC Entries</span>
-            </div>
-            <table class="w-full text-left border-collapse table-fixed">
+          <div class="bg-zinc-100 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 rounded-lg overflow-hidden p-3 mb-4">
+            <div class="bg-zinc-900 text-white text-xs font-bold px-3 py-2 rounded mb-2">JOB ID: ${jobId}</div>
+            
+            <div class="text-[11px] font-semibold mb-1 text-zinc-600 dark:text-zinc-400">AC & Description Schedule</div>
+            <table class="w-full text-left border-collapse mb-3">
               <thead>
-                <tr class="bg-zinc-200 dark:bg-zinc-900 text-[11px] text-zinc-600 dark:text-zinc-400 border-b border-zinc-300 dark:border-zinc-700">
-                  <th class="p-2 w-[11%]">AC Number</th>
-                  <th class="p-2 w-[29%]">Drawing Reference</th>
-                  <th class="p-2 w-[22%]">Material</th>
-                  <th class="p-2 w-[22%]">Supplier Name</th>
-                  <th class="p-2 w-[10%]">PO</th>
-                  <th class="p-2 text-right w-[6%]">Action</th>
+                <tr class="bg-zinc-200 dark:bg-zinc-900 text-[10px] text-zinc-600 dark:text-zinc-400">
+                  <th class="p-1.5">AC Number</th>
+                  <th class="p-1.5">Description</th>
+                  <th class="p-1.5 text-right">Action</th>
                 </tr>
               </thead>
-              <tbody>${rowsHtml}</tbody>
+              <tbody>${acRows || '<tr><td colspan="3" class="p-2 italic text-zinc-400">No AC items added</td></tr>'}</tbody>
+            </table>
+
+            <div class="text-[11px] font-semibold mb-1 text-zinc-600 dark:text-zinc-400">Category & Supplier Schedule</div>
+            <table class="w-full text-left border-collapse">
+              <thead>
+                <tr class="bg-zinc-200 dark:bg-zinc-900 text-[10px] text-zinc-600 dark:text-zinc-400">
+                  <th class="p-1.5">Category</th>
+                  <th class="p-1.5">Sub-Category</th>
+                  <th class="p-1.5">Supplier</th>
+                  <th class="p-1.5">PO</th>
+                  <th class="p-1.5 text-right">Action</th>
+                </tr>
+              </thead>
+              <tbody>${supRows || '<tr><td colspan="5" class="p-2 italic text-zinc-400">No supplier items added</td></tr>'}</tbody>
             </table>
           </div>
         `;
@@ -705,9 +717,15 @@
       document.getElementById('print-out-client').innerText = document.getElementById('meta-client').value.trim() || "N/A";
       document.getElementById('print-out-project').innerText = document.getElementById('meta-project').value.trim() || "N/A";
       
-      const dateGen = document.getElementById('meta-date-gen').value;
-      document.getElementById('print-out-gen-date').innerText = dateGen ? `Generated: ${dateGen}` : "";
-      document.getElementById('print-out-comp-date').innerText = document.getElementById('meta-date-comp').value || "N/A";
+      const dateGenVal = document.getElementById('meta-date-gen').value;
+      if (dateGenVal) {
+        const parts = dateGenVal.split('-');
+        document.getElementById('print-out-gen-date').innerText = `Generated: ${parts[0]}-${parts[1]}-${parts[2]}`;
+      } else {
+        document.getElementById('print-out-gen-date').innerText = "";
+      }
+
+      document.getElementById('print-out-comp-date').innerText = document.getElementById('meta-date-comp').value.trim() || "N/A";
       document.getElementById('print-out-buyer').innerText = document.getElementById('meta-buyer').value.trim() || "N/A";
       
       document.getElementById('print-out-inclusions').innerText = document.getElementById('meta-inclusions').value.trim() || "None specified";
@@ -719,46 +737,62 @@
       const jobKeys = Object.keys(jobDataMap);
       if (jobKeys.length > 0) {
         jobKeys.forEach(jobId => {
-          let rowsHtml = jobDataMap[jobId].map(item => {
-            const formattedPo = item.po ? (item.po.startsWith('PO-') ? item.po : 'PO-' + item.po) : '';
-            return `
-              <tr>
-                <td style="font-weight: bold; color: #dc2626; width: 11%;">${item.num}</td>
-                <td style="width: 29%;">${item.drawingRef || '&nbsp;'}</td>
-                <td style="width: 25%;">${item.material || '&nbsp;'}</td>
-                <td style="width: 25%;">${item.supplier || '&nbsp;'}</td>
-                <td style="font-weight: bold; width: 10%;">${formattedPo}</td>
-              </tr>
-            `;
-          }).join('');
+          let acRows = jobDataMap[jobId].acList.map(item => `
+            <tr>
+              <td style="width: 30%;">${item.num || '&nbsp;'}</td>
+              <td style="width: 70%;">${item.desc || '&nbsp;'}</td>
+            </tr>
+          `).join('');
+
+          let supRows = jobDataMap[jobId].supList.map(item => `
+            <tr>
+              <td style="width: 25%;">${item.category || '&nbsp;'}</td>
+              <td style="width: 25%;">${item.subCategory || '&nbsp;'}</td>
+              <td style="width: 30%;">${item.supplier || '&nbsp;'}</td>
+              <td style="width: 20%; font-weight: bold;">${item.po || '&nbsp;'}</td>
+            </tr>
+          `).join('');
 
           printGroupsContainer.innerHTML += `
             <div style="margin-bottom: 8px;">
-              <div style="background-color: #111827; color: #ffffff; font-weight: bold; font-size: 8pt; padding: 3px 6px;" class="print-header-banner">JOB ID: ${jobId}</div>
-              <table style="width: 100%; table-layout: fixed;">
+              <div style="background-color: #dc2626; color: #ffffff; font-weight: bold; font-size: 8pt; padding: 4px 6px;" class="print-header-banner">JOB ID: ${jobId}</div>
+              
+              <table style="width: 100%; table-layout: fixed; margin-bottom: 0 !important;">
                 <colgroup>
-                  <col style="width: 11%;">
-                  <col style="width: 29%;">
-                  <col style="width: 25%;">
-                  <col style="width: 25%;">
-                  <col style="width: 10%;">
+                  <col style="width: 30%;">
+                  <col style="width: 70%;">
                 </colgroup>
                 <thead>
                   <tr class="print-table-header" style="font-size: 8pt;">
-                    <th style="text-align: left; font-weight: bold;">AC Number</th>
-                    <th style="text-align: left; font-weight: bold;">Drawing Reference</th>
-                    <th style="text-align: left; font-weight: bold;">Material</th>
-                    <th style="text-align: left; font-weight: bold;">Supplier Name</th>
-                    <th style="text-align: left; font-weight: bold;">PO</th>
+                    <th style="text-align: left; font-weight: bold;">AC NUMBER</th>
+                    <th style="text-align: left; font-weight: bold;">DESCRIPTION</th>
                   </tr>
                 </thead>
-                <tbody>${rowsHtml}</tbody>
+                <tbody>${acRows || '<tr><td colspan="2">&nbsp;</td></tr>'}</tbody>
+              </table>
+
+              <table style="width: 100%; table-layout: fixed; margin-top: -1px !important;">
+                <colgroup>
+                  <col style="width: 25%;">
+                  <col style="width: 25%;">
+                  <col style="width: 30%;">
+                  <col style="width: 20%;">
+                </colgroup>
+                <thead>
+                  <tr class="print-table-header" style="font-size: 8pt;">
+                    <th style="text-align: left; font-weight: bold;">CATEGORY</th>
+                    <th style="text-align: left; font-weight: bold;">SUB-CATEGORY</th>
+                    <th style="text-align: left; font-weight: bold;">SUPPLIER</th>
+                    <th style="text-align: left; font-weight: bold;">PURCHASE ORDER</th>
+                  </tr>
+                </thead>
+                <tbody>${supRows || '<tr><td colspan="4">&nbsp;</td></tr>'}</tbody>
               </table>
             </div>
           `;
         });
       } else {
-        printGroupsContainer.innerHTML = `<div style="font-size: 8.5pt; color: #64748b; font-style: italic;">No Job IDs or AC Numbers allocated.</div>`;
+        printGroupsContainer.innerHTML = `<div style="font-size: 8.5pt; color: #64748b; font-style: italic;">No Job IDs allocated.</div>`;
       }
 
       window.print();
