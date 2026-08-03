@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ALLCON - Technical Procurement Portal</title>
+  <title>KERF - Technical Procurement Portal</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <!-- html2pdf library for PDF generation -->
@@ -11,31 +11,64 @@
   <script>
     tailwind.config = { darkMode: 'class' }
   </script>
+  <style>
+    /* Custom Obsidian Styles & Input Text Contrast */
+    .bg-obsidian-900 { background-color: #0b0b0c; }
+    .bg-obsidian-800 { background-color: #141416; }
+    .bg-obsidian-700 { background-color: #1f1f22; }
+    .bg-obsidian-600 { background-color: #2a2a2e; }
+
+    /* Text Inputs / Textareas Styling */
+    input, textarea, select {
+      background-color: #3f3f46 !important; /* Lighter Grey */
+      color: #ffffff !important;           /* White Text */
+      border-color: #52525b !important;
+    }
+    input::placeholder, textarea::placeholder {
+      color: #a1a1aa !important;
+    }
+    input:focus, textarea:focus, select:focus {
+      outline: none;
+      border-color: #dc2626 !important; /* Red Focus Accent */
+      ring: 1px #dc2626;
+    }
+  </style>
 </head>
-<body class="bg-slate-100 dark:bg-slate-900 text-slate-800 dark:text-slate-100 font-sans min-h-screen flex flex-col transition-colors duration-200">
+<body class="bg-zinc-200 dark:bg-obsidian-900 text-zinc-900 dark:text-zinc-100 font-sans min-h-screen flex flex-col transition-colors duration-200">
 
   <!-- HEADER -->
-  <header class="bg-slate-900 text-white shadow-md border-b-4 border-blue-600">
+  <header class="bg-black text-white shadow-lg border-b-4 border-red-600">
     <div class="max-w-7xl mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
-      <div class="flex items-center gap-3">
-        <div class="bg-blue-600 text-white font-black text-xl px-3 py-1 rounded tracking-wider">ALLCON</div>
+      
+      <!-- ALLCON LOGO BRANDING -->
+      <div class="flex items-center gap-4">
+        <div class="bg-red-600 text-white border-b-4 border-black px-4 py-1.5 inline-block text-center shadow-md">
+          <div class="font-black text-2xl tracking-wider leading-none">ALLCON</div>
+          <div class="bg-black text-white text-[8px] font-bold tracking-tighter px-1 py-0.5 mt-1 uppercase">
+            Fabrication & Engineering (Pty) Ltd.
+          </div>
+        </div>
         <div>
-          <h1 class="text-xl font-bold tracking-tight">Fabrication & Engineering</h1>
-          <p class="text-xs text-slate-400">Technical Procurement & Info Sheet Transmittal Portal</p>
+          <h1 class="text-xl font-extrabold tracking-tight text-white">KERF <span class="text-xs font-normal text-zinc-400">v1.0</span></h1>
+          <p class="text-xs text-zinc-400">Technical Procurement & Info Sheet Transmittal Portal</p>
         </div>
       </div>
       
-      <div class="flex items-center gap-3">
-        <!-- Theme Toggle -->
-        <button onclick="toggleDarkMode()" class="p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 transition" title="Toggle Theme">
-          <i id="theme-icon" class="fa-solid fa-moon"></i>
-        </button>
+      <div class="flex items-center gap-5">
+        <!-- CLEAR DARK / LIGHT MODE SWITCH TOGGLE -->
+        <div class="flex items-center gap-2 bg-zinc-900 p-1.5 rounded-full border border-zinc-700">
+          <span class="text-[10px] font-bold px-1 text-zinc-400 dark:text-zinc-500">LIGHT</span>
+          <button id="theme-toggle" onclick="toggleDarkMode()" class="w-12 h-6 bg-zinc-600 dark:bg-red-600 rounded-full p-1 transition-colors duration-200 focus:outline-none flex items-center">
+            <div id="toggle-circle" class="w-4 h-4 bg-white rounded-full shadow-md transform transition-transform duration-200"></div>
+          </button>
+          <span class="text-[10px] font-bold px-1 text-zinc-500 dark:text-red-500">DARK</span>
+        </div>
 
         <!-- Navigation Tabs -->
-        <nav class="flex bg-slate-800 p-1 rounded-lg border border-slate-700 text-xs font-semibold">
-          <button id="tab-suppliers" onclick="switchTab('suppliers')" class="px-3 py-1.5 rounded-md bg-blue-600 text-white">Suppliers</button>
-          <button id="tab-generator" onclick="switchTab('generator')" class="px-3 py-1.5 rounded-md text-slate-300 hover:text-white">Info Sheet Builder</button>
-          <button id="tab-staff" onclick="switchTab('staff')" class="px-3 py-1.5 rounded-md text-slate-300 hover:text-white">Staff</button>
+        <nav class="flex bg-zinc-900 p-1 rounded-lg border border-zinc-800 text-xs font-semibold">
+          <button id="tab-suppliers" onclick="switchTab('suppliers')" class="px-3 py-1.5 rounded-md bg-red-600 text-white">Suppliers</button>
+          <button id="tab-generator" onclick="switchTab('generator')" class="px-3 py-1.5 rounded-md text-zinc-400 hover:text-white">Info Sheet Builder</button>
+          <button id="tab-staff" onclick="switchTab('staff')" class="px-3 py-1.5 rounded-md text-zinc-400 hover:text-white">Staff</button>
         </nav>
       </div>
     </div>
@@ -46,9 +79,9 @@
 
     <!-- VIEW 1: SUPPLIER DIRECTORY -->
     <section id="view-suppliers" class="block">
-      <div class="bg-white dark:bg-slate-800 p-4 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 mb-6 flex flex-col md:flex-row gap-3">
-        <input type="text" id="supplier-search" oninput="filterSuppliers()" placeholder="Search suppliers, materials (plates, structural), contacts..." class="flex-grow pl-4 pr-4 py-2 bg-slate-50 dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg text-sm focus:outline-none">
-        <select id="filter-category" onchange="filterSuppliers()" class="bg-slate-50 dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg px-3 py-2 text-sm">
+      <div class="bg-white dark:bg-obsidian-800 p-4 rounded-xl shadow-sm border border-zinc-300 dark:border-zinc-800 mb-6 flex flex-col md:flex-row gap-3">
+        <input type="text" id="supplier-search" oninput="filterSuppliers()" placeholder="Search suppliers, materials, contacts, services..." class="flex-grow pl-4 pr-4 py-2 rounded-lg text-sm">
+        <select id="filter-category" onchange="filterSuppliers()" class="rounded-lg px-3 py-2 text-sm">
           <option value="">All Categories</option>
           <option value="Plates">Plates</option>
           <option value="Structural">Structural</option>
@@ -62,67 +95,67 @@
 
     <!-- VIEW 2: INFO SHEET & PDF TRANSMITTAL BUILDER -->
     <section id="view-generator" class="hidden">
-      <div class="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-6 mb-6">
-        <h2 class="text-lg font-bold mb-4 text-blue-600"><i class="fa-solid fa-file-pdf mr-2"></i>Project Info Sheet Transmittal Builder</h2>
+      <div class="bg-white dark:bg-obsidian-800 rounded-xl shadow-sm border border-zinc-300 dark:border-zinc-800 p-6 mb-6">
+        <h2 class="text-lg font-bold mb-4 text-red-600 dark:text-red-500"><i class="fa-solid fa-file-pdf mr-2"></i>Project Info Sheet Transmittal Builder</h2>
         
         <!-- METADATA FORM -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 bg-slate-50 dark:bg-slate-700/50 p-4 rounded-lg text-xs">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 bg-zinc-100 dark:bg-obsidian-700 p-4 rounded-lg text-xs border border-zinc-200 dark:border-zinc-700">
           <div>
-            <label class="block font-bold mb-1 text-blue-600 dark:text-blue-400">JOBID (Primary Reference) *</label>
-            <input type="text" id="meta-jobid" placeholder="e.g. JOB-2026-9940" class="w-full p-2 border border-slate-300 dark:border-slate-600 rounded font-bold">
+            <label class="block font-bold mb-1 text-red-600 dark:text-red-400">JOBID (Primary Reference) *</label>
+            <input type="text" id="meta-jobid" placeholder="e.g. JOB-2026-9940" class="w-full p-2 rounded font-bold">
           </div>
           <div>
-            <label class="block font-semibold mb-1">Client Name</label>
-            <input type="text" id="meta-client" placeholder="e.g. Sasol Synfuels" class="w-full p-2 border border-slate-300 dark:border-slate-600 rounded">
+            <label class="block font-semibold mb-1 text-zinc-700 dark:text-zinc-300">Client Name</label>
+            <input type="text" id="meta-client" placeholder="e.g. Sasol Synfuels" class="w-full p-2 rounded">
           </div>
           <div>
-            <label class="block font-semibold mb-1">Project Name</label>
-            <input type="text" id="meta-project" placeholder="e.g. Conveyor Structure Overhaul" class="w-full p-2 border border-slate-300 dark:border-slate-600 rounded">
+            <label class="block font-semibold mb-1 text-zinc-700 dark:text-zinc-300">Project Name</label>
+            <input type="text" id="meta-project" placeholder="e.g. Conveyor Structure Overhaul" class="w-full p-2 rounded">
           </div>
           <div>
-            <label class="block font-semibold mb-1">Date Info Sheet Generated</label>
-            <input type="date" id="meta-date-gen" class="w-full p-2 border border-slate-300 dark:border-slate-600 rounded">
+            <label class="block font-semibold mb-1 text-zinc-700 dark:text-zinc-300">Date Info Sheet Generated</label>
+            <input type="date" id="meta-date-gen" class="w-full p-2 rounded">
           </div>
           <div>
             <label class="block font-semibold mb-1 text-emerald-600 dark:text-emerald-400">Target Completion Date</label>
-            <input type="date" id="meta-date-comp" class="w-full p-2 border border-slate-300 dark:border-slate-600 rounded">
+            <input type="date" id="meta-date-comp" class="w-full p-2 rounded">
           </div>
           <div>
-            <label class="block font-semibold mb-1">Technical Buyer</label>
-            <input type="text" id="meta-buyer" value="Norman Myburgh" class="w-full p-2 border border-slate-300 dark:border-slate-600 rounded bg-slate-100 dark:bg-slate-800" readonly>
+            <label class="block font-semibold mb-1 text-zinc-700 dark:text-zinc-300">Technical Buyer</label>
+            <input type="text" id="meta-buyer" value="Norman Myburgh" class="w-full p-2 rounded font-semibold" readonly>
           </div>
         </div>
 
         <!-- SCOPE / INCLUSIONS / EXCLUSIONS -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 text-xs">
           <div>
-            <label class="block font-semibold mb-1">Scope of Work (from Email)</label>
-            <textarea id="meta-scope" rows="3" placeholder="e.g. Fabrication and machining of drive shaft housings..." class="w-full p-2 border border-slate-300 dark:border-slate-600 rounded"></textarea>
+            <label class="block font-semibold mb-1 text-zinc-700 dark:text-zinc-300">Scope of Work (from Email)</label>
+            <textarea id="meta-scope" rows="3" placeholder="e.g. Fabrication and machining of drive shaft housings..." class="w-full p-2 rounded"></textarea>
           </div>
           <div>
-            <label class="block font-semibold mb-1">Inclusions</label>
-            <textarea id="meta-inclusions" rows="3" placeholder="e.g. Material supply, laser cutting, CNC turning..." class="w-full p-2 border border-slate-300 dark:border-slate-600 rounded"></textarea>
+            <label class="block font-semibold mb-1 text-zinc-700 dark:text-zinc-300">Inclusions</label>
+            <textarea id="meta-inclusions" rows="3" placeholder="e.g. Material supply, laser cutting, CNC turning..." class="w-full p-2 rounded"></textarea>
           </div>
           <div>
-            <label class="block font-semibold mb-1">Exclusions</label>
-            <textarea id="meta-exclusions" rows="3" placeholder="e.g. Site erection, transport to site, NDT..." class="w-full p-2 border border-slate-300 dark:border-slate-600 rounded"></textarea>
+            <label class="block font-semibold mb-1 text-zinc-700 dark:text-zinc-300">Exclusions</label>
+            <textarea id="meta-exclusions" rows="3" placeholder="e.g. Site erection, transport to site, NDT..." class="w-full p-2 rounded"></textarea>
           </div>
         </div>
 
         <!-- AC NUMBERS ENTRY -->
-        <div class="bg-blue-50/50 dark:bg-slate-700/30 p-4 rounded-lg border border-blue-100 dark:border-slate-600 mb-6">
-          <h3 class="text-xs font-bold uppercase mb-3 text-slate-700 dark:text-slate-300">AC Numbers & Drawings Allocation</h3>
+        <div class="bg-red-950/20 dark:bg-obsidian-700 p-4 rounded-lg border border-red-200 dark:border-zinc-700 mb-6">
+          <h3 class="text-xs font-bold uppercase mb-3 text-red-600 dark:text-red-400">AC Numbers & Drawings Allocation</h3>
           <div class="grid grid-cols-1 md:grid-cols-12 gap-3 items-end">
             <div class="md:col-span-3">
-              <label class="block text-xs font-semibold mb-1">AC Number *</label>
-              <input type="text" id="input-ac-num" placeholder="e.g. AC-4010-01" class="w-full p-2 border rounded text-xs font-bold text-emerald-700">
+              <label class="block text-xs font-semibold mb-1 text-zinc-700 dark:text-zinc-300">AC Number *</label>
+              <input type="text" id="input-ac-num" placeholder="e.g. AC-4010-01" class="w-full p-2 rounded text-xs font-bold">
             </div>
             <div class="md:col-span-8">
-              <label class="block text-xs font-semibold mb-1">Portion / Drawing Reference Title</label>
-              <input type="text" id="input-ac-title" placeholder="e.g. Main Base Frame Assembly & Platework" class="w-full p-2 border rounded text-xs">
+              <label class="block text-xs font-semibold mb-1 text-zinc-700 dark:text-zinc-300">Portion / Drawing Reference Title</label>
+              <input type="text" id="input-ac-title" placeholder="e.g. Main Base Frame Assembly & Platework" class="w-full p-2 rounded text-xs">
             </div>
             <div class="md:col-span-1">
-              <button onclick="addACLine()" class="w-full bg-blue-600 text-white font-bold p-2 rounded text-xs hover:bg-blue-700"><i class="fa-solid fa-plus"></i></button>
+              <button onclick="addACLine()" class="w-full bg-red-600 text-white font-bold p-2 rounded text-xs hover:bg-red-700 transition"><i class="fa-solid fa-plus"></i></button>
             </div>
           </div>
         </div>
@@ -130,14 +163,14 @@
         <!-- AC LIST TABLE -->
         <table class="w-full text-left text-xs mb-6 border-collapse">
           <thead>
-            <tr class="bg-slate-800 text-white uppercase"><th class="p-2">#</th><th class="p-2">AC Number</th><th class="p-2">Project Portion / Drawing Title</th><th class="p-2 text-right">Action</th></tr>
+            <tr class="bg-zinc-900 text-white uppercase"><th class="p-2">#</th><th class="p-2">AC Number</th><th class="p-2">Project Portion / Drawing Title</th><th class="p-2 text-right">Action</th></tr>
           </thead>
-          <tbody id="ac-table-body" class="divide-y divide-slate-200 dark:divide-slate-700"></tbody>
+          <tbody id="ac-table-body" class="divide-y divide-zinc-200 dark:divide-zinc-800"></tbody>
         </table>
 
         <!-- EXPORT BUTTON -->
         <div class="flex justify-end">
-          <button onclick="generatePDF()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-6 py-2.5 rounded-lg text-xs flex items-center gap-2 shadow-md">
+          <button onclick="generatePDF()" class="bg-red-600 hover:bg-red-700 text-white font-bold px-6 py-2.5 rounded-lg text-xs flex items-center gap-2 shadow-md transition">
             <i class="fa-solid fa-file-pdf"></i> Download Official PDF Transmittal Sheet
           </button>
         </div>
@@ -146,12 +179,19 @@
 
     <!-- VIEW 3: STAFF DIRECTORY -->
     <section id="view-staff" class="hidden">
-      <div class="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 overflow-hidden">
+      <div class="bg-white dark:bg-obsidian-800 rounded-xl shadow-sm border border-zinc-300 dark:border-zinc-800 overflow-hidden">
         <table class="w-full text-left text-sm">
-          <thead class="bg-slate-800 text-white uppercase text-xs">
+          <thead class="bg-zinc-900 text-white uppercase text-xs">
             <tr><th class="p-4">Name</th><th class="p-4">Job Title</th><th class="p-4">Email</th><th class="p-4">Phone</th></tr>
           </thead>
-          <tbody id="staff-table-body" class="divide-y divide-slate-200 dark:divide-slate-700"></tbody>
+          <tbody id="staff-table-body" class="divide-y divide-zinc-200 dark:divide-zinc-800">
+            <tr>
+              <td class="p-4 font-bold">Norman Myburgh</td>
+              <td class="p-4 text-zinc-500 dark:text-zinc-400">Technical Buyer</td>
+              <td class="p-4 font-semibold text-red-600 dark:text-red-400">norman@allcon.co.za</td>
+              <td class="p-4 text-zinc-500 dark:text-zinc-400">+27 (0)11 000 0000</td>
+            </tr>
+          </tbody>
         </table>
       </div>
     </section>
@@ -160,17 +200,17 @@
 
   <!-- HIDDEN CONTAINER FOR PDF GENERATION -->
   <div class="hidden">
-    <div id="pdf-template" class="p-8 bg-white text-slate-900 font-sans" style="width: 210mm;">
-      <!-- HEADER -->
-      <div style="border-bottom: 3px solid #2563eb; padding-bottom: 12px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center;">
+    <div id="pdf-template" class="p-8 bg-white text-zinc-900 font-sans" style="width: 210mm;">
+      <!-- HEADER LOGO BANNER IN PDF -->
+      <div style="border-bottom: 3px solid #dc2626; padding-bottom: 12px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center;">
         <div>
-          <div style="background-color: #2563eb; color: white; font-weight: 900; font-size: 16pt; padding: 4px 10px; display: inline-block; border-radius: 4px;">ALLCON</div>
-          <div style="font-size: 12pt; font-weight: 800; margin-top: 4px;">FABRICATION & ENGINEERING</div>
-          <div style="font-size: 8pt; color: #64748b; text-transform: uppercase;">Technical Procurement Project Info Sheet</div>
+          <div style="background-color: #dc2626; color: white; font-weight: 900; font-size: 16pt; padding: 4px 10px; display: inline-block;">ALLCON</div>
+          <div style="background-color: #000; color: white; font-size: 7pt; font-weight: 700; padding: 2px 4px; text-transform: uppercase; margin-top: 2px;">FABRICATION & ENGINEERING (PTY) LTD.</div>
+          <div style="font-size: 8pt; color: #52525b; text-transform: uppercase; margin-top: 4px; font-weight: bold;">KERF - Technical Procurement Info Sheet</div>
         </div>
         <div style="text-align: right;">
-          <div style="font-size: 14pt; font-weight: 800; color: #1e40af;" id="pdf-out-jobid">JOB-2026-XXXX</div>
-          <div style="font-size: 8pt; color: #64748b;" id="pdf-out-gen-date">Generated: 31 July 2026</div>
+          <div style="font-size: 14pt; font-weight: 800; color: #dc2626;" id="pdf-out-jobid">JOB-2026-XXXX</div>
+          <div style="font-size: 8pt; color: #52525b;" id="pdf-out-gen-date">Generated: --/--/2026</div>
         </div>
       </div>
 
@@ -198,10 +238,10 @@
       </div>
 
       <!-- AC NUMBERS SCHEDULE -->
-      <div style="font-size: 10pt; font-weight: bold; margin-bottom: 6px; color: #1e293b;">AC NUMBERS & PROJECT ALLOCATIONS</div>
+      <div style="font-size: 10pt; font-weight: bold; margin-bottom: 6px; color: #111827;">AC NUMBERS & PROJECT ALLOCATIONS</div>
       <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 9pt; border: 1px solid #cbd5e1;">
         <thead>
-          <tr style="background-color: #1e293b; color: white;">
+          <tr style="background-color: #111827; color: white;">
             <th style="padding: 6px; width: 8%;">#</th>
             <th style="padding: 6px; width: 25%;">AC NUMBER</th>
             <th style="padding: 6px;">PORTION / DRAWING TITLE</th>
@@ -211,7 +251,7 @@
       </table>
 
       <!-- CATEGORIZED PO DOTTED WRITE-IN REGISTER -->
-      <div style="font-size: 10pt; font-weight: bold; margin-bottom: 6px; color: #1e293b;">PURCHASE ORDER ALLOCATION REGISTER</div>
+      <div style="font-size: 10pt; font-weight: bold; margin-bottom: 6px; color: #111827;">PURCHASE ORDER ALLOCATION REGISTER</div>
       <table style="width: 100%; border-collapse: collapse; font-size: 8.5pt; border: 1px solid #cbd5e1;">
         <thead>
           <tr style="background-color: #f1f5f9;">
@@ -236,12 +276,142 @@
 
   <!-- JAVASCRIPT LOGIC -->
   <script>
-    const API_URL = "YOUR_GOOGLE_APPS_SCRIPT_URL_HERE";
+    // Paste your published Google Apps Script Web App URL here
+    const API_URL = "https://script.google.com/macros/s/AKfycby1YcJXrsyUuhJLDUFv3YbcUqRkTW3YzSl-f4gUxdMhjENZzIGBkvJl4d5h121vukoc/exec"; 
+    
+    let allSuppliers = [];
     let acList = [];
 
     // Set today's date on load
     document.getElementById('meta-date-gen').valueAsDate = new Date();
 
+    // Load Supplier Data on Startup
+    document.addEventListener("DOMContentLoaded", () => {
+      if (API_URL && API_URL !== "YOUR_GOOGLE_APPS_SCRIPT_URL_HERE") {
+        fetchSuppliers();
+      } else {
+        document.getElementById('supplier-grid').innerHTML = `
+          <div class="col-span-full text-center py-10 text-zinc-400 border-2 border-dashed border-zinc-700 rounded-xl">
+            <i class="fa-solid fa-link-slash text-2xl mb-2 text-red-500"></i>
+            <p class="font-bold">Google Apps Script API URL Not Configured</p>
+            <p class="text-xs text-zinc-500">Please paste your deployed Web App URL into <code>const API_URL</code> in the script below.</p>
+          </div>
+        `;
+      }
+    });
+
+    // Fetch Suppliers mapped strictly to your exact sheet headers
+    async function fetchSuppliers() {
+      const grid = document.getElementById('supplier-grid');
+      grid.innerHTML = '<div class="col-span-full text-center py-10 text-zinc-400"><i class="fa-solid fa-circle-notch fa-spin mr-2 text-red-600"></i>Loading live directory from Google Sheets...</div>';
+
+      try {
+        const res = await fetch(API_URL);
+        const data = await res.json();
+
+        // Map exact sheet header names to system properties
+        allSuppliers = data.map(row => ({
+          status: row["STATUS"] || "ACTIVE",
+          name: row["SUPPLIER NAME"] || "Unnamed Supplier",
+          category: row["CATEGORY"] || "General",
+          pocName: row["POC NAME"] || "N/A",
+          pocEmail: row["POC EMAIL"] || "",
+          pocPhone: row["POC PHONE"] || "",
+          services: row["SERVICES OFFERED"] || "",
+          logistics: row["LOGISTICS"] || "",
+          paymentTerms: row["PAYMENT TERMS"] || "",
+          eta: row["STANDARD ETA"] || "",
+          address: row["ADDRESS"] || "",
+          notes: row["NOTES"] || ""
+        }));
+
+        renderSuppliers(allSuppliers);
+      } catch (err) {
+        console.error(err);
+        grid.innerHTML = `
+          <div class="col-span-full text-center py-8 text-red-500 font-bold">
+            <i class="fa-solid fa-triangle-exclamation mr-2"></i> Failed to pull data from sheet. Ensure Web App deployment access is set to "Anyone".
+          </div>
+        `;
+      }
+    }
+
+    // Render Cards with complete details
+    function renderSuppliers(suppliers) {
+      const grid = document.getElementById('supplier-grid');
+      grid.innerHTML = '';
+
+      if (suppliers.length === 0) {
+        grid.innerHTML = '<div class="col-span-full text-center py-8 text-zinc-400">No matching suppliers found.</div>';
+        return;
+      }
+
+      suppliers.forEach(s => {
+        // Determine Status Badge Color
+        const statusUpper = String(s.status).toUpperCase();
+        const statusBg = statusUpper === 'ACTIVE' || statusUpper === 'APPROVED' 
+          ? 'bg-emerald-950/80 text-emerald-400 border-emerald-800' 
+          : 'bg-zinc-800 text-zinc-400 border-zinc-700';
+
+        grid.innerHTML += `
+          <div class="bg-white dark:bg-obsidian-800 p-5 rounded-xl border border-zinc-200 dark:border-zinc-800 shadow-sm flex flex-col justify-between hover:border-red-600/50 transition duration-150">
+            <div>
+              <!-- Header Row -->
+              <div class="flex justify-between items-start mb-2 gap-2">
+                <div>
+                  <h3 class="font-black text-base text-zinc-900 dark:text-white leading-tight">${s.name}</h3>
+                  <span class="text-[10px] font-bold px-2 py-0.5 rounded ${statusBg} border uppercase inline-block mt-1">${s.status}</span>
+                </div>
+                <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-red-100 dark:bg-red-950/60 text-red-600 dark:text-red-400 border border-red-200 dark:border-red-900 shrink-0 uppercase">${s.category}</span>
+              </div>
+
+              <!-- Point of Contact -->
+              <div class="text-xs text-zinc-600 dark:text-zinc-300 mb-3 space-y-1 bg-zinc-100 dark:bg-obsidian-700 p-2.5 rounded border border-zinc-200 dark:border-zinc-700/50">
+                <p class="font-bold text-red-600 dark:text-red-400 mb-1"><i class="fa-solid fa-user-gear mr-1.5"></i> ${s.pocName}</p>
+                ${s.pocPhone ? `<p class="text-[11px]"><i class="fa-solid fa-phone mr-1.5 text-zinc-400"></i> ${s.pocPhone}</p>` : ''}
+                ${s.pocEmail ? `<p class="text-[11px] truncate"><i class="fa-solid fa-envelope mr-1.5 text-zinc-400"></i> ${s.pocEmail}</p>` : ''}
+              </div>
+
+              <!-- Technical Details -->
+              ${s.services ? `<p class="text-xs text-zinc-700 dark:text-zinc-300 mb-3"><strong class="text-zinc-900 dark:text-white">Services:</strong> ${s.services}</p>` : ''}
+
+              <!-- Terms Grid -->
+              <div class="grid grid-cols-2 gap-2 text-[10px] text-zinc-500 dark:text-zinc-400 mb-3">
+                ${s.paymentTerms ? `<div class="bg-zinc-50 dark:bg-obsidian-900 p-1.5 rounded border border-zinc-200 dark:border-zinc-800"><strong>Terms:</strong> ${s.paymentTerms}</div>` : ''}
+                ${s.eta ? `<div class="bg-zinc-50 dark:bg-obsidian-900 p-1.5 rounded border border-zinc-200 dark:border-zinc-800"><strong>ETA:</strong> ${s.eta}</div>` : ''}
+              </div>
+
+              ${s.address ? `<p class="text-[11px] text-zinc-500 dark:text-zinc-400 mb-2"><i class="fa-solid fa-location-dot mr-1"></i> ${s.address}</p>` : ''}
+              ${s.notes ? `<p class="text-[11px] italic text-zinc-400 dark:text-zinc-500 border-t border-zinc-100 dark:border-zinc-800 pt-2"><i class="fa-solid fa-circle-info mr-1"></i> ${s.notes}</p>` : ''}
+            </div>
+
+            <!-- Quick Action Buttons -->
+            <div class="flex gap-2 text-xs pt-4 mt-2 border-t border-zinc-200 dark:border-zinc-800">
+              ${s.pocPhone ? `<a href="tel:${s.pocPhone}" class="flex-1 text-center bg-zinc-200 dark:bg-obsidian-700 hover:bg-zinc-300 dark:hover:bg-obsidian-600 p-2 rounded text-zinc-800 dark:text-zinc-200 font-bold transition"><i class="fa-solid fa-phone mr-1"></i> Call</a>` : ''}
+              ${s.pocEmail ? `<a href="mailto:${s.pocEmail}" class="flex-1 text-center bg-red-600 hover:bg-red-700 text-white p-2 rounded font-bold transition"><i class="fa-solid fa-envelope mr-1"></i> Email</a>` : ''}
+            </div>
+          </div>
+        `;
+      });
+    }
+
+    // Live Filter & Search Logic
+    function filterSuppliers() {
+      const query = document.getElementById('supplier-search').value.toLowerCase();
+      const selectedCat = document.getElementById('filter-category').value.toLowerCase();
+
+      const filtered = allSuppliers.filter(s => {
+        const searchHaystack = `${s.name} ${s.category} ${s.pocName} ${s.services} ${s.notes} ${s.address}`.toLowerCase();
+        const matchesQuery = searchHaystack.includes(query);
+        const matchesCat = selectedCat === '' || s.category.toLowerCase().includes(selectedCat);
+
+        return matchesQuery && matchesCat;
+      });
+
+      renderSuppliers(filtered);
+    }
+
+    // AC Lines Add/Remove
     function addACLine() {
       const acNum = document.getElementById('input-ac-num').value.trim();
       const acTitle = document.getElementById('input-ac-title').value.trim();
@@ -259,7 +429,7 @@
         tbody.innerHTML += `
           <tr>
             <td class="p-2 font-bold">${index + 1}</td>
-            <td class="p-2 font-bold text-emerald-600">${item.num}</td>
+            <td class="p-2 font-bold text-red-600 dark:text-red-400">${item.num}</td>
             <td class="p-2">${item.title}</td>
             <td class="p-2 text-right">
               <button onclick="acList.splice(${index},1); renderACTable();" class="text-red-500 hover:underline">Remove</button>
@@ -269,6 +439,7 @@
       });
     }
 
+    // PDF Generation Function
     function generatePDF() {
       const jobid = document.getElementById('meta-jobid').value.trim() || '[ PENDING JOBID ]';
       const client = document.getElementById('meta-client').value.trim() || 'Not Specified';
@@ -294,7 +465,7 @@
           pdfAcRows.innerHTML += `
             <tr style="border-bottom: 1px solid #e2e8f0;">
               <td style="padding: 6px;">${i + 1}</td>
-              <td style="padding: 6px; font-weight: bold; color: #059669;">${item.num}</td>
+              <td style="padding: 6px; font-weight: bold; color: #dc2626;">${item.num}</td>
               <td style="padding: 6px;">${item.title}</td>
             </tr>
           `;
@@ -310,17 +481,28 @@
       }).from(element).save();
     }
 
+    // Dark / Light Toggle Switch
     function toggleDarkMode() {
-      document.documentElement.classList.toggle('dark');
+      const html = document.documentElement;
+      const circle = document.getElementById('toggle-circle');
+      
+      html.classList.toggle('dark');
+      
+      if (html.classList.contains('dark')) {
+        circle.style.transform = 'translateX(24px)';
+      } else {
+        circle.style.transform = 'translateX(0px)';
+      }
     }
 
+    // Navigation Tabs Switch
     function switchTab(tab) {
       ['suppliers', 'generator', 'staff'].forEach(t => {
         document.getElementById(`view-${t}`).classList.add('hidden');
-        document.getElementById(`tab-${t}`).className = "px-3 py-1.5 rounded-md text-slate-300 hover:text-white";
+        document.getElementById(`tab-${t}`).className = "px-3 py-1.5 rounded-md text-zinc-400 hover:text-white";
       });
       document.getElementById(`view-${tab}`).classList.remove('hidden');
-      document.getElementById(`tab-${tab}`).className = "px-3 py-1.5 rounded-md bg-blue-600 text-white";
+      document.getElementById(`tab-${tab}`).className = "px-3 py-1.5 rounded-md bg-red-600 text-white";
     }
   </script>
 </body>
