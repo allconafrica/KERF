@@ -243,20 +243,20 @@
         <div class="builder-section bg-red-950/20 p-4 rounded-xl border border-red-200 dark:border-zinc-700 mb-6">
           <h3 class="text-xs font-bold uppercase mb-3 text-red-600 dark:text-red-400"><i class="fa-solid fa-diagram-project mr-2"></i>Job ID Schedule Builder</h3>
           
-          <div class="grid grid-cols-1 md:grid-cols-12 gap-3 items-end mb-4 bg-zinc-200 dark:bg-zinc-900 p-3 rounded-lg text-xs">
-            <div class="md:col-span-2">
+          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 mb-4 bg-zinc-200 dark:bg-zinc-900 p-3 rounded-lg text-xs">
+            <div>
               <label class="block font-bold mb-1 text-zinc-700 dark:text-zinc-300">Job ID *</label>
               <input type="text" id="input-job-id" placeholder="e.g. 5276" class="w-full p-2 rounded-lg font-bold">
             </div>
-            <div class="md:col-span-2">
+            <div>
               <label class="block font-bold mb-1 text-zinc-700 dark:text-zinc-300">AC Number</label>
               <input type="text" id="input-ac-num" placeholder="e.g. AC2902" class="w-full p-2 rounded-lg font-bold">
             </div>
-            <div class="md:col-span-3">
+            <div class="sm:col-span-2">
               <label class="block font-bold mb-1 text-zinc-700 dark:text-zinc-300">Description</label>
               <input type="text" id="input-ac-desc" placeholder="e.g. PINION" class="w-full p-2 rounded-lg">
             </div>
-            <div class="md:col-span-2">
+            <div>
               <label class="block font-bold mb-1 text-zinc-700 dark:text-zinc-300">Category</label>
               <select id="input-ac-category" class="w-full p-2 rounded-lg">
                 <option value="">-- Select Category --</option>
@@ -267,23 +267,26 @@
                 <option value="TRANSPORT">TRANSPORT</option>
               </select>
             </div>
-            <div class="md:col-span-3">
+            <div>
               <label class="block font-bold mb-1 text-zinc-700 dark:text-zinc-300">Sub-Category</label>
               <input type="text" id="input-ac-subcategory" placeholder="e.g. STRUCTURAL" class="w-full p-2 rounded-lg">
             </div>
-            <div class="md:col-span-3 mt-2">
+            <div>
               <label class="block font-bold mb-1 text-zinc-700 dark:text-zinc-300">Supplier Name</label>
               <select id="input-ac-supplier" class="w-full p-2 rounded-lg">
                 <option value="">-- Select Supplier --</option>
               </select>
             </div>
-            <div class="md:col-span-3 mt-2">
+            <div>
               <label class="block font-bold mb-1 text-zinc-700 dark:text-zinc-300">Purchase Order</label>
               <input type="text" id="input-ac-po" placeholder="PO18008" class="w-full p-2 rounded-lg font-bold">
             </div>
-            <div class="md:col-span-2 mt-2">
-              <button onclick="addLinkedACLine()" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold p-2 rounded-lg transition"><i class="fa-solid fa-plus mr-1"></i> Add Entry</button>
-            </div>
+          </div>
+
+          <div class="flex justify-end mb-4">
+            <button onclick="addLinkedACLine()" class="bg-red-600 hover:bg-red-700 text-white font-bold px-5 py-2.5 rounded-lg text-xs transition shadow flex items-center gap-1.5">
+              <i class="fa-solid fa-plus"></i> Add Entry
+            </button>
           </div>
 
           <div id="grouped-ac-container" class="space-y-4">
