@@ -171,7 +171,7 @@
 
         <nav class="flex bg-zinc-900 p-1 rounded-lg border border-zinc-800 text-xs font-semibold">
           <button id="tab-suppliers" onclick="switchTab('suppliers')" class="px-3 py-1.5 rounded-md text-zinc-400 hover:text-white">Suppliers</button>
-          <button id="tab-generator" onclick="switchTab('generator')" class="px-3 py-1.5 rounded-md bg-red-600 text-white">Info Sheet Builder</button>
+          <button id="tab-generator" onclick="switchTab('generator')" class="px-3 py-1.5 rounded-md bg-red-600 text-white">Project Transmittal</button>
           <button id="tab-staff" onclick="switchTab('staff')" class="px-3 py-1.5 rounded-md text-zinc-400 hover:text-white">Staff</button>
         </nav>
       </div>
@@ -191,16 +191,16 @@
         <div class="text-xs text-zinc-500 font-semibold" id="supplier-count">Loading Suppliers...</div>
       </div>
 
-      <div id="suppliers-list-container" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div class="col-span-2 text-center p-8 text-zinc-500"><i class="fa-solid fa-spinner fa-spin mr-2"></i> Fetching Live Supplier Data...</div>
+      <div id="suppliers-list-container" class="space-y-6">
+        <div class="text-center p-8 text-zinc-500"><i class="fa-solid fa-spinner fa-spin mr-2"></i> Fetching Live Supplier Data...</div>
       </div>
     </section>
 
-    <!-- VIEW 2: INFO SHEET BUILDER -->
+    <!-- VIEW 2: PROJECT TRANSMITTAL -->
     <section id="view-generator" class="block">
       <div class="builder-frame bg-white rounded-2xl shadow-xl border border-zinc-300 p-6 mb-6 transition-colors duration-200">
         <h2 class="text-xl font-bold mb-5 text-red-600 dark:text-red-500 flex items-center gap-2">
-          <i class="fa-solid fa-file-pdf"></i> Project Info Sheet Builder
+          <i class="fa-solid fa-file-pdf"></i> Project Transmittal Builder
         </h2>
 
         <!-- METADATA FORM -->
@@ -239,7 +239,7 @@
           </div>
         </div>
 
-        <!-- LINKED JOB ID & AC DRAWING SCHEDULE -->
+        <!-- JOB ID SCHEDULE BUILDER -->
         <div class="builder-section bg-red-950/20 p-4 rounded-xl border border-red-200 dark:border-zinc-700 mb-6 relative pb-16">
           <h3 class="text-xs font-bold uppercase mb-3 text-red-600 dark:text-red-400"><i class="fa-solid fa-diagram-project mr-2"></i>Job ID Schedule Builder</h3>
           
@@ -548,26 +548,61 @@
       document.getElementById('supplier-count').innerText = `Showing ${filtered.length} Suppliers`;
 
       if (filtered.length === 0) {
-        container.innerHTML = `<div class="col-span-2 text-center p-8 text-zinc-500">No suppliers found matching your query.</div>`;
+        container.innerHTML = `<div class="text-center p-8 text-zinc-500">No suppliers found matching your query.</div>`;
         return;
       }
 
-      container.innerHTML = filtered.map(s => {
-        const badgeClass = getStatusBadgeClass(s.status);
-        return `
-          <div class="bg-white dark:bg-zinc-900 border border-zinc-300 dark:border-zinc-800 rounded-xl p-5 shadow-sm hover:shadow-md transition">
-            <div class="flex justify-between items-start mb-3">
-              <div>
-                <span class="text-[10px] font-bold px-2 py-0.5 rounded text-white ${badgeClass}">${s.status || 'N/A'}</span>
-                <h3 class="text-base font-bold mt-1 text-zinc-900 dark:text-zinc-100">${s.supplierName}</h3>
-                <p class="text-xs text-red-600 dark:text-red-400 font-semibold">${s.category}</p>
+      // Sort alphabetically by supplierName
+      filtered.sort((a, b) => (a.supplierName || '').localeCompare(b.supplierName || ''));
+
+      // Group by first letter
+      const groups = {};
+      filtered.forEach(s => {
+        const name = s.supplierName || '';
+        const firstLetter = name.charAt(0).toUpperCase();
+        const key = /[A-Z]/.test(firstLetter) ? firstLetter : '#';
+        if (!groups[key]) groups[key] = [];
+        groups[key].push(s);
+      });
+
+      const sortedKeys = Object.keys(groups).sort((a, b) => {
+        if (a === '#') return 1;
+        if (b === '#') return -1;
+        return a.localeCompare(b);
+      });
+
+      container.innerHTML = sortedKeys.map(letter => {
+        const suppliersInGroup = groups[letter];
+        const cardsHtml = suppliersInGroup.map(s => {
+          const badgeClass = getStatusBadgeClass(s.status);
+          return `
+            <div class="bg-white dark:bg-zinc-900 border border-zinc-300 dark:border-zinc-800 rounded-xl p-5 shadow-sm hover:shadow-md transition">
+              <div class="flex justify-between items-start mb-3">
+                <div>
+                  <span class="text-[10px] font-bold px-2 py-0.5 rounded text-white ${badgeClass}">${s.status || 'N/A'}</span>
+                  <h3 class="text-base font-bold mt-1 text-zinc-900 dark:text-zinc-100">${s.supplierName}</h3>
+                  <p class="text-xs text-red-600 dark:text-red-400 font-semibold">${s.category}</p>
+                </div>
+              </div>
+              <div class="grid grid-cols-1 gap-1.5 text-xs text-zinc-600 dark:text-zinc-300 my-3 bg-zinc-50 dark:bg-zinc-800/50 p-3 rounded-lg border border-zinc-200 dark:border-zinc-700/50">
+                ${s.pocName ? `<div><strong>POC Name:</strong> ${s.pocName}</div>` : ''}
+                ${s.pocEmail ? `<div><strong>POC Email:</strong> <a href="mailto:${s.pocEmail}" class="text-red-600 hover:underline">${s.pocEmail}</a></div>` : ''}
+                ${s.pocPhone ? `<div><strong>POC Phone:</strong> <a href="tel:${s.pocPhone}" class="text-red-600 hover:underline">${s.pocPhone}</a></div>` : ''}
+                ${s.servicesOffered ? `<div><strong>Services Offered:</strong> ${s.servicesOffered}</div>` : ''}
               </div>
             </div>
-            <div class="grid grid-cols-1 gap-1.5 text-xs text-zinc-600 dark:text-zinc-300 my-3 bg-zinc-50 dark:bg-zinc-800/50 p-3 rounded-lg border border-zinc-200 dark:border-zinc-700/50">
-              ${s.pocName ? `<div><strong>POC Name:</strong> ${s.pocName}</div>` : ''}
-              ${s.pocEmail ? `<div><strong>POC Email:</strong> <a href="mailto:${s.pocEmail}" class="text-red-600 hover:underline">${s.pocEmail}</a></div>` : ''}
-              ${s.pocPhone ? `<div><strong>POC Phone:</strong> <a href="tel:${s.pocPhone}" class="text-red-600 hover:underline">${s.pocPhone}</a></div>` : ''}
-              ${s.servicesOffered ? `<div><strong>Services Offered:</strong> ${s.servicesOffered}</div>` : ''}
+          `;
+        }).join('');
+
+        return `
+          <div>
+            <div class="flex items-center gap-3 mb-4">
+              <span class="w-8 h-8 rounded-lg bg-red-600 text-white font-black text-sm flex items-center justify-center shadow">${letter}</span>
+              <div class="flex-grow border-t border-zinc-300 dark:border-zinc-800"></div>
+              <span class="text-xs font-semibold text-zinc-500">${suppliersInGroup.length} supplier${suppliersInGroup.length === 1 ? '' : 's'}</span>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              ${cardsHtml}
             </div>
           </div>
         `;
@@ -680,7 +715,7 @@
             <td class="p-2 font-bold w-[25%]">${item.category || '--'}</td>
             <td class="p-2 w-[25%]">${item.subCategory || '--'}</td>
             <td class="p-2 w-[30%]">${item.supplier || '--'}</td>
-            <td class="p-2 w-[15%]">${item.po || '--'}</td>
+            <td class="p-2 w-[15%]" font-bold>${item.po || '--'}</td>
             <td class="p-2 text-right w-[5%]"><button onclick="removeACItem('${jobId}', 'supList', ${idx})" class="text-red-500 hover:underline">Remove</button></td>
           </tr>
         `).join('');
