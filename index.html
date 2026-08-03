@@ -465,7 +465,7 @@
       loadLiveData();
     });
 
-    // POPULATE BUILDER SUPPLIER DROPDOWN
+    // POPULATE BUILDER SUPPLIER DROPDOWN (ALPHABETICALLY CATEGORISED BY FIRST LETTER)
     function populateSupplierDropdown() {
       const select = document.getElementById('input-ac-supplier');
       if (!select) return;
@@ -475,8 +475,31 @@
         .filter(Boolean)
         .sort((a, b) => a.localeCompare(b));
 
-      select.innerHTML = `<option value="">-- Select Supplier --</option>` + 
-        sortedNames.map(name => `<option value="${name}">${name}</option>`).join('');
+      // Group by starting letter
+      const groups = {};
+      sortedNames.forEach(name => {
+        const firstLetter = name.charAt(0).toUpperCase();
+        const key = /[A-Z]/.test(firstLetter) ? firstLetter : '#';
+        if (!groups[key]) groups[key] = [];
+        groups[key].push(name);
+      });
+
+      const sortedKeys = Object.keys(groups).sort((a, b) => {
+        if (a === '#') return 1;
+        if (b === '#') return -1;
+        return a.localeCompare(b);
+      });
+
+      let html = `<option value="">-- Select Supplier --</option>`;
+      sortedKeys.forEach(letter => {
+        html += `<optgroup label="${letter} - (${groups[letter].length})">`;
+        groups[letter].forEach(name => {
+          html += `<option value="${name}">${name}</option>`;
+        });
+        html += `</optgroup>`;
+      });
+
+      select.innerHTML = html;
     }
 
     // HELPER FOR BADGE COLORS
