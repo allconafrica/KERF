@@ -340,18 +340,14 @@
     <!-- HEADER -->
     <table class="no-border" style="width: 100%; border-bottom: 2px solid #dc2626 !important; padding-bottom: 8px; margin-bottom: 12px;">
       <tr>
-        <td style="vertical-align: top; width: 55%; text-align: left;">
+        <td style="vertical-align: top; width: 60%; text-align: left;">
           <div style="margin-bottom: 4px;">
             <img src="./ALLCON-Logo.jpg" alt="ALLCON Logo" style="height: 44px; width: auto; max-width: 260px; object-fit: contain;" onerror="this.onerror=null; this.outerHTML='<div class=\'print-header-banner\' style=\'font-weight: 900; font-size: 20pt; padding: 4px 12px; display: inline-block; letter-spacing: 2px;\'>ALLCON</div>';">
           </div>
-          <div style="font-size: 8pt; font-weight: bold; color: #000000; text-transform: uppercase; margin-top: 2px;">FABRICATION &amp; ENGINEERING (PTY) LTD.</div>
-          <div style="font-size: 8.5pt; color: #334155; text-transform: uppercase; font-weight: bold; margin-top: 2px;">PROJECT INFO SHEET TRANSMITTAL</div>
+          <div style="font-size: 9pt; color: #334155; text-transform: uppercase; font-weight: bold; margin-top: 4px;">PROJECT INFO SHEET TRANSMITTAL</div>
         </td>
-        <td style="vertical-align: top; text-align: right; width: 45%;">
-          <div style="font-size: 10pt; font-weight: bold; color: #000000; margin-bottom: 6px;">
-            PO Number: <span id="print-out-po" style="border-bottom: 1.5px solid #000000; padding-bottom: 2px; min-width: 150px; display: inline-block; text-align: left; padding-left: 6px;"></span>
-          </div>
-          <div style="font-size: 8.5pt; color: #334155;" id="print-out-gen-date"></div>
+        <td style="vertical-align: top; text-align: right; width: 40%;">
+          <div style="font-size: 8.5pt; color: #334155; font-weight: bold;" id="print-out-gen-date"></div>
         </td>
       </tr>
     </table>
@@ -688,7 +684,6 @@
     }
 
     function triggerPrintPDF() {
-      document.getElementById('print-out-po').innerText = document.getElementById('meta-po-number').value.trim() || "";
       document.getElementById('print-out-client').innerText = document.getElementById('meta-client').value.trim() || "N/A";
       document.getElementById('print-out-project').innerText = document.getElementById('meta-project').value.trim() || "N/A";
       
