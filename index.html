@@ -61,7 +61,7 @@
     @media print {
       @page {
         size: A4 portrait;
-        margin: 8mm;
+        margin: 10mm;
       }
 
       /* STRICT WHITE BACKGROUND OVERRIDE FOR PRINTING */
@@ -70,6 +70,7 @@
         color: #000000 !important;
         margin: 0 !important;
         padding: 0 !important;
+        width: 100% !important;
       }
 
       /* Hide web portal UI completely */
@@ -78,17 +79,13 @@
       }
 
       /* Display print template exclusively */
-      #print-template, #print-template * {
-        display: block;
-        background-color: transparent !important;
-        color: #000000 !important;
-      }
-
       #print-template {
         display: block !important;
         width: 100% !important;
         font-family: Arial, Helvetica, sans-serif !important;
         font-size: 8.5pt;
+        color: #000000 !important;
+        background-color: #ffffff !important;
       }
 
       .print-header-banner {
@@ -104,14 +101,13 @@
         print-color-adjust: exact !important;
       }
 
-      /* Table Layout & Grid Borders Strict Enforcement */
+      /* Table Structure & Width Lockdown */
       #print-template table {
         display: table !important;
         width: 100% !important;
         border-collapse: collapse !important;
         table-layout: fixed !important;
-        margin-bottom: 10px !important;
-        border: 1px solid #000000 !important;
+        margin-bottom: 12px !important;
       }
 
       #print-template tr { 
@@ -122,10 +118,17 @@
       #print-template td { 
         display: table-cell !important;
         border: 1px solid #000000 !important;
-        padding: 5px 6px !important;
+        padding: 6px 8px !important;
+        box-sizing: border-box !important;
         word-wrap: break-word !important;
         overflow-wrap: break-word !important;
-        box-sizing: border-box !important;
+        vertical-align: middle !important;
+      }
+
+      /* Remove border for clean header table */
+      #print-template table.no-border, 
+      #print-template table.no-border td {
+        border: none !important;
       }
     }
   </style>
@@ -323,18 +326,18 @@
   <div id="print-template">
     
     <!-- HEADER -->
-    <table style="width: 100%; border-bottom: 2px solid #dc2626; padding-bottom: 8px; margin-bottom: 12px; border: none !important;">
+    <table class="no-border" style="width: 100%; border-bottom: 2px solid #dc2626 !important; padding-bottom: 8px; margin-bottom: 12px;">
       <tr>
-        <td style="vertical-align: top; width: 60%; border: none !important; padding: 0 !important;">
+        <td style="vertical-align: top; width: 55%; text-align: left;">
           <div style="margin-bottom: 4px;">
             <img src="./ALLCON-Logo.jpg" alt="ALLCON Logo" style="height: 44px; width: auto; max-width: 260px; object-fit: contain;" onerror="this.onerror=null; this.outerHTML='<div class=\'print-header-banner\' style=\'font-weight: 900; font-size: 20pt; padding: 4px 12px; display: inline-block; letter-spacing: 2px;\'>ALLCON</div>';">
           </div>
           <div style="font-size: 8pt; font-weight: bold; color: #000000; text-transform: uppercase; margin-top: 2px;">FABRICATION &amp; ENGINEERING (PTY) LTD.</div>
           <div style="font-size: 8.5pt; color: #334155; text-transform: uppercase; font-weight: bold; margin-top: 2px;">PROJECT INFO SHEET TRANSMITTAL</div>
         </td>
-        <td style="vertical-align: top; text-align: right; width: 40%; border: none !important; padding: 0 !important;">
+        <td style="vertical-align: top; text-align: right; width: 45%;">
           <div style="font-size: 10pt; font-weight: bold; color: #000000; margin-bottom: 6px;">
-            PO Number: <span id="print-out-po" style="border-bottom: 1.5px solid #000000; padding-bottom: 2px; min-width: 140px; display: inline-block; text-align: left; padding-left: 6px;"></span>
+            PO Number: <span id="print-out-po" style="border-bottom: 1.5px solid #000000; padding-bottom: 2px; min-width: 150px; display: inline-block; text-align: left; padding-left: 6px;"></span>
           </div>
           <div style="font-size: 8.5pt; color: #334155;" id="print-out-gen-date"></div>
         </td>
@@ -342,12 +345,12 @@
     </table>
 
     <!-- METADATA TABLE -->
-    <table style="width: 100%; border-collapse: collapse; margin-bottom: 12px; font-size: 8.5pt; border: 1px solid #000000;">
+    <table style="width: 100%;">
       <colgroup>
-        <col style="width: 20%;">
-        <col style="width: 30%;">
-        <col style="width: 20%;">
-        <col style="width: 30%;">
+        <col style="width: 18%;">
+        <col style="width: 32%;">
+        <col style="width: 22%;">
+        <col style="width: 28%;">
       </colgroup>
       <tbody>
         <tr class="print-table-header">
@@ -377,17 +380,17 @@
 
     <!-- PO REGISTER TABLE -->
     <div style="font-size: 9pt; font-weight: bold; margin-bottom: 4px; color: #000000;">PURCHASE ORDER ALLOCATION REGISTER</div>
-    <table style="width: 100%; border-collapse: collapse; font-size: 8.5pt; border: 1px solid #000000;">
+    <table style="width: 100%;">
       <colgroup>
-        <col style="width: 35%;">
-        <col style="width: 40%;">
-        <col style="width: 25%;">
+        <col style="width: 32%;">
+        <col style="width: 50%;">
+        <col style="width: 18%;">
       </colgroup>
       <thead>
         <tr class="print-table-header">
           <th style="text-align: left; font-weight: bold;">Category</th>
           <th style="text-align: left; font-weight: bold;">Allocated Supplier Name</th>
-          <th style="text-align: left; font-weight: bold;">Purchase Order No. (PO)</th>
+          <th style="text-align: left; font-weight: bold;">PO No.</th>
         </tr>
       </thead>
       <tbody>
@@ -648,10 +651,10 @@
           printGroupsContainer.innerHTML += `
             <div style="margin-bottom: 6px;">
               <div style="background-color: #111827; color: #ffffff; font-weight: bold; font-size: 8pt; padding: 3px 6px;" class="print-header-banner">JOB ID: ${jobId}</div>
-              <table style="width: 100%; border-collapse: collapse; font-size: 8.5pt; border: 1px solid #000000; table-layout: fixed;">
+              <table style="width: 100%;">
                 <colgroup>
-                  <col style="width: 35%;">
-                  <col style="width: 65%;">
+                  <col style="width: 32%;">
+                  <col style="width: 68%;">
                 </colgroup>
                 <tbody>${rowsHtml}</tbody>
               </table>
