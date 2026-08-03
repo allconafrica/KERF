@@ -514,6 +514,23 @@
       loadLiveData();
     });
 
+    // HELPER FOR BADGE COLORS
+    function getStatusBadgeClass(status) {
+      const cleanStatus = (status || '').toUpperCase().trim();
+      switch (cleanStatus) {
+        case 'APPROVED':
+          return 'bg-blue-600';
+        case 'PREFERRED':
+          return 'bg-emerald-600';
+        case 'REJECTED':
+          return 'bg-red-600';
+        case 'PENDING NDA':
+          return 'bg-amber-500';
+        default:
+          return 'bg-zinc-600';
+      }
+    }
+
     // RENDER SUPPLIERS
     function renderSuppliers() {
       const query = (document.getElementById('supplier-search')?.value || '').toLowerCase();
@@ -533,29 +550,33 @@
         return;
       }
 
-      container.innerHTML = filtered.map(s => `
-        <div class="bg-white dark:bg-zinc-900 border border-zinc-300 dark:border-zinc-800 rounded-xl p-5 shadow-sm hover:shadow-md transition">
-          <div class="flex justify-between items-start mb-3">
-            <div>
-              <span class="text-[10px] font-bold px-2 py-0.5 rounded text-white ${s.status === 'APPROVED' ? 'bg-emerald-600' : 'bg-amber-600'}">${s.status}</span>
-              <h3 class="text-base font-bold mt-1 text-zinc-900 dark:text-zinc-100">${s.supplierName}</h3>
-              <p class="text-xs text-red-600 dark:text-red-400 font-semibold">${s.category}</p>
-            </div>
-          </div>
-          
-          <div class="grid grid-cols-1 gap-1.5 text-xs text-zinc-600 dark:text-zinc-300 my-3 bg-zinc-50 dark:bg-zinc-800/50 p-3 rounded-lg border border-zinc-200 dark:border-zinc-700/50">
-            ${s.pocName ? `<div><strong>POC Name:</strong> ${s.pocName}</div>` : ''}
-            ${s.pocEmail ? `<div><strong>POC Email:</strong> <a href="mailto:${s.pocEmail}" class="text-red-600 hover:underline">${s.pocEmail}</a></div>` : ''}
-            ${s.pocPhone ? `<div><strong>POC Phone:</strong> <a href="tel:${s.pocPhone}" class="text-red-600 hover:underline">${s.pocPhone}</a></div>` : ''}
-            ${s.servicesOffered ? `<div><strong>Services Offered:</strong> ${s.servicesOffered}</div>` : ''}
-            ${s.logistics ? `<div><strong>Logistics:</strong> ${s.logistics}</div>` : ''}
-            ${(s.paymentTerms || s.standardEta) ? `<div><strong>Payment Terms:</strong> ${s.paymentTerms} | <strong>Standard ETA:</strong> ${s.standardEta}</div>` : ''}
-            ${s.address ? `<div><strong>Address:</strong> ${s.address}</div>` : ''}
-          </div>
+      container.innerHTML = filtered.map(s => {
+        const badgeClass = getStatusBadgeClass(s.status);
 
-          ${s.notes ? `<div class="text-[11px] italic text-zinc-500 dark:text-zinc-400"><strong>Notes:</strong> ${s.notes}</div>` : ''}
-        </div>
-      `).join('');
+        return `
+          <div class="bg-white dark:bg-zinc-900 border border-zinc-300 dark:border-zinc-800 rounded-xl p-5 shadow-sm hover:shadow-md transition">
+            <div class="flex justify-between items-start mb-3">
+              <div>
+                <span class="text-[10px] font-bold px-2 py-0.5 rounded text-white ${badgeClass}">${s.status || 'N/A'}</span>
+                <h3 class="text-base font-bold mt-1 text-zinc-900 dark:text-zinc-100">${s.supplierName}</h3>
+                <p class="text-xs text-red-600 dark:text-red-400 font-semibold">${s.category}</p>
+              </div>
+            </div>
+            
+            <div class="grid grid-cols-1 gap-1.5 text-xs text-zinc-600 dark:text-zinc-300 my-3 bg-zinc-50 dark:bg-zinc-800/50 p-3 rounded-lg border border-zinc-200 dark:border-zinc-700/50">
+              ${s.pocName ? `<div><strong>POC Name:</strong> ${s.pocName}</div>` : ''}
+              ${s.pocEmail ? `<div><strong>POC Email:</strong> <a href="mailto:${s.pocEmail}" class="text-red-600 hover:underline">${s.pocEmail}</a></div>` : ''}
+              ${s.pocPhone ? `<div><strong>POC Phone:</strong> <a href="tel:${s.pocPhone}" class="text-red-600 hover:underline">${s.pocPhone}</a></div>` : ''}
+              ${s.servicesOffered ? `<div><strong>Services Offered:</strong> ${s.servicesOffered}</div>` : ''}
+              ${s.logistics ? `<div><strong>Logistics:</strong> ${s.logistics}</div>` : ''}
+              ${(s.paymentTerms || s.standardEta) ? `<div><strong>Payment Terms:</strong> ${s.paymentTerms} | <strong>Standard ETA:</strong> ${s.standardEta}</div>` : ''}
+              ${s.address ? `<div><strong>Address:</strong> ${s.address}</div>` : ''}
+            </div>
+
+            ${s.notes ? `<div class="text-[11px] italic text-zinc-500 dark:text-zinc-400"><strong>Notes:</strong> ${s.notes}</div>` : ''}
+          </div>
+        `;
+      }).join('');
     }
 
     // RENDER STAFF
