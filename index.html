@@ -184,11 +184,11 @@
           <i class="fa-solid fa-magnifying-glass absolute left-3 top-3 text-zinc-400"></i>
           <input type="text" id="supplier-search" onkeyup="renderSuppliers()" placeholder="Search suppliers by name, category, services, or contact person..." class="w-full pl-9 pr-4 py-2 rounded-lg text-sm border border-zinc-300 dark:border-zinc-700">
         </div>
-        <div class="text-xs text-zinc-500 font-semibold" id="supplier-count">Showing 0 Suppliers</div>
+        <div class="text-xs text-zinc-500 font-semibold" id="supplier-count">Loading Suppliers...</div>
       </div>
 
       <div id="suppliers-list-container" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <!-- Supplier cards dynamically inserted here -->
+        <div class="col-span-2 text-center p-8 text-zinc-500"><i class="fa-solid fa-spinner fa-spin mr-2"></i> Fetching Live Supplier Data...</div>
       </div>
     </section>
 
@@ -320,11 +320,11 @@
           <i class="fa-solid fa-magnifying-glass absolute left-3 top-3 text-zinc-400"></i>
           <input type="text" id="staff-search" onkeyup="renderStaff()" placeholder="Search staff by name, surname, job title, phone, or email..." class="w-full pl-9 pr-4 py-2 rounded-lg text-sm border border-zinc-300 dark:border-zinc-700">
         </div>
-        <div class="text-xs text-zinc-500 font-semibold" id="staff-count">Showing 0 Staff Members</div>
+        <div class="text-xs text-zinc-500 font-semibold" id="staff-count">Loading Staff...</div>
       </div>
 
       <div id="staff-list-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        <!-- Staff cards dynamically inserted here -->
+        <div class="col-span-3 text-center p-8 text-zinc-500"><i class="fa-solid fa-spinner fa-spin mr-2"></i> Fetching Live Staff Data...</div>
       </div>
     </section>
 
@@ -415,66 +415,98 @@
   </div>
 
   <script>
+    // LIVE PUBLISHED GOOGLE SHEET CSV LINK
+    const GOOGLE_SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSNynT5Snb9PgJp6ti3QpuHUr9fX8bGKEG10H8kjkbCna_ZfkEC7aM06QrwkjHwxR1n6uu3ZgvvaKu6/pub?output=csv";
+
     let jobDataMap = {};
+    let liveStaffData = [];
+    let liveSupplierData = [];
 
-    // SAMPLE SUPPLIER REGISTRY DATA
-    const sampleSuppliers = [
-      {
-        status: "APPROVED",
-        supplierName: "Vaal Laser & Profile Works",
-        category: "Laser Cutting & Bending",
-        pocName: "Johan Coetzee",
-        pocEmail: "johan@vaallaser.co.za",
-        pocPhone: "+27 16 931 2000",
-        servicesOffered: "Fiber laser cutting (up to 25mm steel), CNC plate bending, beveling.",
-        logistics: "Delivery included (Vaal Triangle & Gauteng)",
-        paymentTerms: "30 Days Account",
-        standardEta: "3 - 5 Working Days",
-        address: "14 Platinum Street, Vanderbijlpark, 1900",
-        notes: "Preferred supplier for heavy structural gussets and base plates."
-      },
-      {
-        status: "APPROVED",
-        supplierName: "Macsteel Industrial Supplies",
-        category: "Material (Plates & Structural)",
-        pocName: "Sarah Jenkins",
-        pocEmail: "sjenkins@macsteel.co.za",
-        pocPhone: "+27 11 871 0000",
-        servicesOffered: "S355JR Plate, I-Beams, Channels, Equal Angels, Hollow Sections.",
-        logistics: "Ex-Works / Delivery via Macsteel Fleet",
-        paymentTerms: "60 Days Account",
-        standardEta: "2 Working Days",
-        address: "55 Steel Road, Roodekop, Germiston",
-        notes: "Mill test certificates required on all orders."
-      },
-      {
-        status: "PENDING REVIEW",
-        supplierName: "Apex Galvanizers (Pty) Ltd",
-        category: "Surface Coating / HDG",
-        pocName: "David Naidoo",
-        pocEmail: "david@apexgalv.co.za",
-        pocPhone: "+27 11 902 4411",
-        servicesOffered: "Hot Dip Galvanizing SANS 121 / ISO 1461, Sandblasting, Duplex Coating.",
-        logistics: "Supplier Collection & Dropoff Available",
-        paymentTerms: "COD / 30 Days",
-        standardEta: "4 - 7 Working Days",
-        address: "8 Industry Road, Alrode, Alberton",
-        notes: "Check bath size dimensions for oversize structures (>12m)."
+    // ROBUST CSV PARSER (Handles quoted values containing commas)
+    function parseCSV(text) {
+      const lines = text.trim().split(/\r?\n/);
+      if (lines.length < 2) return [];
+
+      const parseRow = (rowText) => {
+        const result = [];
+        let current = '';
+        let inQuotes = false;
+        for (let i = 0; i < rowText.length; i++) {
+          const char = rowText[i];
+          if (char === '"' && rowText[i + 1] === '"') {
+            current += '"';
+            i++;
+          } else if (char === '"') {
+            inQuotes = !inQuotes;
+          } else if (char === ',' && !inQuotes) {
+            result.push(current.trim());
+            current = '';
+          } else {
+            current += char;
+          }
+        }
+        result.push(current.trim());
+        return result;
+      };
+
+      const headers = parseRow(lines[0]).map(h => h.toLowerCase());
+      
+      return lines.slice(1).map(line => {
+        if (!line.trim()) return null;
+        const values = parseRow(line);
+        const entry = {};
+        headers.forEach((h, idx) => {
+          entry[h] = values[idx] || '';
+        });
+        return entry;
+      }).filter(Boolean);
+    }
+
+    // FETCH DATA FROM GOOGLE SHEET
+    async function loadLiveData() {
+      try {
+        const response = await fetch(GOOGLE_SHEET_CSV_URL);
+        const csvText = await response.text();
+        const rawData = parseCSV(csvText);
+
+        // Map CSV rows into Staff or Supplier depending on column presence
+        liveStaffData = rawData
+          .filter(r => (r['name'] || r['first name']) && (r['surname'] || r['last name']))
+          .map(r => ({
+            name: r['name'] || r['first name'] || '',
+            surname: r['surname'] || r['last name'] || '',
+            jobTitle: r['job title'] || r['title'] || r['position'] || '',
+            phone: r['phone'] || r['mobile'] || r['contact'] || '',
+            email: r['email'] || ''
+          }));
+
+        liveSupplierData = rawData
+          .filter(r => r['supplier name'] || r['company'] || r['supplier'])
+          .map(r => ({
+            status: r['status'] || 'APPROVED',
+            supplierName: r['supplier name'] || r['company'] || r['supplier'] || '',
+            category: r['category'] || r['service'] || '',
+            pocName: r['poc name'] || r['contact person'] || r['poc'] || '',
+            pocEmail: r['poc email'] || r['email'] || '',
+            pocPhone: r['poc phone'] || r['phone'] || '',
+            servicesOffered: r['services offered'] || r['services'] || '',
+            logistics: r['logistics'] || '',
+            paymentTerms: r['payment terms'] || r['terms'] || '',
+            standardEta: r['standard eta'] || r['eta'] || '',
+            address: r['address'] || '',
+            notes: r['notes'] || ''
+          }));
+
+        renderStaff();
+        renderSuppliers();
+      } catch (error) {
+        console.error("Failed to load Google Sheet data:", error);
       }
-    ];
-
-    // SAMPLE STAFF REGISTRY DATA
-    const sampleStaff = [
-      { name: "Hendrik", surname: "Venter", jobTitle: "Senior Fabrication Engineer", phone: "+27 82 455 1010", email: "hventer@allcon.co.za" },
-      { name: "Liezel", surname: "Marais", jobTitle: "Technical Buyer & Procurement", phone: "+27 83 912 3044", email: "lmarais@allcon.co.za" },
-      { name: "Kobus", surname: "De Wet", jobTitle: "Workshop Manager", phone: "+27 79 112 8890", email: "kdewet@allcon.co.za" },
-      { name: "Thabo", surname: "Mokoena", jobTitle: "QC & NDT Inspector", phone: "+27 71 884 5521", email: "tmokoena@allcon.co.za" }
-    ];
+    }
 
     document.addEventListener("DOMContentLoaded", () => {
       document.getElementById('meta-date-gen').valueAsDate = new Date();
-      renderSuppliers();
-      renderStaff();
+      loadLiveData();
     });
 
     // RENDER SUPPLIERS
@@ -482,11 +514,11 @@
       const query = (document.getElementById('supplier-search')?.value || '').toLowerCase();
       const container = document.getElementById('suppliers-list-container');
       
-      const filtered = sampleSuppliers.filter(s => 
-        s.supplierName.toLowerCase().includes(query) ||
-        s.category.toLowerCase().includes(query) ||
-        s.pocName.toLowerCase().includes(query) ||
-        s.servicesOffered.toLowerCase().includes(query)
+      const filtered = liveSupplierData.filter(s => 
+        (s.supplierName || '').toLowerCase().includes(query) ||
+        (s.category || '').toLowerCase().includes(query) ||
+        (s.pocName || '').toLowerCase().includes(query) ||
+        (s.servicesOffered || '').toLowerCase().includes(query)
       );
 
       document.getElementById('supplier-count').innerText = `Showing ${filtered.length} Suppliers`;
@@ -507,13 +539,13 @@
           </div>
           
           <div class="grid grid-cols-1 gap-1.5 text-xs text-zinc-600 dark:text-zinc-300 my-3 bg-zinc-50 dark:bg-zinc-800/50 p-3 rounded-lg border border-zinc-200 dark:border-zinc-700/50">
-            <div><strong>POC Name:</strong> ${s.pocName}</div>
-            <div><strong>POC Email:</strong> <a href="mailto:${s.pocEmail}" class="text-red-600 hover:underline">${s.pocEmail}</a></div>
-            <div><strong>POC Phone:</strong> <a href="tel:${s.pocPhone}" class="text-red-600 hover:underline">${s.pocPhone}</a></div>
-            <div><strong>Services Offered:</strong> ${s.servicesOffered}</div>
-            <div><strong>Logistics:</strong> ${s.logistics}</div>
-            <div><strong>Payment Terms:</strong> ${s.paymentTerms} | <strong>Standard ETA:</strong> ${s.standardEta}</div>
-            <div><strong>Address:</strong> ${s.address}</div>
+            ${s.pocName ? `<div><strong>POC Name:</strong> ${s.pocName}</div>` : ''}
+            ${s.pocEmail ? `<div><strong>POC Email:</strong> <a href="mailto:${s.pocEmail}" class="text-red-600 hover:underline">${s.pocEmail}</a></div>` : ''}
+            ${s.pocPhone ? `<div><strong>POC Phone:</strong> <a href="tel:${s.pocPhone}" class="text-red-600 hover:underline">${s.pocPhone}</a></div>` : ''}
+            ${s.servicesOffered ? `<div><strong>Services Offered:</strong> ${s.servicesOffered}</div>` : ''}
+            ${s.logistics ? `<div><strong>Logistics:</strong> ${s.logistics}</div>` : ''}
+            ${(s.paymentTerms || s.standardEta) ? `<div><strong>Payment Terms:</strong> ${s.paymentTerms} | <strong>Standard ETA:</strong> ${s.standardEta}</div>` : ''}
+            ${s.address ? `<div><strong>Address:</strong> ${s.address}</div>` : ''}
           </div>
 
           ${s.notes ? `<div class="text-[11px] italic text-zinc-500 dark:text-zinc-400"><strong>Notes:</strong> ${s.notes}</div>` : ''}
@@ -526,12 +558,12 @@
       const query = (document.getElementById('staff-search')?.value || '').toLowerCase();
       const container = document.getElementById('staff-list-container');
 
-      const filtered = sampleStaff.filter(st => 
-        st.name.toLowerCase().includes(query) ||
-        st.surname.toLowerCase().includes(query) ||
-        st.jobTitle.toLowerCase().includes(query) ||
-        st.email.toLowerCase().includes(query) ||
-        st.phone.toLowerCase().includes(query)
+      const filtered = liveStaffData.filter(st => 
+        (st.name || '').toLowerCase().includes(query) ||
+        (st.surname || '').toLowerCase().includes(query) ||
+        (st.jobTitle || '').toLowerCase().includes(query) ||
+        (st.email || '').toLowerCase().includes(query) ||
+        (st.phone || '').toLowerCase().includes(query)
       );
 
       document.getElementById('staff-count').innerText = `Showing ${filtered.length} Staff Members`;
@@ -545,7 +577,7 @@
         <div class="bg-white dark:bg-zinc-900 border border-zinc-300 dark:border-zinc-800 rounded-xl p-4 shadow-sm hover:shadow-md transition">
           <div class="flex items-center gap-3 mb-3">
             <div class="w-10 h-10 rounded-full bg-red-600 text-white flex items-center justify-center font-black text-sm">
-              ${st.name.charAt(0)}${st.surname.charAt(0)}
+              ${st.name ? st.name.charAt(0) : ''}${st.surname ? st.surname.charAt(0) : ''}
             </div>
             <div>
               <h3 class="text-sm font-bold text-zinc-900 dark:text-zinc-100">${st.name} ${st.surname}</h3>
@@ -554,8 +586,8 @@
           </div>
 
           <div class="space-y-1 text-xs text-zinc-600 dark:text-zinc-300 border-t border-zinc-200 dark:border-zinc-800 pt-2">
-            <div><i class="fa-solid fa-phone mr-2 text-zinc-400"></i><a href="tel:${st.phone}" class="hover:underline">${st.phone}</a></div>
-            <div><i class="fa-solid fa-envelope mr-2 text-zinc-400"></i><a href="mailto:${st.email}" class="hover:underline text-red-600 dark:text-red-400">${st.email}</a></div>
+            ${st.phone ? `<div><i class="fa-solid fa-phone mr-2 text-zinc-400"></i><a href="tel:${st.phone}" class="hover:underline">${st.phone}</a></div>` : ''}
+            ${st.email ? `<div><i class="fa-solid fa-envelope mr-2 text-zinc-400"></i><a href="mailto:${st.email}" class="hover:underline text-red-600 dark:text-red-400">${st.email}</a></div>` : ''}
           </div>
         </div>
       `).join('');
