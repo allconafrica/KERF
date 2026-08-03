@@ -64,6 +64,10 @@
         margin: 10mm;
       }
 
+      *, *:before, *:after {
+        box-sizing: border-box !important;
+      }
+
       /* STRICT WHITE BACKGROUND OVERRIDE FOR PRINTING */
       html, body {
         background-color: #ffffff !important;
@@ -95,19 +99,21 @@
         print-color-adjust: exact !important;
       }
 
+      /* Light Red Tint Header */
       .print-table-header {
-        background-color: #e2e8f0 !important;
+        background-color: #fef2f2 !important;
         -webkit-print-color-adjust: exact !important;
         print-color-adjust: exact !important;
       }
 
-      /* Table Structure & Width Lockdown */
+      /* Table Structure & Border Lockdown */
       #print-template table {
         display: table !important;
         width: 100% !important;
         border-collapse: collapse !important;
         table-layout: fixed !important;
         margin-bottom: 12px !important;
+        border: 1px solid #000000 !important;
       }
 
       #print-template tr { 
@@ -118,14 +124,13 @@
       #print-template td { 
         display: table-cell !important;
         border: 1px solid #000000 !important;
-        padding: 6px 8px !important;
-        box-sizing: border-box !important;
+        padding: 5px 8px !important;
         word-wrap: break-word !important;
         overflow-wrap: break-word !important;
         vertical-align: middle !important;
       }
 
-      /* Remove border for clean header table */
+      /* Remove outer borders for clean top header table */
       #print-template table.no-border, 
       #print-template table.no-border td {
         border: none !important;
