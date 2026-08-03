@@ -20,16 +20,19 @@
       color: #f4f4f5 !important;
     }
 
+    /* Main Builder Outer Frame */
     html.dark .builder-frame {
       background-color: #1e1e24 !important;
       border-color: #3f3f46 !important;
     }
 
+    /* Builder Sub-sections */
     html.dark .builder-section {
       background-color: #27272a !important;
       border-color: #3f3f46 !important;
     }
 
+    /* Form Text Inputs & Selects */
     html.dark input, 
     html.dark textarea, 
     html.dark select {
@@ -51,6 +54,7 @@
       box-shadow: 0 0 0 1px #dc2626;
     }
 
+    /* Hide Print Preview Template on Screen */
     #print-template {
       display: none;
     }
@@ -68,6 +72,7 @@
         box-sizing: border-box !important;
       }
 
+      /* STRICT WHITE BACKGROUND OVERRIDE FOR PRINTING */
       html, body {
         background-color: #ffffff !important;
         color: #000000 !important;
@@ -76,10 +81,12 @@
         width: 100% !important;
       }
 
+      /* Hide web portal UI completely */
       header, main, nav, button, .builder-frame {
         display: none !important;
       }
 
+      /* Display print template exclusively with safety buffer */
       #print-template {
         display: block !important;
         width: calc(100% - 2px) !important;
@@ -97,12 +104,14 @@
         print-color-adjust: exact !important;
       }
 
+      /* Light Red Tint Header */
       .print-table-header {
         background-color: #fef2f2 !important;
         -webkit-print-color-adjust: exact !important;
         print-color-adjust: exact !important;
       }
 
+      /* Table Structure & Border Lockdown */
       #print-template table {
         display: table !important;
         width: 100% !important;
@@ -128,34 +137,10 @@
         box-sizing: border-box !important;
       }
 
+      /* Remove outer borders for clean top header table */
       #print-template table.no-border, 
       #print-template table.no-border td {
         border: none !important;
-      }
-
-      /* Handwritten pad style styling for the manual schedule block inside print */
-      .manual-pad-sheet {
-        border: 1px solid #000000 !important;
-        margin-bottom: 8px;
-        background-color: #ffffff !important;
-      }
-
-      .manual-row {
-        border-bottom: 1px solid #94a3b8 !important;
-        padding: 6px 8px !important;
-        min-height: 30px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-      }
-
-      .manual-row-last {
-        border-bottom: none !important;
-        padding: 6px 8px !important;
-        min-height: 30px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
       }
     }
   </style>
@@ -222,11 +207,11 @@
         <div class="builder-section grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 bg-zinc-100 p-4 rounded-xl text-xs border border-zinc-200">
           <div>
             <label class="block font-semibold mb-1 text-zinc-700 dark:text-zinc-300">Client Name</label>
-            <input type="text" id="meta-client" placeholder="e.g. Quantum Steel" class="w-full p-2.5 rounded-lg text-sm">
+            <input type="text" id="meta-client" placeholder="e.g. Sasol Synfuels" class="w-full p-2.5 rounded-lg text-sm">
           </div>
           <div>
             <label class="block font-semibold mb-1 text-zinc-700 dark:text-zinc-300">Project Name</label>
-            <input type="text" id="meta-project" placeholder="e.g. Shanta New" class="w-full p-2.5 rounded-lg text-sm">
+            <input type="text" id="meta-project" placeholder="e.g. Conveyor Structure Overhaul" class="w-full p-2.5 rounded-lg text-sm">
           </div>
           <div>
             <label class="block font-semibold mb-1 text-zinc-700 dark:text-zinc-300">Date Info Sheet Generated</label>
@@ -256,7 +241,7 @@
 
         <!-- LINKED JOB ID & AC DRAWING SCHEDULE -->
         <div class="builder-section bg-red-950/20 p-4 rounded-xl border border-red-200 dark:border-zinc-700 mb-6">
-          <h3 class="text-xs font-bold uppercase mb-3 text-red-600 dark:text-red-400"><i class="fa-solid fa-diagram-project mr-2"></i>Job ID &amp; AC Drawing Schedule Builder</h3>
+          <h3 class="text-xs font-bold uppercase mb-3 text-red-600 dark:text-red-400"><i class="fa-solid fa-diagram-project mr-2"></i>Job ID &amp; AC Drawing Schedule (AC Number | Drawing Reference | Material | Supplier | PO)</h3>
           
           <div class="grid grid-cols-1 md:grid-cols-12 gap-3 items-end mb-4 bg-zinc-200 dark:bg-zinc-900 p-3 rounded-lg text-xs">
             <div class="md:col-span-2">
@@ -264,19 +249,17 @@
               <input type="text" id="input-job-id" placeholder="e.g. 4720" class="w-full p-2 rounded-lg font-bold">
             </div>
             <div class="md:col-span-2">
-              <label class="block font-bold mb-1 text-zinc-700 dark:text-zinc-300">AC Num</label>
-              <input type="text" id="input-ac-num" placeholder="e.g. AC2897" class="w-full p-2 rounded-lg font-bold">
+              <label class="block font-bold mb-1 text-zinc-700 dark:text-zinc-300">AC Number *</label>
+              <input type="text" id="input-ac-num" placeholder="e.g. AC2896" class="w-full p-2 rounded-lg font-bold">
             </div>
-            <div class="md:col-span-3">
-              <label class="block font-bold mb-1 text-zinc-700 dark:text-zinc-300">Drawing / Part Description *</label>
-              <input type="text" id="input-drawing-ref" placeholder="e.g. OUTER COURSE 100NB (TRN)" class="w-full p-2 rounded-lg">
+            <div class="md:col-span-2">
+              <label class="block font-bold mb-1 text-zinc-700 dark:text-zinc-300">Drawing Ref</label>
+              <input type="text" id="input-drawing-ref" placeholder="e.g. DRW-01" class="w-full p-2 rounded-lg">
             </div>
             <div class="md:col-span-2">
               <label class="block font-bold mb-1 text-zinc-700 dark:text-zinc-300">Material Category</label>
               <select id="input-ac-material" class="w-full p-2 rounded-lg">
-                <option value="">-- Material --</option>
-                <option value="Material">Material</option>
-                <option value="Machining">Machining</option>
+                <option value="">-- Select Material --</option>
                 <option value="Material (Plates)">Material (Plates)</option>
                 <option value="Material (Structural)">Material (Structural)</option>
                 <option value="Laser Cutting &amp; Bending">Laser Cutting &amp; Bending</option>
@@ -284,20 +267,21 @@
                 <option value="Fasteners &amp; Hardware">Fasteners &amp; Hardware</option>
                 <option value="Surface Coating / HDG">Surface Coating / HDG</option>
                 <option value="Freight / Transport">Freight / Transport</option>
+                <option value="Miscellaneous">Miscellaneous</option>
               </select>
             </div>
-            <div class="md:col-span-3">
+            <div class="md:col-span-2">
               <label class="block font-bold mb-1 text-zinc-700 dark:text-zinc-300">Supplier Name</label>
               <select id="input-ac-supplier" class="w-full p-2 rounded-lg">
                 <option value="">-- Select Supplier --</option>
               </select>
             </div>
-            <div class="md:col-span-2">
+            <div class="md:col-span-1">
               <label class="block font-bold mb-1 text-zinc-700 dark:text-zinc-300">PO Num</label>
-              <input type="text" id="input-ac-po" placeholder="PO18017" class="w-full p-2 rounded-lg font-bold">
+              <input type="text" id="input-ac-po" placeholder="PO-88392" class="w-full p-2 rounded-lg font-bold">
             </div>
-            <div class="md:col-span-2">
-              <button onclick="addLinkedACLine()" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold p-2 rounded-lg transition"><i class="fa-solid fa-plus mr-1"></i> Add Line</button>
+            <div class="md:col-span-1">
+              <button onclick="addLinkedACLine()" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold p-2 rounded-lg transition"><i class="fa-solid fa-plus mr-1"></i> Add</button>
             </div>
           </div>
 
@@ -379,13 +363,14 @@
       <div><strong>Exclusions:</strong> <span id="print-out-exclusions">None specified</span></div>
     </div>
 
-    <!-- LINKED AC SCHEDULE WITH MANUAL NOTEBOOK PAD LAYOUT -->
+    <!-- LINKED AC SCHEDULE -->
     <div style="font-size: 9pt; font-weight: bold; margin-bottom: 4px; color: #000000;">JOB IDs &amp; LINKED AC DRAWING SCHEDULE</div>
     <div id="print-job-groups-container" style="margin-bottom: 12px;"></div>
 
   </div>
 
   <script>
+    // DEDICATED GOOGLE SHEET TAB ENDPOINTS
     const STAFF_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSNynT5Snb9PgJp6ti3QpuHUr9fX8bGKEG10H8kjkbCna_ZfkEC7aM06QrwkjHwxR1n6uu3ZgvvaKu6/pub?gid=1666500445&single=true&output=csv";
     const SUPPLIERS_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSNynT5Snb9PgJp6ti3QpuHUr9fX8bGKEG10H8kjkbCna_ZfkEC7aM06QrwkjHwxR1n6uu3ZgvvaKu6/pub?gid=0&single=true&output=csv";
 
@@ -393,6 +378,7 @@
     let liveStaffData = [];
     let liveSupplierData = [];
 
+    // ROBUST CSV PARSER
     function parseCSV(text) {
       const lines = text.trim().split(/\r?\n/);
       if (lines.length < 2) return [];
@@ -432,11 +418,14 @@
       }).filter(Boolean);
     }
 
+    // LOAD DEDICATED DATA FROM INDIVIDUAL GOOGLE SHEET ENDPOINTS
     async function loadLiveData() {
+      // 1. Fetch Staff Directory Tab Data
       try {
         const staffRes = await fetch(STAFF_CSV_URL);
         const staffCsv = await staffRes.text();
         const staffRaw = parseCSV(staffCsv);
+
         liveStaffData = staffRaw.map(r => ({
           name: r['name'] || r['first name'] || '',
           surname: r['surname'] || r['last name'] || '',
@@ -449,10 +438,12 @@
         console.error("Failed to load Staff Directory data:", err);
       }
 
+      // 2. Fetch Suppliers Tab Data
       try {
         const suppRes = await fetch(SUPPLIERS_CSV_URL);
         const suppCsv = await suppRes.text();
         const suppRaw = parseCSV(suppCsv);
+
         liveSupplierData = suppRaw.map(r => ({
           status: r['status'] || 'APPROVED',
           supplierName: r['supplier name'] || r['company'] || r['supplier'] || '',
@@ -479,6 +470,7 @@
       loadLiveData();
     });
 
+    // POPULATE BUILDER SUPPLIER DROPDOWN (ALPHABETICALLY CATEGORISED BY FIRST LETTER)
     function populateSupplierDropdown() {
       const select = document.getElementById('input-ac-supplier');
       if (!select) return;
@@ -488,27 +480,55 @@
         .filter(Boolean)
         .sort((a, b) => a.localeCompare(b));
 
-      let html = `<option value="">-- Select Supplier --</option>`;
+      // Group by starting letter
+      const groups = {};
       sortedNames.forEach(name => {
-        html += `<option value="${name}">${name}</option>`;
+        const firstLetter = name.charAt(0).toUpperCase();
+        const key = /[A-Z]/.test(firstLetter) ? firstLetter : '#';
+        if (!groups[key]) groups[key] = [];
+        groups[key].push(name);
       });
+
+      const sortedKeys = Object.keys(groups).sort((a, b) => {
+        if (a === '#') return 1;
+        if (b === '#') return -1;
+        return a.localeCompare(b);
+      });
+
+      let html = `<option value="">-- Select Supplier --</option>`;
+      sortedKeys.forEach(letter => {
+        html += `<optgroup label="${letter} - (${groups[letter].length})">`;
+        groups[letter].forEach(name => {
+          html += `<option value="${name}">${name}</option>`;
+        });
+        html += `</optgroup>`;
+      });
+
       select.innerHTML = html;
     }
 
+    // HELPER FOR BADGE COLORS
     function getStatusBadgeClass(status) {
       const cleanStatus = (status || '').toUpperCase().trim();
       switch (cleanStatus) {
-        case 'APPROVED': return 'bg-blue-600';
-        case 'PREFERRED': return 'bg-emerald-600';
-        case 'REJECTED': return 'bg-red-600';
-        case 'PENDING NDA': return 'bg-amber-500';
-        default: return 'bg-zinc-600';
+        case 'APPROVED':
+          return 'bg-blue-600';
+        case 'PREFERRED':
+          return 'bg-emerald-600';
+        case 'REJECTED':
+          return 'bg-red-600';
+        case 'PENDING NDA':
+          return 'bg-amber-500';
+        default:
+          return 'bg-zinc-600';
       }
     }
 
+    // RENDER SUPPLIERS
     function renderSuppliers() {
       const query = (document.getElementById('supplier-search')?.value || '').toLowerCase();
       const container = document.getElementById('suppliers-list-container');
+      
       const filtered = liveSupplierData.filter(s => 
         (s.supplierName || '').toLowerCase().includes(query) ||
         (s.category || '').toLowerCase().includes(query) ||
@@ -525,6 +545,7 @@
 
       container.innerHTML = filtered.map(s => {
         const badgeClass = getStatusBadgeClass(s.status);
+
         return `
           <div class="bg-white dark:bg-zinc-900 border border-zinc-300 dark:border-zinc-800 rounded-xl p-5 shadow-sm hover:shadow-md transition">
             <div class="flex justify-between items-start mb-3">
@@ -534,6 +555,7 @@
                 <p class="text-xs text-red-600 dark:text-red-400 font-semibold">${s.category}</p>
               </div>
             </div>
+            
             <div class="grid grid-cols-1 gap-1.5 text-xs text-zinc-600 dark:text-zinc-300 my-3 bg-zinc-50 dark:bg-zinc-800/50 p-3 rounded-lg border border-zinc-200 dark:border-zinc-700/50">
               ${s.pocName ? `<div><strong>POC Name:</strong> ${s.pocName}</div>` : ''}
               ${s.pocEmail ? `<div><strong>POC Email:</strong> <a href="mailto:${s.pocEmail}" class="text-red-600 hover:underline">${s.pocEmail}</a></div>` : ''}
@@ -543,15 +565,18 @@
               ${(s.paymentTerms || s.standardEta) ? `<div><strong>Payment Terms:</strong> ${s.paymentTerms} | <strong>Standard ETA:</strong> ${s.standardEta}</div>` : ''}
               ${s.address ? `<div><strong>Address:</strong> ${s.address}</div>` : ''}
             </div>
+
             ${s.notes ? `<div class="text-[11px] italic text-zinc-500 dark:text-zinc-400"><strong>Notes:</strong> ${s.notes}</div>` : ''}
           </div>
         `;
       }).join('');
     }
 
+    // RENDER STAFF
     function renderStaff() {
       const query = (document.getElementById('staff-search')?.value || '').toLowerCase();
       const container = document.getElementById('staff-list-container');
+
       const filtered = liveStaffData.filter(st => 
         (st.name || '').toLowerCase().includes(query) ||
         (st.surname || '').toLowerCase().includes(query) ||
@@ -578,6 +603,7 @@
               <p class="text-xs text-red-600 dark:text-red-400 font-medium">${st.jobTitle}</p>
             </div>
           </div>
+
           <div class="space-y-1 text-xs text-zinc-600 dark:text-zinc-300 border-t border-zinc-200 dark:border-zinc-800 pt-2">
             ${st.phone ? `<div><i class="fa-solid fa-phone mr-2 text-zinc-400"></i><a href="tel:${st.phone}" class="hover:underline">${st.phone}</a></div>` : ''}
             ${st.email ? `<div><i class="fa-solid fa-envelope mr-2 text-zinc-400"></i><a href="mailto:${st.email}" class="hover:underline text-red-600 dark:text-red-400">${st.email}</a></div>` : ''}
@@ -586,6 +612,7 @@
       `).join('');
     }
 
+    // BUILDER FUNCTIONS
     function addLinkedACLine() {
       const jobId = document.getElementById('input-job-id').value.trim();
       const acNum = document.getElementById('input-ac-num').value.trim();
@@ -596,13 +623,12 @@
 
       if (!jobId) return alert('Please enter a Job ID.');
       if (!acNum) return alert('Please enter an AC Number.');
-      if (!drawingRef) return alert('Please enter a Drawing / Part Description.');
 
       if (!jobDataMap[jobId]) {
-        jobDataMap[jobId] = { items: [] };
+        jobDataMap[jobId] = [];
       }
 
-      jobDataMap[jobId].items.push({ 
+      jobDataMap[jobId].push({ 
         num: acNum, 
         drawingRef: drawingRef,
         material: material, 
@@ -621,8 +647,8 @@
 
     function removeACItem(jobId, index) {
       if (jobDataMap[jobId]) {
-        jobDataMap[jobId].items.splice(index, 1);
-        if (jobDataMap[jobId].items.length === 0) delete jobDataMap[jobId];
+        jobDataMap[jobId].splice(index, 1);
+        if (jobDataMap[jobId].length === 0) delete jobDataMap[jobId];
         renderGroupedACTable();
       }
     }
@@ -638,14 +664,13 @@
 
       container.innerHTML = '';
       jobKeys.forEach(jobId => {
-        const group = jobDataMap[jobId];
-        let rowsHtml = group.items.map((item, idx) => `
+        let rowsHtml = jobDataMap[jobId].map((item, idx) => `
           <tr class="border-b border-zinc-200 dark:border-zinc-800 text-xs">
-            <td class="p-2 font-bold text-red-600 dark:text-red-400 w-[12%]">${item.num}</td>
-            <td class="p-2 w-[30%] text-zinc-700 dark:text-zinc-300 font-medium">${item.drawingRef}</td>
-            <td class="p-2 w-[18%] text-zinc-700 dark:text-zinc-300">${item.material || '<span class="text-zinc-400 italic">--</span>'}</td>
+            <td class="p-2 font-bold text-red-600 dark:text-red-400 w-[11%]">${item.num}</td>
+            <td class="p-2 w-[29%] text-zinc-700 dark:text-zinc-300">${item.drawingRef || '<span class="text-zinc-400 italic">--</span>'}</td>
+            <td class="p-2 w-[22%] text-zinc-700 dark:text-zinc-300">${item.material || '<span class="text-zinc-400 italic">--</span>'}</td>
             <td class="p-2 w-[22%]" title="${item.supplier || ''}">${item.supplier || '<span class="text-zinc-400 italic">--</span>'}</td>
-            <td class="p-2 font-semibold w-[12%]">${item.po ? (item.po.startsWith('PO') ? item.po : 'PO' + item.po) : '<span class="text-zinc-400 italic">--</span>'}</td>
+            <td class="p-2 font-semibold w-[10%]">${item.po ? (item.po.startsWith('PO-') ? item.po : 'PO-' + item.po) : '<span class="text-zinc-400 italic">--</span>'}</td>
             <td class="p-2 text-right w-[6%]">
               <button onclick="removeACItem('${jobId}', ${idx})" class="text-red-500 hover:underline">Remove</button>
             </td>
@@ -656,16 +681,16 @@
           <div class="bg-zinc-100 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 rounded-lg overflow-hidden">
             <div class="bg-zinc-900 text-white text-xs font-bold px-3 py-2 flex justify-between items-center">
               <span><i class="fa-solid fa-folder-closed mr-2 text-red-500"></i>JOB ID: ${jobId}</span>
-              <span class="text-[10px] bg-red-600 px-2 py-0.5 rounded">${group.items.length} AC Entries</span>
+              <span class="text-[10px] bg-red-600 px-2 py-0.5 rounded">${jobDataMap[jobId].length} AC Entries</span>
             </div>
             <table class="w-full text-left border-collapse table-fixed">
               <thead>
                 <tr class="bg-zinc-200 dark:bg-zinc-900 text-[11px] text-zinc-600 dark:text-zinc-400 border-b border-zinc-300 dark:border-zinc-700">
-                  <th class="p-2 w-[12%]">AC Number</th>
-                  <th class="p-2 w-[30%]">Part / Description</th>
-                  <th class="p-2 w-[18%]">Material</th>
+                  <th class="p-2 w-[11%]">AC Number</th>
+                  <th class="p-2 w-[29%]">Drawing Reference</th>
+                  <th class="p-2 w-[22%]">Material</th>
                   <th class="p-2 w-[22%]">Supplier Name</th>
-                  <th class="p-2 w-[12%]">PO Number</th>
+                  <th class="p-2 w-[10%]">PO</th>
                   <th class="p-2 text-right w-[6%]">Action</th>
                 </tr>
               </thead>
@@ -694,32 +719,41 @@
       const jobKeys = Object.keys(jobDataMap);
       if (jobKeys.length > 0) {
         jobKeys.forEach(jobId => {
-          const group = jobDataMap[jobId];
-          
-          let rowsHtml = '';
-          group.items.forEach((item, idx) => {
-            const formattedPo = item.po ? (item.po.startsWith('PO') ? item.po : 'PO' + item.po) : '';
-            const rowClass = (idx === group.items.length - 1) ? 'manual-row-last' : 'manual-row';
-            
-            rowsHtml += `
-              <div class="${rowClass}">
-                <div style="font-weight: bold; color: #dc2626; width: 14%;">${item.num}</div>
-                <div style="width: 28%; font-weight: bold;">${item.drawingRef}</div>
-                <div style="width: 20%;">${item.material || ''}</div>
-                <div style="width: 26%;">${item.supplier || ''}</div>
-                <div style="font-weight: bold; width: 12%; text-align: right;">${formattedPo}</div>
-              </div>
+          let rowsHtml = jobDataMap[jobId].map(item => {
+            const formattedPo = item.po ? (item.po.startsWith('PO-') ? item.po : 'PO-' + item.po) : '';
+            return `
+              <tr>
+                <td style="font-weight: bold; color: #dc2626; width: 11%;">${item.num}</td>
+                <td style="width: 29%;">${item.drawingRef || '&nbsp;'}</td>
+                <td style="width: 25%;">${item.material || '&nbsp;'}</td>
+                <td style="width: 25%;">${item.supplier || '&nbsp;'}</td>
+                <td style="font-weight: bold; width: 10%;">${formattedPo}</td>
+              </tr>
             `;
-          });
+          }).join('');
 
           printGroupsContainer.innerHTML += `
             <div style="margin-bottom: 8px;">
-              <div style="background-color: #111827; color: #ffffff; font-weight: bold; font-size: 8pt; padding: 4px 6px;" class="print-header-banner">
-                JOB ID: ${jobId}
-              </div>
-              <div class="manual-pad-sheet">
-                ${rowsHtml}
-              </div>
+              <div style="background-color: #111827; color: #ffffff; font-weight: bold; font-size: 8pt; padding: 3px 6px;" class="print-header-banner">JOB ID: ${jobId}</div>
+              <table style="width: 100%; table-layout: fixed;">
+                <colgroup>
+                  <col style="width: 11%;">
+                  <col style="width: 29%;">
+                  <col style="width: 25%;">
+                  <col style="width: 25%;">
+                  <col style="width: 10%;">
+                </colgroup>
+                <thead>
+                  <tr class="print-table-header" style="font-size: 8pt;">
+                    <th style="text-align: left; font-weight: bold;">AC Number</th>
+                    <th style="text-align: left; font-weight: bold;">Drawing Reference</th>
+                    <th style="text-align: left; font-weight: bold;">Material</th>
+                    <th style="text-align: left; font-weight: bold;">Supplier Name</th>
+                    <th style="text-align: left; font-weight: bold;">PO</th>
+                  </tr>
+                </thead>
+                <tbody>${rowsHtml}</tbody>
+              </table>
             </div>
           `;
         });
