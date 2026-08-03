@@ -20,19 +20,16 @@
       color: #f4f4f5 !important;
     }
 
-    /* Main Builder Outer Frame */
     html.dark .builder-frame {
       background-color: #1e1e24 !important;
       border-color: #3f3f46 !important;
     }
 
-    /* Builder Sub-sections */
     html.dark .builder-section {
       background-color: #27272a !important;
       border-color: #3f3f46 !important;
     }
 
-    /* Form Text Inputs & Selects */
     html.dark input, 
     html.dark textarea, 
     html.dark select {
@@ -54,13 +51,16 @@
       box-shadow: 0 0 0 1px #dc2626;
     }
 
-    /* Hide Print Preview Template on Screen */
     #print-template {
       display: none;
     }
 
     /* ==========================================
        NATIVE PRINT / PDF ENGINE (@media print)
+       Matches the handwritten pad look exactly:
+       - Outer thick bordered document frame
+       - Top header block with brand & date line
+       - Manual-style ruled notebook entry lines
        ========================================== */
     @media print {
       @page {
@@ -72,7 +72,6 @@
         box-sizing: border-box !important;
       }
 
-      /* STRICT WHITE BACKGROUND OVERRIDE FOR PRINTING */
       html, body {
         background-color: #ffffff !important;
         color: #000000 !important;
@@ -81,66 +80,45 @@
         width: 100% !important;
       }
 
-      /* Hide web portal UI completely */
       header, main, nav, button, .builder-frame {
         display: none !important;
       }
 
-      /* Display print template exclusively with safety buffer */
       #print-template {
         display: block !important;
         width: calc(100% - 2px) !important;
         margin: 0 auto !important;
         font-family: Arial, Helvetica, sans-serif !important;
-        font-size: 8.5pt;
+        font-size: 10pt;
         color: #000000 !important;
+        background-color: #ffffff !important;
+        border: 2px solid #000000 !important;
+        padding: 12px !important;
+      }
+
+      /* Manual-style notebook block mimicking the pad format */
+      .manual-pad-sheet {
+        border: 1px solid #000000 !important;
+        margin-top: 10px;
         background-color: #ffffff !important;
       }
 
-      .print-header-banner {
-        background-color: #dc2626 !important;
-        color: #ffffff !important;
-        -webkit-print-color-adjust: exact !important;
-        print-color-adjust: exact !important;
+      .manual-row {
+        border-bottom: 1px solid #94a3b8 !important;
+        padding: 8px 12px !important;
+        min-height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
       }
 
-      /* Light Red Tint Header */
-      .print-table-header {
-        background-color: #fef2f2 !important;
-        -webkit-print-color-adjust: exact !important;
-        print-color-adjust: exact !important;
-      }
-
-      /* Table Structure & Border Lockdown */
-      #print-template table {
-        display: table !important;
-        width: 100% !important;
-        border-collapse: collapse !important;
-        table-layout: fixed !important;
-        margin-bottom: 12px !important;
-        border: 1px solid #000000 !important;
-        box-sizing: border-box !important;
-      }
-
-      #print-template tr { 
-        display: table-row !important; 
-      }
-
-      #print-template th, 
-      #print-template td { 
-        display: table-cell !important;
-        border: 1px solid #000000 !important;
-        padding: 5px 8px !important;
-        word-wrap: break-word !important;
-        overflow-wrap: break-word !important;
-        vertical-align: middle !important;
-        box-sizing: border-box !important;
-      }
-
-      /* Remove outer borders for clean top header table */
-      #print-template table.no-border, 
-      #print-template table.no-border td {
-        border: none !important;
+      .manual-row-last {
+        border-bottom: none !important;
+        padding: 8px 12px !important;
+        min-height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
       }
     }
   </style>
@@ -248,10 +226,6 @@
               <label class="block font-bold mb-1 text-zinc-700 dark:text-zinc-300">Job ID *</label>
               <input type="text" id="input-job-id" placeholder="e.g. 4720" class="w-full p-2 rounded-lg font-bold">
             </div>
-            <!-- NOTE: Drawing Description field kept in form inputs to populate individual row items -->
-            <div class="md:col-span-3 hidden">
-              <input type="text" id="input-job-desc" value="">
-            </div>
             <div class="md:col-span-2">
               <label class="block font-bold mb-1 text-zinc-700 dark:text-zinc-300">AC Num</label>
               <input type="text" id="input-ac-num" placeholder="e.g. AC2897" class="w-full p-2 rounded-lg font-bold">
@@ -323,67 +297,44 @@
   <!-- PRINT TEMPLATE -->
   <div id="print-template">
     
-    <!-- HEADER -->
-    <table class="no-border" style="width: 100%; border-bottom: 2px solid #dc2626 !important; padding-bottom: 8px; margin-bottom: 12px;">
-      <tr>
-        <td style="vertical-align: top; width: 60%; text-align: left;">
-          <div style="margin-bottom: 4px;">
-            <img src="./ALLCON-Logo.jpg" alt="ALLCON Logo" style="height: 44px; width: auto; max-width: 260px; object-fit: contain;" onerror="this.onerror=null; this.outerHTML='<div class=\'print-header-banner\' style=\'font-weight: 900; font-size: 20pt; padding: 4px 12px; display: inline-block; letter-spacing: 2px;\'>ALLCON</div>';">
-          </div>
-          <div style="font-size: 9pt; color: #334155; text-transform: uppercase; font-weight: bold; margin-top: 4px;">PROJECT INFO SHEET TRANSMITTAL</div>
-        </td>
-        <td style="vertical-align: top; text-align: right; width: 40%;">
-          <div style="font-size: 8.5pt; color: #334155; font-weight: bold;" id="print-out-gen-date"></div>
-        </td>
-      </tr>
-    </table>
-
-    <!-- METADATA TABLE -->
-    <table style="width: 100%;">
-      <colgroup>
-        <col style="width: 18%;">
-        <col style="width: 32%;">
-        <col style="width: 22%;">
-        <col style="width: 28%;">
-      </colgroup>
-      <tbody>
-        <tr class="print-table-header">
-          <td style="font-weight: bold;">CLIENT:</td>
-          <td id="print-out-client">N/A</td>
-          <td style="font-weight: bold;">TARGET COMPLETION:</td>
-          <td style="font-weight: bold; color: #dc2626;" id="print-out-comp-date">N/A</td>
-        </tr>
-        <tr>
-          <td style="font-weight: bold;" class="print-table-header">PROJECT NAME:</td>
-          <td id="print-out-project">N/A</td>
-          <td style="font-weight: bold;" class="print-table-header">TECHNICAL BUYER:</td>
-          <td id="print-out-buyer">N/A</td>
-        </tr>
-      </tbody>
-    </table>
-
-    <!-- INCLUSIONS & EXCLUSIONS -->
-    <div style="font-size: 8.5pt; margin-bottom: 12px; padding: 6px 8px; border: 1px solid #000000; background-color: #ffffff; box-sizing: border-box;">
-      <div style="margin-bottom: 4px;"><strong>Inclusions:</strong> <span id="print-out-inclusions">None specified</span></div>
-      <div><strong>Exclusions:</strong> <span id="print-out-exclusions">None specified</span></div>
+    <!-- MANUAL PAD TOP HEADER BLOCK -->
+    <div style="display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 2px solid #000000; padding-bottom: 8px; margin-bottom: 12px;">
+      <div>
+        <img src="./ALLCON-Logo.jpg" alt="ALLCON Logo" style="height: 40px; width: auto; max-width: 220px; object-fit: contain;" onerror="this.onerror=null; this.outerHTML='<div style=\'font-weight: 900; font-size: 16pt; letter-spacing: 1px;\'>QUANTUM STEEL</div>';">
+        <div style="font-size: 7.5pt; color: #475569; margin-top: 2px;">201 IMMELMAN RD, CORNER BRISTOL STREET, WADEVILLE, 1428</div>
+      </div>
+      <div style="text-align: right;">
+        <div style="font-size: 9pt; font-weight: bold; border-bottom: 1px solid #000000; padding-bottom: 2px; margin-bottom: 2px;" id="print-out-gen-date">21 / 08 / 2026</div>
+        <div style="font-size: 7.5pt; color: #475569;">P.O. BOX 92474 NORWOOD 2117</div>
+      </div>
     </div>
 
-    <!-- LINKED AC SCHEDULE -->
-    <div style="font-size: 9pt; font-weight: bold; margin-bottom: 4px; color: #000000;">JOB IDs &amp; LINKED AC DRAWING SCHEDULE</div>
-    <div id="print-job-groups-container" style="margin-bottom: 12px;"></div>
+    <!-- METADATA SUMMARY -->
+    <div style="display: flex; justify-content: space-between; font-size: 9pt; font-weight: bold; margin-bottom: 10px; border-bottom: 1px solid #000000; padding-bottom: 6px;">
+      <div>CLIENT: <span id="print-out-client" style="font-weight: normal;">N/A</span></div>
+      <div>PROJECT: <span id="print-out-project" style="font-weight: normal;">N/A</span></div>
+      <div>TARGET: <span id="print-out-comp-date" style="font-weight: normal; color: #dc2626;">N/A</span></div>
+    </div>
 
+    <!-- NOTEBOOK PAD STYLE ENTRIES CONTAINER -->
+    <div id="print-job-groups-container"></div>
+
+    <!-- FOOTER INFO -->
+    <div style="display: flex; justify-content: space-between; font-size: 7.5pt; border-top: 2px solid #000000; margin-top: 15px; padding-top: 6px; font-weight: bold;">
+      <div>TEL: (011) 824 - 1694</div>
+      <div>FAX: 086 266 2322</div>
+      <div>E-MAIL: INFO@QUANTUMSTEEL.CO.ZA</div>
+    </div>
   </div>
 
   <script>
-    // DEDICATED GOOGLE SHEET TAB ENDPOINTS
     const STAFF_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSNynT5Snb9PgJp6ti3QpuHUr9fX8bGKEG10H8kjkbCna_ZfkEC7aM06QrwkjHwxR1n6uu3ZgvvaKu6/pub?gid=1666500445&single=true&output=csv";
     const SUPPLIERS_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSNynT5Snb9PgJp6ti3QpuHUr9fX8bGKEG10H8kjkbCna_ZfkEC7aM06QrwkjHwxR1n6uu3ZgvvaKu6/pub?gid=0&single=true&output=csv";
 
-    let jobDataMap = {}; // Structure: { jobId: { items: [...] } }
+    let jobDataMap = {};
     let liveStaffData = [];
     let liveSupplierData = [];
 
-    // ROBUST CSV PARSER
     function parseCSV(text) {
       const lines = text.trim().split(/\r?\n/);
       if (lines.length < 2) return [];
@@ -423,14 +374,11 @@
       }).filter(Boolean);
     }
 
-    // LOAD DEDICATED DATA FROM INDIVIDUAL GOOGLE SHEET ENDPOINTS
     async function loadLiveData() {
-      // 1. Fetch Staff Directory Tab Data
       try {
         const staffRes = await fetch(STAFF_CSV_URL);
         const staffCsv = await staffRes.text();
         const staffRaw = parseCSV(staffCsv);
-
         liveStaffData = staffRaw.map(r => ({
           name: r['name'] || r['first name'] || '',
           surname: r['surname'] || r['last name'] || '',
@@ -443,12 +391,10 @@
         console.error("Failed to load Staff Directory data:", err);
       }
 
-      // 2. Fetch Suppliers Tab Data
       try {
         const suppRes = await fetch(SUPPLIERS_CSV_URL);
         const suppCsv = await suppRes.text();
         const suppRaw = parseCSV(suppCsv);
-
         liveSupplierData = suppRaw.map(r => ({
           status: r['status'] || 'APPROVED',
           supplierName: r['supplier name'] || r['company'] || r['supplier'] || '',
@@ -475,7 +421,6 @@
       loadLiveData();
     });
 
-    // POPULATE BUILDER SUPPLIER DROPDOWN (ALPHABETICALLY CATEGORISED BY FIRST LETTER)
     function populateSupplierDropdown() {
       const select = document.getElementById('input-ac-supplier');
       if (!select) return;
@@ -485,55 +430,27 @@
         .filter(Boolean)
         .sort((a, b) => a.localeCompare(b));
 
-      // Group by starting letter
-      const groups = {};
-      sortedNames.forEach(name => {
-        const firstLetter = name.charAt(0).toUpperCase();
-        const key = /[A-Z]/.test(firstLetter) ? firstLetter : '#';
-        if (!groups[key]) groups[key] = [];
-        groups[key].push(name);
-      });
-
-      const sortedKeys = Object.keys(groups).sort((a, b) => {
-        if (a === '#') return 1;
-        if (b === '#') return -1;
-        return a.localeCompare(b);
-      });
-
       let html = `<option value="">-- Select Supplier --</option>`;
-      sortedKeys.forEach(letter => {
-        html += `<optgroup label="${letter} - (${groups[letter].length})">`;
-        groups[letter].forEach(name => {
-          html += `<option value="${name}">${name}</option>`;
-        });
-        html += `</optgroup>`;
+      sortedNames.forEach(name => {
+        html += `<option value="${name}">${name}</option>`;
       });
-
       select.innerHTML = html;
     }
 
-    // HELPER FOR BADGE COLORS
     function getStatusBadgeClass(status) {
       const cleanStatus = (status || '').toUpperCase().trim();
       switch (cleanStatus) {
-        case 'APPROVED':
-          return 'bg-blue-600';
-        case 'PREFERRED':
-          return 'bg-emerald-600';
-        case 'REJECTED':
-          return 'bg-red-600';
-        case 'PENDING NDA':
-          return 'bg-amber-500';
-        default:
-          return 'bg-zinc-600';
+        case 'APPROVED': return 'bg-blue-600';
+        case 'PREFERRED': return 'bg-emerald-600';
+        case 'REJECTED': return 'bg-red-600';
+        case 'PENDING NDA': return 'bg-amber-500';
+        default: return 'bg-zinc-600';
       }
     }
 
-    // RENDER SUPPLIERS
     function renderSuppliers() {
       const query = (document.getElementById('supplier-search')?.value || '').toLowerCase();
       const container = document.getElementById('suppliers-list-container');
-      
       const filtered = liveSupplierData.filter(s => 
         (s.supplierName || '').toLowerCase().includes(query) ||
         (s.category || '').toLowerCase().includes(query) ||
@@ -550,7 +467,6 @@
 
       container.innerHTML = filtered.map(s => {
         const badgeClass = getStatusBadgeClass(s.status);
-
         return `
           <div class="bg-white dark:bg-zinc-900 border border-zinc-300 dark:border-zinc-800 rounded-xl p-5 shadow-sm hover:shadow-md transition">
             <div class="flex justify-between items-start mb-3">
@@ -560,7 +476,6 @@
                 <p class="text-xs text-red-600 dark:text-red-400 font-semibold">${s.category}</p>
               </div>
             </div>
-            
             <div class="grid grid-cols-1 gap-1.5 text-xs text-zinc-600 dark:text-zinc-300 my-3 bg-zinc-50 dark:bg-zinc-800/50 p-3 rounded-lg border border-zinc-200 dark:border-zinc-700/50">
               ${s.pocName ? `<div><strong>POC Name:</strong> ${s.pocName}</div>` : ''}
               ${s.pocEmail ? `<div><strong>POC Email:</strong> <a href="mailto:${s.pocEmail}" class="text-red-600 hover:underline">${s.pocEmail}</a></div>` : ''}
@@ -570,18 +485,15 @@
               ${(s.paymentTerms || s.standardEta) ? `<div><strong>Payment Terms:</strong> ${s.paymentTerms} | <strong>Standard ETA:</strong> ${s.standardEta}</div>` : ''}
               ${s.address ? `<div><strong>Address:</strong> ${s.address}</div>` : ''}
             </div>
-
             ${s.notes ? `<div class="text-[11px] italic text-zinc-500 dark:text-zinc-400"><strong>Notes:</strong> ${s.notes}</div>` : ''}
           </div>
         `;
       }).join('');
     }
 
-    // RENDER STAFF
     function renderStaff() {
       const query = (document.getElementById('staff-search')?.value || '').toLowerCase();
       const container = document.getElementById('staff-list-container');
-
       const filtered = liveStaffData.filter(st => 
         (st.name || '').toLowerCase().includes(query) ||
         (st.surname || '').toLowerCase().includes(query) ||
@@ -608,7 +520,6 @@
               <p class="text-xs text-red-600 dark:text-red-400 font-medium">${st.jobTitle}</p>
             </div>
           </div>
-
           <div class="space-y-1 text-xs text-zinc-600 dark:text-zinc-300 border-t border-zinc-200 dark:border-zinc-800 pt-2">
             ${st.phone ? `<div><i class="fa-solid fa-phone mr-2 text-zinc-400"></i><a href="tel:${st.phone}" class="hover:underline">${st.phone}</a></div>` : ''}
             ${st.email ? `<div><i class="fa-solid fa-envelope mr-2 text-zinc-400"></i><a href="mailto:${st.email}" class="hover:underline text-red-600 dark:text-red-400">${st.email}</a></div>` : ''}
@@ -617,7 +528,6 @@
       `).join('');
     }
 
-    // BUILDER FUNCTIONS
     function addLinkedACLine() {
       const jobId = document.getElementById('input-job-id').value.trim();
       const acNum = document.getElementById('input-ac-num').value.trim();
@@ -631,9 +541,7 @@
       if (!drawingRef) return alert('Please enter a Drawing / Part Description.');
 
       if (!jobDataMap[jobId]) {
-        jobDataMap[jobId] = {
-          items: []
-        };
+        jobDataMap[jobId] = { items: [] };
       }
 
       jobDataMap[jobId].items.push({ 
@@ -715,12 +623,11 @@
       document.getElementById('print-out-project').innerText = document.getElementById('meta-project').value.trim() || "N/A";
       
       const dateGen = document.getElementById('meta-date-gen').value;
-      document.getElementById('print-out-gen-date').innerText = dateGen ? `Generated: ${dateGen}` : "";
+      if (dateGen) {
+        const parts = dateGen.split('-');
+        document.getElementById('print-out-gen-date').innerText = `${parts[2]} / ${parts[1]} / ${parts[0]}`;
+      }
       document.getElementById('print-out-comp-date').innerText = document.getElementById('meta-date-comp').value || "N/A";
-      document.getElementById('print-out-buyer').innerText = document.getElementById('meta-buyer').value.trim() || "N/A";
-      
-      document.getElementById('print-out-inclusions').innerText = document.getElementById('meta-inclusions').value.trim() || "None specified";
-      document.getElementById('print-out-exclusions').innerText = document.getElementById('meta-exclusions').value.trim() || "None specified";
 
       const printGroupsContainer = document.getElementById('print-job-groups-container');
       printGroupsContainer.innerHTML = '';
@@ -729,48 +636,31 @@
       if (jobKeys.length > 0) {
         jobKeys.forEach(jobId => {
           const group = jobDataMap[jobId];
-          let rowsHtml = group.items.map(item => {
+          
+          let rowsHtml = '';
+          group.items.forEach((item, idx) => {
             const formattedPo = item.po ? (item.po.startsWith('PO') ? item.po : 'PO' + item.po) : '';
-            return `
-              <tr>
-                <td style="font-weight: bold; color: #dc2626; width: 12%;">${item.num}</td>
-                <td style="width: 30%; font-weight: bold;">${item.drawingRef}</td>
-                <td style="width: 20%;">${item.material || '&nbsp;'}</td>
-                <td style="width: 26%;">${item.supplier || '&nbsp;'}</td>
-                <td style="font-weight: bold; width: 12%;">${formattedPo}</td>
-              </tr>
+            const rowClass = (idx === group.items.length - 1) ? 'manual-row-last' : 'manual-row';
+            
+            rowsHtml += `
+              <div class="${rowClass}">
+                <div style="font-weight: bold; width: 22%;">${item.num} - ${item.drawingRef}</div>
+                <div style="font-weight: bold; width: 18%; text-align: left;">Job ID: ${jobId}</div>
+                <div style="width: 22%;">${item.material || ''}</div>
+                <div style="width: 24%;">${item.supplier || ''}</div>
+                <div style="font-weight: bold; width: 14%; text-align: right;">${formattedPo}</div>
+              </div>
             `;
-          }).join('');
+          });
 
           printGroupsContainer.innerHTML += `
-            <div style="margin-bottom: 8px;">
-              <div style="background-color: #111827; color: #ffffff; font-weight: bold; font-size: 8pt; padding: 4px 6px;" class="print-header-banner">
-                JOB ID: ${jobId}
-              </div>
-              <table style="width: 100%; table-layout: fixed;">
-                <colgroup>
-                  <col style="width: 12%;">
-                  <col style="width: 30%;">
-                  <col style="width: 20%;">
-                  <col style="width: 26%;">
-                  <col style="width: 12%;">
-                </colgroup>
-                <thead>
-                  <tr class="print-table-header" style="font-size: 8pt;">
-                    <th style="text-align: left; font-weight: bold;">AC Number</th>
-                    <th style="text-align: left; font-weight: bold;">Part / Description</th>
-                    <th style="text-align: left; font-weight: bold;">Material</th>
-                    <th style="text-align: left; font-weight: bold;">Supplier Name</th>
-                    <th style="text-align: left; font-weight: bold;">PO Number</th>
-                  </tr>
-                </thead>
-                <tbody>${rowsHtml}</tbody>
-              </table>
+            <div class="manual-pad-sheet">
+              ${rowsHtml}
             </div>
           `;
         });
       } else {
-        printGroupsContainer.innerHTML = `<div style="font-size: 8.5pt; color: #64748b; font-style: italic;">No Job IDs or AC Numbers allocated.</div>`;
+        printGroupsContainer.innerHTML = `<div style="font-size: 9pt; color: #64748b; font-style: italic; padding: 10px;">No Job IDs or AC Numbers allocated.</div>`;
       }
 
       window.print();
