@@ -57,10 +57,6 @@
 
     /* ==========================================
        NATIVE PRINT / PDF ENGINE (@media print)
-       Matches the handwritten pad look exactly:
-       - Outer thick bordered document frame
-       - Top header block with brand & date line
-       - Manual-style ruled notebook entry lines
        ========================================== */
     @media print {
       @page {
@@ -89,24 +85,65 @@
         width: calc(100% - 2px) !important;
         margin: 0 auto !important;
         font-family: Arial, Helvetica, sans-serif !important;
-        font-size: 10pt;
+        font-size: 8.5pt;
         color: #000000 !important;
         background-color: #ffffff !important;
-        border: 2px solid #000000 !important;
-        padding: 12px !important;
       }
 
-      /* Manual-style notebook block mimicking the pad format */
+      .print-header-banner {
+        background-color: #dc2626 !important;
+        color: #ffffff !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+
+      .print-table-header {
+        background-color: #fef2f2 !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+
+      #print-template table {
+        display: table !important;
+        width: 100% !important;
+        border-collapse: collapse !important;
+        table-layout: fixed !important;
+        margin-bottom: 12px !important;
+        border: 1px solid #000000 !important;
+        box-sizing: border-box !important;
+      }
+
+      #print-template tr { 
+        display: table-row !important; 
+      }
+
+      #print-template th, 
+      #print-template td { 
+        display: table-cell !important;
+        border: 1px solid #000000 !important;
+        padding: 5px 8px !important;
+        word-wrap: break-word !important;
+        overflow-wrap: break-word !important;
+        vertical-align: middle !important;
+        box-sizing: border-box !important;
+      }
+
+      #print-template table.no-border, 
+      #print-template table.no-border td {
+        border: none !important;
+      }
+
+      /* Handwritten pad style styling for the manual schedule block inside print */
       .manual-pad-sheet {
         border: 1px solid #000000 !important;
-        margin-top: 10px;
+        margin-bottom: 8px;
         background-color: #ffffff !important;
       }
 
       .manual-row {
         border-bottom: 1px solid #94a3b8 !important;
-        padding: 8px 12px !important;
-        min-height: 36px;
+        padding: 6px 8px !important;
+        min-height: 30px;
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -114,8 +151,8 @@
 
       .manual-row-last {
         border-bottom: none !important;
-        padding: 8px 12px !important;
-        min-height: 36px;
+        padding: 6px 8px !important;
+        min-height: 30px;
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -297,34 +334,55 @@
   <!-- PRINT TEMPLATE -->
   <div id="print-template">
     
-    <!-- MANUAL PAD TOP HEADER BLOCK -->
-    <div style="display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 2px solid #000000; padding-bottom: 8px; margin-bottom: 12px;">
-      <div>
-        <img src="./ALLCON-Logo.jpg" alt="ALLCON Logo" style="height: 40px; width: auto; max-width: 220px; object-fit: contain;" onerror="this.onerror=null; this.outerHTML='<div style=\'font-weight: 900; font-size: 16pt; letter-spacing: 1px;\'>QUANTUM STEEL</div>';">
-        <div style="font-size: 7.5pt; color: #475569; margin-top: 2px;">201 IMMELMAN RD, CORNER BRISTOL STREET, WADEVILLE, 1428</div>
-      </div>
-      <div style="text-align: right;">
-        <div style="font-size: 9pt; font-weight: bold; border-bottom: 1px solid #000000; padding-bottom: 2px; margin-bottom: 2px;" id="print-out-gen-date">21 / 08 / 2026</div>
-        <div style="font-size: 7.5pt; color: #475569;">P.O. BOX 92474 NORWOOD 2117</div>
-      </div>
+    <!-- HEADER -->
+    <table class="no-border" style="width: 100%; border-bottom: 2px solid #dc2626 !important; padding-bottom: 8px; margin-bottom: 12px;">
+      <tr>
+        <td style="vertical-align: top; width: 60%; text-align: left;">
+          <div style="margin-bottom: 4px;">
+            <img src="./ALLCON-Logo.jpg" alt="ALLCON Logo" style="height: 44px; width: auto; max-width: 260px; object-fit: contain;" onerror="this.onerror=null; this.outerHTML='<div class=\'print-header-banner\' style=\'font-weight: 900; font-size: 20pt; padding: 4px 12px; display: inline-block; letter-spacing: 2px;\'>ALLCON</div>';">
+          </div>
+          <div style="font-size: 9pt; color: #334155; text-transform: uppercase; font-weight: bold; margin-top: 4px;">PROJECT INFO SHEET TRANSMITTAL</div>
+        </td>
+        <td style="vertical-align: top; text-align: right; width: 40%;">
+          <div style="font-size: 8.5pt; color: #334155; font-weight: bold;" id="print-out-gen-date"></div>
+        </td>
+      </tr>
+    </table>
+
+    <!-- METADATA TABLE -->
+    <table style="width: 100%;">
+      <colgroup>
+        <col style="width: 18%;">
+        <col style="width: 32%;">
+        <col style="width: 22%;">
+        <col style="width: 28%;">
+      </colgroup>
+      <tbody>
+        <tr class="print-table-header">
+          <td style="font-weight: bold;">CLIENT:</td>
+          <td id="print-out-client">N/A</td>
+          <td style="font-weight: bold;">TARGET COMPLETION:</td>
+          <td style="font-weight: bold; color: #dc2626;" id="print-out-comp-date">N/A</td>
+        </tr>
+        <tr>
+          <td style="font-weight: bold;" class="print-table-header">PROJECT NAME:</td>
+          <td id="print-out-project">N/A</td>
+          <td style="font-weight: bold;" class="print-table-header">TECHNICAL BUYER:</td>
+          <td id="print-out-buyer">N/A</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- INCLUSIONS & EXCLUSIONS -->
+    <div style="font-size: 8.5pt; margin-bottom: 12px; padding: 6px 8px; border: 1px solid #000000; background-color: #ffffff; box-sizing: border-box;">
+      <div style="margin-bottom: 4px;"><strong>Inclusions:</strong> <span id="print-out-inclusions">None specified</span></div>
+      <div><strong>Exclusions:</strong> <span id="print-out-exclusions">None specified</span></div>
     </div>
 
-    <!-- METADATA SUMMARY -->
-    <div style="display: flex; justify-content: space-between; font-size: 9pt; font-weight: bold; margin-bottom: 10px; border-bottom: 1px solid #000000; padding-bottom: 6px;">
-      <div>CLIENT: <span id="print-out-client" style="font-weight: normal;">N/A</span></div>
-      <div>PROJECT: <span id="print-out-project" style="font-weight: normal;">N/A</span></div>
-      <div>TARGET: <span id="print-out-comp-date" style="font-weight: normal; color: #dc2626;">N/A</span></div>
-    </div>
+    <!-- LINKED AC SCHEDULE WITH MANUAL NOTEBOOK PAD LAYOUT -->
+    <div style="font-size: 9pt; font-weight: bold; margin-bottom: 4px; color: #000000;">JOB IDs &amp; LINKED AC DRAWING SCHEDULE</div>
+    <div id="print-job-groups-container" style="margin-bottom: 12px;"></div>
 
-    <!-- NOTEBOOK PAD STYLE ENTRIES CONTAINER -->
-    <div id="print-job-groups-container"></div>
-
-    <!-- FOOTER INFO -->
-    <div style="display: flex; justify-content: space-between; font-size: 7.5pt; border-top: 2px solid #000000; margin-top: 15px; padding-top: 6px; font-weight: bold;">
-      <div>TEL: (011) 824 - 1694</div>
-      <div>FAX: 086 266 2322</div>
-      <div>E-MAIL: INFO@QUANTUMSTEEL.CO.ZA</div>
-    </div>
   </div>
 
   <script>
@@ -623,11 +681,12 @@
       document.getElementById('print-out-project').innerText = document.getElementById('meta-project').value.trim() || "N/A";
       
       const dateGen = document.getElementById('meta-date-gen').value;
-      if (dateGen) {
-        const parts = dateGen.split('-');
-        document.getElementById('print-out-gen-date').innerText = `${parts[2]} / ${parts[1]} / ${parts[0]}`;
-      }
+      document.getElementById('print-out-gen-date').innerText = dateGen ? `Generated: ${dateGen}` : "";
       document.getElementById('print-out-comp-date').innerText = document.getElementById('meta-date-comp').value || "N/A";
+      document.getElementById('print-out-buyer').innerText = document.getElementById('meta-buyer').value.trim() || "N/A";
+      
+      document.getElementById('print-out-inclusions').innerText = document.getElementById('meta-inclusions').value.trim() || "None specified";
+      document.getElementById('print-out-exclusions').innerText = document.getElementById('meta-exclusions').value.trim() || "None specified";
 
       const printGroupsContainer = document.getElementById('print-job-groups-container');
       printGroupsContainer.innerHTML = '';
@@ -644,23 +703,28 @@
             
             rowsHtml += `
               <div class="${rowClass}">
-                <div style="font-weight: bold; width: 22%;">${item.num} - ${item.drawingRef}</div>
-                <div style="font-weight: bold; width: 18%; text-align: left;">Job ID: ${jobId}</div>
-                <div style="width: 22%;">${item.material || ''}</div>
-                <div style="width: 24%;">${item.supplier || ''}</div>
-                <div style="font-weight: bold; width: 14%; text-align: right;">${formattedPo}</div>
+                <div style="font-weight: bold; color: #dc2626; width: 14%;">${item.num}</div>
+                <div style="width: 28%; font-weight: bold;">${item.drawingRef}</div>
+                <div style="width: 20%;">${item.material || ''}</div>
+                <div style="width: 26%;">${item.supplier || ''}</div>
+                <div style="font-weight: bold; width: 12%; text-align: right;">${formattedPo}</div>
               </div>
             `;
           });
 
           printGroupsContainer.innerHTML += `
-            <div class="manual-pad-sheet">
-              ${rowsHtml}
+            <div style="margin-bottom: 8px;">
+              <div style="background-color: #111827; color: #ffffff; font-weight: bold; font-size: 8pt; padding: 4px 6px;" class="print-header-banner">
+                JOB ID: ${jobId}
+              </div>
+              <div class="manual-pad-sheet">
+                ${rowsHtml}
+              </div>
             </div>
           `;
         });
       } else {
-        printGroupsContainer.innerHTML = `<div style="font-size: 9pt; color: #64748b; font-style: italic; padding: 10px;">No Job IDs or AC Numbers allocated.</div>`;
+        printGroupsContainer.innerHTML = `<div style="font-size: 8.5pt; color: #64748b; font-style: italic;">No Job IDs or AC Numbers allocated.</div>`;
       }
 
       window.print();
