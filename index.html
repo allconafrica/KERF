@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>KERF - Technical Procurement Portal</title>
+  <title>KERF Portal</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <!-- html2pdf library for PDF generation -->
@@ -42,19 +42,14 @@
 
   <!-- HEADER -->
   <header class="bg-black text-white shadow-lg border-b-4 border-red-600">
-    <div class="max-w-7xl mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
+    <div class="max-w-7xl mx-auto px-4 py-3 flex flex-col sm:flex-row justify-between items-center gap-4">
       
-      <!-- BRANDING -->
+      <!-- ACTUAL LOGO & BRANDING -->
       <div class="flex items-center gap-4">
-        <div class="bg-red-600 text-white border-b-4 border-black px-4 py-1.5 inline-block text-center shadow-md">
-          <div class="font-black text-2xl tracking-wider leading-none">ALLCON</div>
-          <div class="bg-black text-white text-[8px] font-bold tracking-tighter px-1 py-0.5 mt-1 uppercase">
-            Fabrication & Engineering (Pty) Ltd.
-          </div>
-        </div>
+        <!-- Logo Image File from Root -->
+        <img src="ALLCON_Logo.jpg" alt="ALLCON Logo" class="h-12 w-auto object-contain rounded bg-white p-1" onerror="this.onerror=null; this.src='https://via.placeholder.com/150x50/dc2626/ffffff?text=ALLCON';">
         <div>
-          <h1 class="text-xl font-extrabold tracking-tight text-white">KERF <span class="text-xs font-normal text-zinc-400">v1.1</span></h1>
-          <p class="text-xs text-zinc-400">Technical Procurement & Info Sheet Transmittal Portal</p>
+          <h1 class="text-2xl font-black tracking-wider text-white uppercase">KERF Portal</h1>
         </div>
       </div>
       
@@ -100,7 +95,7 @@
     <!-- VIEW 2: INFO SHEET BUILDER -->
     <section id="view-generator" class="hidden">
       <div class="bg-white dark:bg-obsidian-800 rounded-xl shadow-sm border border-zinc-300 dark:border-zinc-800 p-6 mb-6">
-        <h2 class="text-lg font-bold mb-4 text-red-600 dark:text-red-500"><i class="fa-solid fa-file-pdf mr-2"></i>Project Info Sheet Transmittal Builder</h2>
+        <h2 class="text-lg font-bold mb-4 text-red-600 dark:text-red-500"><i class="fa-solid fa-file-pdf mr-2"></i>Project Info Sheet Builder</h2>
 
         <!-- METADATA FORM -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 bg-zinc-100 dark:bg-obsidian-700 p-4 rounded-lg text-xs border border-zinc-200 dark:border-zinc-700">
@@ -202,65 +197,67 @@
 
   <!-- HIDDEN CONTAINER FOR PDF GENERATION -->
   <div class="hidden">
-    <div id="pdf-template" class="p-8 bg-white text-zinc-900 font-sans" style="width: 210mm;">
+    <div id="pdf-template" class="p-8 bg-white text-zinc-900 font-sans" style="width: 210mm; min-height: 297mm; box-sizing: border-box;">
+      
       <!-- HEADER LOGO BANNER IN PDF -->
-      <div style="border-bottom: 3px solid #dc2626; padding-bottom: 12px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: flex-start;">
-        <div>
-          <div style="background-color: #dc2626; color: white; font-weight: 900; font-size: 16pt; padding: 4px 10px; display: inline-block;">ALLCON</div>
-          <div style="background-color: #000; color: white; font-size: 7pt; font-weight: 700; padding: 2px 4px; text-transform: uppercase; margin-top: 2px;">FABRICATION & ENGINEERING (PTY) LTD.</div>
-          <div style="font-size: 8pt; color: #52525b; text-transform: uppercase; margin-top: 4px; font-weight: bold;">KERF - Technical Procurement Info Sheet</div>
-        </div>
-        <div style="text-align: right;">
-          <div style="font-size: 9pt; font-weight: 700; color: #111827;" id="pdf-out-po"></div>
-          <div style="font-size: 8pt; color: #52525b; margin-top: 2px;" id="pdf-out-gen-date"></div>
-        </div>
-      </div>
+      <table style="width: 100%; border-bottom: 3px solid #dc2626; padding-bottom: 8px; margin-bottom: 15px;">
+        <tr>
+          <td style="vertical-align: top; width: 60%;">
+            <img src="ALLCON_Logo.jpg" alt="ALLCON Logo" style="height: 45px; width: auto; display: block; margin-bottom: 4px;">
+            <div style="font-size: 8pt; color: #52525b; text-transform: uppercase; font-weight: bold;">Project Info Sheet Transmittal</div>
+          </td>
+          <td style="vertical-align: top; text-align: right; width: 40%;">
+            <div style="font-size: 10pt; font-weight: 800; color: #dc2626;" id="pdf-out-po"></div>
+            <div style="font-size: 8pt; color: #52525b; margin-top: 2px;" id="pdf-out-gen-date"></div>
+          </td>
+        </tr>
+      </table>
 
       <!-- METADATA GRID -->
-      <table style="width: 100%; border-collapse: collapse; margin-bottom: 15px; font-size: 9pt; border: 1px solid #cbd5e1;">
+      <table style="width: 100%; border-collapse: collapse; margin-bottom: 15px; font-size: 8.5pt; border: 1px solid #cbd5e1;">
         <tr style="background-color: #f8fafc;">
-          <td style="padding: 6px; font-weight: bold; width: 18%;">CLIENT:</td>
-          <td style="padding: 6px; width: 32%;" id="pdf-out-client"></td>
-          <td style="padding: 6px; font-weight: bold; width: 20%;">COMPLETION DATE:</td>
-          <td style="padding: 6px; width: 30%; font-weight: bold; color: #059669;" id="pdf-out-comp-date"></td>
+          <td style="padding: 6px; font-weight: bold; width: 18%; border: 1px solid #cbd5e1;">CLIENT:</td>
+          <td style="padding: 6px; width: 32%; border: 1px solid #cbd5e1;" id="pdf-out-client"></td>
+          <td style="padding: 6px; font-weight: bold; width: 20%; border: 1px solid #cbd5e1;">COMPLETION DATE:</td>
+          <td style="padding: 6px; width: 30%; font-weight: bold; color: #059669; border: 1px solid #cbd5e1;" id="pdf-out-comp-date"></td>
         </tr>
         <tr>
-          <td style="padding: 6px; font-weight: bold;">PROJECT NAME:</td>
-          <td style="padding: 6px;" id="pdf-out-project"></td>
-          <td style="padding: 6px; font-weight: bold;">BUYER:</td>
-          <td style="padding: 6px;" id="pdf-out-buyer"></td>
+          <td style="padding: 6px; font-weight: bold; border: 1px solid #cbd5e1;">PROJECT NAME:</td>
+          <td style="padding: 6px; border: 1px solid #cbd5e1;" id="pdf-out-project"></td>
+          <td style="padding: 6px; font-weight: bold; border: 1px solid #cbd5e1;">BUYER:</td>
+          <td style="padding: 6px; border: 1px solid #cbd5e1;" id="pdf-out-buyer"></td>
         </tr>
       </table>
 
       <!-- INCLUSIONS & EXCLUSIONS -->
-      <div style="font-size: 9pt; margin-bottom: 15px; background-color: #f8fafc; padding: 10px; border: 1px solid #e2e8f0; border-radius: 4px;">
-        <div style="margin-bottom: 6px;"><strong>Inclusions:</strong> <span id="pdf-out-inclusions"></span></div>
+      <div style="font-size: 8.5pt; margin-bottom: 15px; background-color: #f8fafc; padding: 8px; border: 1px solid #cbd5e1; border-radius: 4px;">
+        <div style="margin-bottom: 4px;"><strong>Inclusions:</strong> <span id="pdf-out-inclusions"></span></div>
         <div><strong>Exclusions:</strong> <span id="pdf-out-exclusions"></span></div>
       </div>
 
-      <!-- LINKED JOB IDs & AC NUMBERS SCHEDULE -->
-      <div style="font-size: 10pt; font-weight: bold; margin-bottom: 6px; color: #111827;">JOB IDs & LINKED AC DRAWING SCHEDULE</div>
-      <div id="pdf-job-groups-container"></div>
+      <!-- LINKED JOB IDs & AC NUMBERS SCHEDULE (LAYOUT FIXED) -->
+      <div style="font-size: 9.5pt; font-weight: bold; margin-bottom: 6px; color: #111827;">JOB IDs & LINKED AC DRAWING SCHEDULE</div>
+      <div id="pdf-job-groups-container" style="margin-bottom: 15px;"></div>
 
       <!-- CATEGORIZED PO REGISTER -->
-      <div style="font-size: 10pt; font-weight: bold; margin-top: 15px; margin-bottom: 6px; color: #111827;">PURCHASE ORDER ALLOCATION REGISTER</div>
-      <table style="width: 100%; border-collapse: collapse; font-size: 8.5pt; border: 1px solid #cbd5e1;">
+      <div style="font-size: 9.5pt; font-weight: bold; margin-bottom: 6px; color: #111827;">PURCHASE ORDER ALLOCATION REGISTER</div>
+      <table style="width: 100%; border-collapse: collapse; font-size: 8pt; border: 1px solid #cbd5e1;">
         <thead>
           <tr style="background-color: #f1f5f9;">
-            <th style="padding: 6px; border: 1px solid #cbd5e1; text-align: left; width: 25%;">Category</th>
-            <th style="padding: 6px; border: 1px solid #cbd5e1; text-align: left; width: 40%;">Allocated Supplier Name</th>
-            <th style="padding: 6px; border: 1px solid #cbd5e1; text-align: left; width: 35%;">Purchase Order No. (PO)</th>
+            <th style="padding: 5px; border: 1px solid #cbd5e1; text-align: left; width: 25%;">Category</th>
+            <th style="padding: 5px; border: 1px solid #cbd5e1; text-align: left; width: 40%;">Allocated Supplier Name</th>
+            <th style="padding: 5px; border: 1px solid #cbd5e1; text-align: left; width: 35%;">Purchase Order No. (PO)</th>
           </tr>
         </thead>
         <tbody>
-          <tr><td style="padding: 6px; border: 1px solid #cbd5e1;">1. Material (Plates)</td><td style="border: 1px solid #cbd5e1;"></td><td style="padding: 6px; border: 1px solid #cbd5e1; color: #94a3b8;">PO- . . . . . . . . . . . . . . . . . . . . . . .</td></tr>
-          <tr><td style="padding: 6px; border: 1px solid #cbd5e1;">2. Material (Structural)</td><td style="border: 1px solid #cbd5e1;"></td><td style="padding: 6px; border: 1px solid #cbd5e1; color: #94a3b8;">PO- . . . . . . . . . . . . . . . . . . . . . . .</td></tr>
-          <tr><td style="padding: 6px; border: 1px solid #cbd5e1;">3. Laser Cutting & Bending</td><td style="border: 1px solid #cbd5e1;"></td><td style="padding: 6px; border: 1px solid #cbd5e1; color: #94a3b8;">PO- . . . . . . . . . . . . . . . . . . . . . . .</td></tr>
-          <tr><td style="padding: 6px; border: 1px solid #cbd5e1;">4. Machining / Turning</td><td style="border: 1px solid #cbd5e1;"></td><td style="padding: 6px; border: 1px solid #cbd5e1; color: #94a3b8;">PO- . . . . . . . . . . . . . . . . . . . . . . .</td></tr>
-          <tr><td style="padding: 6px; border: 1px solid #cbd5e1;">5. Fasteners & Hardware</td><td style="border: 1px solid #cbd5e1;"></td><td style="padding: 6px; border: 1px solid #cbd5e1; color: #94a3b8;">PO- . . . . . . . . . . . . . . . . . . . . . . .</td></tr>
-          <tr><td style="padding: 6px; border: 1px solid #cbd5e1;">6. Surface Coating / HDG</td><td style="border: 1px solid #cbd5e1;"></td><td style="padding: 6px; border: 1px solid #cbd5e1; color: #94a3b8;">PO- . . . . . . . . . . . . . . . . . . . . . . .</td></tr>
-          <tr><td style="padding: 6px; border: 1px solid #cbd5e1;">7. Freight / Transport</td><td style="border: 1px solid #cbd5e1;"></td><td style="padding: 6px; border: 1px solid #cbd5e1; color: #94a3b8;">PO- . . . . . . . . . . . . . . . . . . . . . . .</td></tr>
-          <tr><td style="padding: 6px; border: 1px solid #cbd5e1;">8. Miscellaneous</td><td style="border: 1px solid #cbd5e1;"></td><td style="padding: 6px; border: 1px solid #cbd5e1; color: #94a3b8;">PO- . . . . . . . . . . . . . . . . . . . . . . .</td></tr>
+          <tr><td style="padding: 5px; border: 1px solid #cbd5e1;">1. Material (Plates)</td><td style="border: 1px solid #cbd5e1;"></td><td style="padding: 5px; border: 1px solid #cbd5e1; color: #94a3b8;">PO- . . . . . . . . . . . . . . . . . . . . . . .</td></tr>
+          <tr><td style="padding: 5px; border: 1px solid #cbd5e1;">2. Material (Structural)</td><td style="border: 1px solid #cbd5e1;"></td><td style="padding: 5px; border: 1px solid #cbd5e1; color: #94a3b8;">PO- . . . . . . . . . . . . . . . . . . . . . . .</td></tr>
+          <tr><td style="padding: 5px; border: 1px solid #cbd5e1;">3. Laser Cutting & Bending</td><td style="border: 1px solid #cbd5e1;"></td><td style="padding: 5px; border: 1px solid #cbd5e1; color: #94a3b8;">PO- . . . . . . . . . . . . . . . . . . . . . . .</td></tr>
+          <tr><td style="padding: 5px; border: 1px solid #cbd5e1;">4. Machining / Turning</td><td style="border: 1px solid #cbd5e1;"></td><td style="padding: 5px; border: 1px solid #cbd5e1; color: #94a3b8;">PO- . . . . . . . . . . . . . . . . . . . . . . .</td></tr>
+          <tr><td style="padding: 5px; border: 1px solid #cbd5e1;">5. Fasteners & Hardware</td><td style="border: 1px solid #cbd5e1;"></td><td style="padding: 5px; border: 1px solid #cbd5e1; color: #94a3b8;">PO- . . . . . . . . . . . . . . . . . . . . . . .</td></tr>
+          <tr><td style="padding: 5px; border: 1px solid #cbd5e1;">6. Surface Coating / HDG</td><td style="border: 1px solid #cbd5e1;"></td><td style="padding: 5px; border: 1px solid #cbd5e1; color: #94a3b8;">PO- . . . . . . . . . . . . . . . . . . . . . . .</td></tr>
+          <tr><td style="padding: 5px; border: 1px solid #cbd5e1;">7. Freight / Transport</td><td style="border: 1px solid #cbd5e1;"></td><td style="padding: 5px; border: 1px solid #cbd5e1; color: #94a3b8;">PO- . . . . . . . . . . . . . . . . . . . . . . .</td></tr>
+          <tr><td style="padding: 5px; border: 1px solid #cbd5e1;">8. Miscellaneous</td><td style="border: 1px solid #cbd5e1;"></td><td style="padding: 5px; border: 1px solid #cbd5e1; color: #94a3b8;">PO- . . . . . . . . . . . . . . . . . . . . . . .</td></tr>
         </tbody>
       </table>
     </div>
@@ -268,10 +265,9 @@
 
   <!-- JAVASCRIPT LOGIC -->
   <script>
-    const API_URL = "YOUR_GOOGLE_APPS_SCRIPT_URL_HERE"; 
+    const API_URL = "https://script.google.com/macros/library/d/15aSkNvpxsr5NWK8Lf_bXkPVSQZGav-sMniKMLzxRPy0bsixUIJlFtf1Y/2"; 
     
     let allSuppliers = [];
-    // Data Structure: { "JOB-101": [ { num: "AC-01", title: "Frame" }, ... ] }
     let jobDataMap = {}; 
 
     document.getElementById('meta-date-gen').valueAsDate = new Date();
@@ -412,9 +408,9 @@
       jobKeys.forEach(jobId => {
         let rowsHtml = jobDataMap[jobId].map((item, idx) => `
           <tr class="border-b border-zinc-200 dark:border-zinc-800 text-xs">
-            <td class="p-2 font-bold text-red-600 dark:text-red-400">${item.num}</td>
+            <td class="p-2 font-bold text-red-600 dark:text-red-400 w-1/3">${item.num}</td>
             <td class="p-2">${item.title}</td>
-            <td class="p-2 text-right">
+            <td class="p-2 text-right w-16">
               <button onclick="removeACItem('${jobId}', ${idx})" class="text-red-500 hover:underline">Remove</button>
             </td>
           </tr>
@@ -426,7 +422,7 @@
               <span><i class="fa-solid fa-folder-closed mr-2 text-red-500"></i>JOB ID: ${jobId}</span>
               <span class="text-[10px] bg-red-600 px-2 py-0.5 rounded">${jobDataMap[jobId].length} AC Numbers</span>
             </div>
-            <table class="w-full text-left">
+            <table class="w-full text-left border-collapse">
               <thead>
                 <tr class="text-[10px] uppercase bg-zinc-200 dark:bg-obsidian-700 text-zinc-600 dark:text-zinc-400">
                   <th class="p-2">AC Number</th>
@@ -441,7 +437,7 @@
       });
     }
 
-    // PDF GENERATION (GROUPED BY JOB ID)
+    // PDF GENERATION (STRUCTURE FIXED FOR PRECISE RENDERING)
     function generatePDF() {
       const client = document.getElementById('meta-client').value.trim();
       const project = document.getElementById('meta-project').value.trim();
@@ -460,7 +456,7 @@
       document.getElementById('pdf-out-inclusions').innerText = document.getElementById('meta-inclusions').value.trim() || "";
       document.getElementById('pdf-out-exclusions').innerText = document.getElementById('meta-exclusions').value.trim() || "";
 
-      // Build grouped AC schedule in PDF
+      // Build clean grouped AC schedule in PDF with rigid table styling
       const pdfGroupsContainer = document.getElementById('pdf-job-groups-container');
       pdfGroupsContainer.innerHTML = '';
 
@@ -469,29 +465,31 @@
         jobKeys.forEach(jobId => {
           let rowsHtml = jobDataMap[jobId].map(item => `
             <tr style="border-bottom: 1px solid #cbd5e1;">
-              <td style="padding: 5px; font-weight: bold; color: #dc2626; width: 30%;">${item.num}</td>
-              <td style="padding: 5px;">${item.title}</td>
+              <td style="padding: 5px; font-weight: bold; color: #dc2626; width: 30%; border: 1px solid #cbd5e1;">${item.num}</td>
+              <td style="padding: 5px; border: 1px solid #cbd5e1;">${item.title || '&nbsp;'}</td>
             </tr>
           `).join('');
 
           pdfGroupsContainer.innerHTML += `
-            <div style="margin-bottom: 10px;">
-              <div style="background-color: #111827; color: white; font-weight: bold; font-size: 8.5pt; padding: 4px 8px;">JOB ID: ${jobId}</div>
-              <table style="width: 100%; border-collapse: collapse; font-size: 8.5pt; border: 1px solid #cbd5e1;">
+            <div style="margin-bottom: 8px;">
+              <div style="background-color: #111827; color: #ffffff; font-weight: bold; font-size: 8.5pt; padding: 4px 8px;">JOB ID: ${jobId}</div>
+              <table style="width: 100%; border-collapse: collapse; font-size: 8pt; border: 1px solid #cbd5e1;">
                 <tbody>${rowsHtml}</tbody>
               </table>
             </div>
           `;
         });
+      } else {
+        pdfGroupsContainer.innerHTML = `<div style="font-size: 8pt; color: #94a3b8; font-style: italic;">No Job IDs or AC Numbers allocated.</div>`;
       }
 
       const element = document.getElementById('pdf-template');
       const fileNameId = jobKeys.length > 0 ? jobKeys[0] : (poNum || 'Transmittal');
       
       html2pdf().set({
-        margin: 10,
+        margin: 8,
         filename: `ALLCON_InfoSheet_${fileNameId}.pdf`,
-        html2canvas: { scale: 2 },
+        html2canvas: { scale: 2, useCORS: true },
         jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
       }).from(element).save();
     }
