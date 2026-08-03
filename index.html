@@ -12,15 +12,15 @@
     tailwind.config = { darkMode: 'class' }
   </script>
   <style>
-    /* Absolute Dark Mode Body & HTML Fix */
+    /* Absolute Dark Mode Body & HTML Fix - Softened Whites to Dark Charcoal Grey */
     html.dark, html.dark body {
-      background-color: #0b0b0c !important;
+      background-color: #0d0d0e !important;
       color: #f4f4f5 !important;
     }
-    .bg-obsidian-900 { background-color: #0b0b0c !important; }
-    .bg-obsidian-800 { background-color: #141416 !important; }
-    .bg-obsidian-700 { background-color: #1f1f22 !important; }
-    .bg-obsidian-600 { background-color: #2a2a2e !important; }
+    .bg-obsidian-900 { background-color: #0d0d0e !important; }
+    .bg-obsidian-800 { background-color: #1a1a1d !important; }
+    .bg-obsidian-700 { background-color: #242428 !important; }
+    .bg-obsidian-600 { background-color: #2e2e34 !important; }
 
     /* Inputs dynamic styling */
     input, textarea, select {
@@ -36,6 +36,11 @@
       border-color: #dc2626 !important;
       ring: 1px #dc2626;
     }
+
+    /* Print & PDF Alignment Fixes */
+    @media print {
+      body { background-color: #ffffff !important; color: #000000 !important; }
+    }
   </style>
 </head>
 <body class="bg-zinc-200 dark:bg-obsidian-900 text-zinc-900 dark:text-zinc-100 font-sans min-h-screen flex flex-col transition-colors duration-200">
@@ -46,8 +51,14 @@
       
       <!-- ACTUAL LOGO & BRANDING -->
       <div class="flex items-center gap-4">
-        <!-- Logo Image File from Root -->
-        <img src="ALLCON_Logo.jpg" alt="ALLCON Logo" class="h-12 w-auto object-contain rounded bg-white p-1" onerror="this.onerror=null; this.src='https://via.placeholder.com/150x50/dc2626/ffffff?text=ALLCON';">
+        <!-- Embedded High-Res Allcon Logo SVG -->
+        <div class="h-12 px-3 py-1 bg-white rounded flex items-center justify-center shrink-0">
+          <svg class="h-8 w-auto" viewBox="0 0 300 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="300" height="60" fill="#FFFFFF"/>
+            <path d="M10 45 L25 15 L40 45 L32 45 L25 30 L18 45 Z" fill="#DC2626"/>
+            <text x="50" y="42" font-family="Arial, sans-serif" font-weight="900" font-size="32" fill="#111827" letter-spacing="1">ALLCON</text>
+          </svg>
+        </div>
         <div>
           <h1 class="text-2xl font-black tracking-wider text-white uppercase">KERF Portal</h1>
         </div>
@@ -116,8 +127,9 @@
             <input type="date" id="meta-date-gen" class="w-full p-2 rounded">
           </div>
           <div>
-            <label class="block font-semibold mb-1 text-emerald-600 dark:text-emerald-400">Target Completion Date</label>
-            <input type="date" id="meta-date-comp" class="w-full p-2 rounded">
+            <!-- Faded Red Accent theme replacement for teal -->
+            <label class="block font-semibold mb-1 text-red-600 dark:text-red-400">Target Completion Date</label>
+            <input type="date" id="meta-date-comp" class="w-full p-2 rounded border-red-300 dark:border-red-900/50">
           </div>
           <div>
             <label class="block font-semibold mb-1 text-zinc-700 dark:text-zinc-300">Technical Buyer</label>
@@ -195,16 +207,20 @@
 
   </main>
 
-  <!-- HIDDEN CONTAINER FOR PDF GENERATION -->
-  <div class="hidden">
-    <div id="pdf-template" class="p-8 bg-white text-zinc-900 font-sans" style="width: 210mm; min-height: 297mm; box-sizing: border-box;">
+  <!-- HIDDEN CONTAINER FOR PDF GENERATION (STRICT A4 MEASUREMENTS & ALIGNMENT) -->
+  <div style="display: none;">
+    <div id="pdf-template" style="width: 190mm; min-height: 277mm; box-sizing: border-box; font-family: Arial, sans-serif; background-color: #ffffff; color: #111827; padding: 0mm;">
       
       <!-- HEADER LOGO BANNER IN PDF -->
-      <table style="width: 100%; border-bottom: 3px solid #dc2626; padding-bottom: 8px; margin-bottom: 15px;">
+      <table style="width: 100%; border-bottom: 3px solid #dc2626; padding-bottom: 8px; margin-bottom: 15px; table-layout: fixed;">
         <tr>
           <td style="vertical-align: top; width: 60%;">
-            <img src="ALLCON_Logo.jpg" alt="ALLCON Logo" style="height: 45px; width: auto; display: block; margin-bottom: 4px;">
-            <div style="font-size: 8pt; color: #52525b; text-transform: uppercase; font-weight: bold;">Project Info Sheet Transmittal</div>
+            <svg style="height: 40px; width: 200px;" viewBox="0 0 300 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect width="300" height="60" fill="#FFFFFF"/>
+              <path d="M10 45 L25 15 L40 45 L32 45 L25 30 L18 45 Z" fill="#DC2626"/>
+              <text x="50" y="42" font-family="Arial, sans-serif" font-weight="900" font-size="32" fill="#111827" letter-spacing="1">ALLCON</text>
+            </svg>
+            <div style="font-size: 8pt; color: #52525b; text-transform: uppercase; font-weight: bold; margin-top: 4px;">Project Info Sheet Transmittal</div>
           </td>
           <td style="vertical-align: top; text-align: right; width: 40%;">
             <div style="font-size: 10pt; font-weight: 800; color: #dc2626;" id="pdf-out-po"></div>
@@ -214,12 +230,12 @@
       </table>
 
       <!-- METADATA GRID -->
-      <table style="width: 100%; border-collapse: collapse; margin-bottom: 15px; font-size: 8.5pt; border: 1px solid #cbd5e1;">
+      <table style="width: 100%; border-collapse: collapse; margin-bottom: 15px; font-size: 8.5pt; border: 1px solid #cbd5e1; table-layout: fixed;">
         <tr style="background-color: #f8fafc;">
           <td style="padding: 6px; font-weight: bold; width: 18%; border: 1px solid #cbd5e1;">CLIENT:</td>
           <td style="padding: 6px; width: 32%; border: 1px solid #cbd5e1;" id="pdf-out-client"></td>
-          <td style="padding: 6px; font-weight: bold; width: 20%; border: 1px solid #cbd5e1;">COMPLETION DATE:</td>
-          <td style="padding: 6px; width: 30%; font-weight: bold; color: #059669; border: 1px solid #cbd5e1;" id="pdf-out-comp-date"></td>
+          <td style="padding: 6px; font-weight: bold; width: 22%; border: 1px solid #cbd5e1;">COMPLETION DATE:</td>
+          <td style="padding: 6px; width: 28%; font-weight: bold; color: #dc2626; border: 1px solid #cbd5e1;" id="pdf-out-comp-date"></td>
         </tr>
         <tr>
           <td style="padding: 6px; font-weight: bold; border: 1px solid #cbd5e1;">PROJECT NAME:</td>
@@ -235,17 +251,17 @@
         <div><strong>Exclusions:</strong> <span id="pdf-out-exclusions"></span></div>
       </div>
 
-      <!-- LINKED JOB IDs & AC NUMBERS SCHEDULE (LAYOUT FIXED) -->
+      <!-- LINKED JOB IDs & AC NUMBERS SCHEDULE -->
       <div style="font-size: 9.5pt; font-weight: bold; margin-bottom: 6px; color: #111827;">JOB IDs & LINKED AC DRAWING SCHEDULE</div>
       <div id="pdf-job-groups-container" style="margin-bottom: 15px;"></div>
 
       <!-- CATEGORIZED PO REGISTER -->
       <div style="font-size: 9.5pt; font-weight: bold; margin-bottom: 6px; color: #111827;">PURCHASE ORDER ALLOCATION REGISTER</div>
-      <table style="width: 100%; border-collapse: collapse; font-size: 8pt; border: 1px solid #cbd5e1;">
+      <table style="width: 100%; border-collapse: collapse; font-size: 8pt; border: 1px solid #cbd5e1; table-layout: fixed;">
         <thead>
           <tr style="background-color: #f1f5f9;">
-            <th style="padding: 5px; border: 1px solid #cbd5e1; text-align: left; width: 25%;">Category</th>
-            <th style="padding: 5px; border: 1px solid #cbd5e1; text-align: left; width: 40%;">Allocated Supplier Name</th>
+            <th style="padding: 5px; border: 1px solid #cbd5e1; text-align: left; width: 30%;">Category</th>
+            <th style="padding: 5px; border: 1px solid #cbd5e1; text-align: left; width: 35%;">Allocated Supplier Name</th>
             <th style="padding: 5px; border: 1px solid #cbd5e1; text-align: left; width: 35%;">Purchase Order No. (PO)</th>
           </tr>
         </thead>
@@ -437,7 +453,7 @@
       });
     }
 
-    // PDF GENERATION (STRUCTURE FIXED FOR PRECISE RENDERING)
+    // PDF GENERATION (STRICT SIZING OPTIONS PREVENT CUT OFF)
     function generatePDF() {
       const client = document.getElementById('meta-client').value.trim();
       const project = document.getElementById('meta-project').value.trim();
@@ -456,7 +472,7 @@
       document.getElementById('pdf-out-inclusions').innerText = document.getElementById('meta-inclusions').value.trim() || "";
       document.getElementById('pdf-out-exclusions').innerText = document.getElementById('meta-exclusions').value.trim() || "";
 
-      // Build clean grouped AC schedule in PDF with rigid table styling
+      // Build grouped AC schedule in PDF
       const pdfGroupsContainer = document.getElementById('pdf-job-groups-container');
       pdfGroupsContainer.innerHTML = '';
 
@@ -473,7 +489,7 @@
           pdfGroupsContainer.innerHTML += `
             <div style="margin-bottom: 8px;">
               <div style="background-color: #111827; color: #ffffff; font-weight: bold; font-size: 8.5pt; padding: 4px 8px;">JOB ID: ${jobId}</div>
-              <table style="width: 100%; border-collapse: collapse; font-size: 8pt; border: 1px solid #cbd5e1;">
+              <table style="width: 100%; border-collapse: collapse; font-size: 8pt; border: 1px solid #cbd5e1; table-layout: fixed;">
                 <tbody>${rowsHtml}</tbody>
               </table>
             </div>
@@ -487,9 +503,10 @@
       const fileNameId = jobKeys.length > 0 ? jobKeys[0] : (poNum || 'Transmittal');
       
       html2pdf().set({
-        margin: 8,
+        margin: [10, 10, 10, 10],
         filename: `ALLCON_InfoSheet_${fileNameId}.pdf`,
-        html2canvas: { scale: 2, useCORS: true },
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2, useCORS: true, scrollX: 0, scrollY: 0 },
         jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
       }).from(element).save();
     }
@@ -519,4 +536,3 @@
   </script>
 </body>
 </html>
-
