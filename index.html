@@ -415,14 +415,15 @@
   </div>
 
   <script>
-    // LIVE PUBLISHED GOOGLE SHEET CSV LINK
-    const GOOGLE_SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSNynT5Snb9PgJp6ti3QpuHUr9fX8bGKEG10H8kjkbCna_ZfkEC7aM06QrwkjHwxR1n6uu3ZgvvaKu6/pub?output=csv";
+    // DEDICATED GOOGLE SHEET TAB ENDPOINTS
+    const STAFF_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSNynT5Snb9PgJp6ti3QpuHUr9fX8bGKEG10H8kjkbCna_ZfkEC7aM06QrwkjHwxR1n6uu3ZgvvaKu6/pub?gid=1666500445&single=true&output=csv";
+    const SUPPLIERS_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSNynT5Snb9PgJp6ti3QpuHUr9fX8bGKEG10H8kjkbCna_ZfkEC7aM06QrwkjHwxR1n6uu3ZgvvaKu6/pub?gid=0&single=true&output=csv";
 
     let jobDataMap = {};
     let liveStaffData = [];
     let liveSupplierData = [];
 
-    // ROBUST CSV PARSER (Handles quoted values containing commas)
+    // ROBUST CSV PARSER
     function parseCSV(text) {
       const lines = text.trim().split(/\r?\n/);
       if (lines.length < 2) return [];
@@ -462,45 +463,49 @@
       }).filter(Boolean);
     }
 
-    // FETCH DATA FROM GOOGLE SHEET
+    // LOAD DEDICATED DATA FROM INDIVIDUAL GOOGLE SHEET ENDPOINTS
     async function loadLiveData() {
+      // 1. Fetch Staff Directory Tab Data
       try {
-        const response = await fetch(GOOGLE_SHEET_CSV_URL);
-        const csvText = await response.text();
-        const rawData = parseCSV(csvText);
+        const staffRes = await fetch(STAFF_CSV_URL);
+        const staffCsv = await staffRes.text();
+        const staffRaw = parseCSV(staffCsv);
 
-        // Map CSV rows into Staff or Supplier depending on column presence
-        liveStaffData = rawData
-          .filter(r => (r['name'] || r['first name']) && (r['surname'] || r['last name']))
-          .map(r => ({
-            name: r['name'] || r['first name'] || '',
-            surname: r['surname'] || r['last name'] || '',
-            jobTitle: r['job title'] || r['title'] || r['position'] || '',
-            phone: r['phone'] || r['mobile'] || r['contact'] || '',
-            email: r['email'] || ''
-          }));
-
-        liveSupplierData = rawData
-          .filter(r => r['supplier name'] || r['company'] || r['supplier'])
-          .map(r => ({
-            status: r['status'] || 'APPROVED',
-            supplierName: r['supplier name'] || r['company'] || r['supplier'] || '',
-            category: r['category'] || r['service'] || '',
-            pocName: r['poc name'] || r['contact person'] || r['poc'] || '',
-            pocEmail: r['poc email'] || r['email'] || '',
-            pocPhone: r['poc phone'] || r['phone'] || '',
-            servicesOffered: r['services offered'] || r['services'] || '',
-            logistics: r['logistics'] || '',
-            paymentTerms: r['payment terms'] || r['terms'] || '',
-            standardEta: r['standard eta'] || r['eta'] || '',
-            address: r['address'] || '',
-            notes: r['notes'] || ''
-          }));
-
+        liveStaffData = staffRaw.map(r => ({
+          name: r['name'] || r['first name'] || '',
+          surname: r['surname'] || r['last name'] || '',
+          jobTitle: r['job title'] || r['title'] || r['position'] || '',
+          phone: r['phone'] || r['mobile'] || r['contact'] || '',
+          email: r['email'] || ''
+        }));
         renderStaff();
+      } catch (err) {
+        console.error("Failed to load Staff Directory data:", err);
+      }
+
+      // 2. Fetch Suppliers Tab Data
+      try {
+        const suppRes = await fetch(SUPPLIERS_CSV_URL);
+        const suppCsv = await suppRes.text();
+        const suppRaw = parseCSV(suppCsv);
+
+        liveSupplierData = suppRaw.map(r => ({
+          status: r['status'] || 'APPROVED',
+          supplierName: r['supplier name'] || r['company'] || r['supplier'] || '',
+          category: r['category'] || r['service'] || '',
+          pocName: r['poc name'] || r['contact person'] || r['poc'] || '',
+          pocEmail: r['poc email'] || r['email'] || '',
+          pocPhone: r['poc phone'] || r['phone'] || '',
+          servicesOffered: r['services offered'] || r['services'] || '',
+          logistics: r['logistics'] || '',
+          paymentTerms: r['payment terms'] || r['terms'] || '',
+          standardEta: r['standard eta'] || r['eta'] || '',
+          address: r['address'] || '',
+          notes: r['notes'] || ''
+        }));
         renderSuppliers();
-      } catch (error) {
-        console.error("Failed to load Google Sheet data:", error);
+      } catch (err) {
+        console.error("Failed to load Suppliers data:", err);
       }
     }
 
