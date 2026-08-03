@@ -82,10 +82,11 @@
         display: none !important;
       }
 
-      /* Display print template exclusively */
+      /* Display print template exclusively with safety buffer */
       #print-template {
         display: block !important;
-        width: 100% !important;
+        width: calc(100% - 2px) !important;
+        margin: 0 auto !important;
         font-family: Arial, Helvetica, sans-serif !important;
         font-size: 8.5pt;
         color: #000000 !important;
@@ -114,6 +115,7 @@
         table-layout: fixed !important;
         margin-bottom: 12px !important;
         border: 1px solid #000000 !important;
+        box-sizing: border-box !important;
       }
 
       #print-template tr { 
@@ -128,6 +130,7 @@
         word-wrap: break-word !important;
         overflow-wrap: break-word !important;
         vertical-align: middle !important;
+        box-sizing: border-box !important;
       }
 
       /* Remove outer borders for clean top header table */
@@ -374,7 +377,7 @@
     </table>
 
     <!-- INCLUSIONS & EXCLUSIONS -->
-    <div style="font-size: 8.5pt; margin-bottom: 12px; padding: 6px 8px; border: 1px solid #000000; background-color: #ffffff;">
+    <div style="font-size: 8.5pt; margin-bottom: 12px; padding: 6px 8px; border: 1px solid #000000; background-color: #ffffff; box-sizing: border-box;">
       <div style="margin-bottom: 4px;"><strong>Inclusions:</strong> <span id="print-out-inclusions">None specified</span></div>
       <div><strong>Exclusions:</strong> <span id="print-out-exclusions">None specified</span></div>
     </div>
