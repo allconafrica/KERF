@@ -207,11 +207,11 @@
         <div class="builder-section grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 bg-zinc-100 p-4 rounded-xl text-xs border border-zinc-200">
           <div>
             <label class="block font-semibold mb-1 text-zinc-700 dark:text-zinc-300">Client Name</label>
-            <input type="text" id="meta-client" placeholder="e.g. Sasol Synfuels" class="w-full p-2.5 rounded-lg text-sm">
+            <input type="text" id="meta-client" placeholder="e.g. Quantum Steel" class="w-full p-2.5 rounded-lg text-sm">
           </div>
           <div>
             <label class="block font-semibold mb-1 text-zinc-700 dark:text-zinc-300">Project Name</label>
-            <input type="text" id="meta-project" placeholder="e.g. Conveyor Structure Overhaul" class="w-full p-2.5 rounded-lg text-sm">
+            <input type="text" id="meta-project" placeholder="e.g. Shanta New" class="w-full p-2.5 rounded-lg text-sm">
           </div>
           <div>
             <label class="block font-semibold mb-1 text-zinc-700 dark:text-zinc-300">Date Info Sheet Generated</label>
@@ -241,25 +241,31 @@
 
         <!-- LINKED JOB ID & AC DRAWING SCHEDULE -->
         <div class="builder-section bg-red-950/20 p-4 rounded-xl border border-red-200 dark:border-zinc-700 mb-6">
-          <h3 class="text-xs font-bold uppercase mb-3 text-red-600 dark:text-red-400"><i class="fa-solid fa-diagram-project mr-2"></i>Job ID &amp; AC Drawing Schedule (AC Number | Drawing Reference | Material | Supplier | PO)</h3>
+          <h3 class="text-xs font-bold uppercase mb-3 text-red-600 dark:text-red-400"><i class="fa-solid fa-diagram-project mr-2"></i>Job ID &amp; AC Drawing Schedule Builder</h3>
           
           <div class="grid grid-cols-1 md:grid-cols-12 gap-3 items-end mb-4 bg-zinc-200 dark:bg-zinc-900 p-3 rounded-lg text-xs">
             <div class="md:col-span-2">
               <label class="block font-bold mb-1 text-zinc-700 dark:text-zinc-300">Job ID *</label>
-              <input type="text" id="input-job-id" placeholder="e.g. 4720" class="w-full p-2 rounded-lg font-bold">
+              <input type="text" id="input-job-id" placeholder="e.g. 5276" class="w-full p-2 rounded-lg font-bold">
+            </div>
+            <div class="md:col-span-3">
+              <label class="block font-bold mb-1 text-zinc-700 dark:text-zinc-300">Drawing / Group Desc *</label>
+              <input type="text" id="input-job-desc" placeholder="e.g. Chockey Blocks" class="w-full p-2 rounded-lg font-bold">
             </div>
             <div class="md:col-span-2">
-              <label class="block font-bold mb-1 text-zinc-700 dark:text-zinc-300">AC Number *</label>
-              <input type="text" id="input-ac-num" placeholder="e.g. AC2896" class="w-full p-2 rounded-lg font-bold">
+              <label class="block font-bold mb-1 text-zinc-700 dark:text-zinc-300">AC Num (50%)</label>
+              <input type="text" id="input-ac-num" placeholder="e.g. AC2902" class="w-full p-2 rounded-lg font-bold">
             </div>
-            <div class="md:col-span-2">
-              <label class="block font-bold mb-1 text-zinc-700 dark:text-zinc-300">Drawing Ref</label>
-              <input type="text" id="input-drawing-ref" placeholder="e.g. DRW-01" class="w-full p-2 rounded-lg">
+            <div class="md:col-span-3">
+              <label class="block font-bold mb-1 text-zinc-700 dark:text-zinc-300">Part / Drawing Reference</label>
+              <input type="text" id="input-drawing-ref" placeholder="e.g. Pinion" class="w-full p-2 rounded-lg">
             </div>
             <div class="md:col-span-2">
               <label class="block font-bold mb-1 text-zinc-700 dark:text-zinc-300">Material Category</label>
               <select id="input-ac-material" class="w-full p-2 rounded-lg">
-                <option value="">-- Select Material --</option>
+                <option value="">-- Material --</option>
+                <option value="Material">Material</option>
+                <option value="Machining">Machining</option>
                 <option value="Material (Plates)">Material (Plates)</option>
                 <option value="Material (Structural)">Material (Structural)</option>
                 <option value="Laser Cutting &amp; Bending">Laser Cutting &amp; Bending</option>
@@ -267,21 +273,20 @@
                 <option value="Fasteners &amp; Hardware">Fasteners &amp; Hardware</option>
                 <option value="Surface Coating / HDG">Surface Coating / HDG</option>
                 <option value="Freight / Transport">Freight / Transport</option>
-                <option value="Miscellaneous">Miscellaneous</option>
               </select>
             </div>
-            <div class="md:col-span-2">
+            <div class="md:col-span-3">
               <label class="block font-bold mb-1 text-zinc-700 dark:text-zinc-300">Supplier Name</label>
               <select id="input-ac-supplier" class="w-full p-2 rounded-lg">
                 <option value="">-- Select Supplier --</option>
               </select>
             </div>
-            <div class="md:col-span-1">
+            <div class="md:col-span-2">
               <label class="block font-bold mb-1 text-zinc-700 dark:text-zinc-300">PO Num</label>
-              <input type="text" id="input-ac-po" placeholder="PO-88392" class="w-full p-2 rounded-lg font-bold">
+              <input type="text" id="input-ac-po" placeholder="PO18008" class="w-full p-2 rounded-lg font-bold">
             </div>
-            <div class="md:col-span-1">
-              <button onclick="addLinkedACLine()" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold p-2 rounded-lg transition"><i class="fa-solid fa-plus mr-1"></i> Add</button>
+            <div class="md:col-span-2">
+              <button onclick="addLinkedACLine()" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold p-2 rounded-lg transition"><i class="fa-solid fa-plus mr-1"></i> Add Line</button>
             </div>
           </div>
 
@@ -374,7 +379,7 @@
     const STAFF_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSNynT5Snb9PgJp6ti3QpuHUr9fX8bGKEG10H8kjkbCna_ZfkEC7aM06QrwkjHwxR1n6uu3ZgvvaKu6/pub?gid=1666500445&single=true&output=csv";
     const SUPPLIERS_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSNynT5Snb9PgJp6ti3QpuHUr9fX8bGKEG10H8kjkbCna_ZfkEC7aM06QrwkjHwxR1n6uu3ZgvvaKu6/pub?gid=0&single=true&output=csv";
 
-    let jobDataMap = {};
+    let jobDataMap = {}; // Structure: { jobId: { description: "...", items: [...] } }
     let liveStaffData = [];
     let liveSupplierData = [];
 
@@ -615,6 +620,7 @@
     // BUILDER FUNCTIONS
     function addLinkedACLine() {
       const jobId = document.getElementById('input-job-id').value.trim();
+      const jobDesc = document.getElementById('input-job-desc').value.trim();
       const acNum = document.getElementById('input-ac-num').value.trim();
       const drawingRef = document.getElementById('input-drawing-ref').value.trim();
       const material = document.getElementById('input-ac-material').value;
@@ -625,10 +631,15 @@
       if (!acNum) return alert('Please enter an AC Number.');
 
       if (!jobDataMap[jobId]) {
-        jobDataMap[jobId] = [];
+        jobDataMap[jobId] = {
+          description: jobDesc,
+          items: []
+        };
+      } else if (jobDesc && !jobDataMap[jobId].description) {
+        jobDataMap[jobId].description = jobDesc;
       }
 
-      jobDataMap[jobId].push({ 
+      jobDataMap[jobId].items.push({ 
         num: acNum, 
         drawingRef: drawingRef,
         material: material, 
@@ -647,8 +658,8 @@
 
     function removeACItem(jobId, index) {
       if (jobDataMap[jobId]) {
-        jobDataMap[jobId].splice(index, 1);
-        if (jobDataMap[jobId].length === 0) delete jobDataMap[jobId];
+        jobDataMap[jobId].items.splice(index, 1);
+        if (jobDataMap[jobId].items.length === 0) delete jobDataMap[jobId];
         renderGroupedACTable();
       }
     }
@@ -664,13 +675,14 @@
 
       container.innerHTML = '';
       jobKeys.forEach(jobId => {
-        let rowsHtml = jobDataMap[jobId].map((item, idx) => `
+        const group = jobDataMap[jobId];
+        let rowsHtml = group.items.map((item, idx) => `
           <tr class="border-b border-zinc-200 dark:border-zinc-800 text-xs">
-            <td class="p-2 font-bold text-red-600 dark:text-red-400 w-[11%]">${item.num}</td>
-            <td class="p-2 w-[29%] text-zinc-700 dark:text-zinc-300">${item.drawingRef || '<span class="text-zinc-400 italic">--</span>'}</td>
-            <td class="p-2 w-[22%] text-zinc-700 dark:text-zinc-300">${item.material || '<span class="text-zinc-400 italic">--</span>'}</td>
+            <td class="p-2 font-bold text-red-600 dark:text-red-400 w-[12%]">${item.num}</td>
+            <td class="p-2 w-[30%] text-zinc-700 dark:text-zinc-300 font-medium">${item.drawingRef || '<span class="text-zinc-400 italic">--</span>'}</td>
+            <td class="p-2 w-[18%] text-zinc-700 dark:text-zinc-300">${item.material || '<span class="text-zinc-400 italic">--</span>'}</td>
             <td class="p-2 w-[22%]" title="${item.supplier || ''}">${item.supplier || '<span class="text-zinc-400 italic">--</span>'}</td>
-            <td class="p-2 font-semibold w-[10%]">${item.po ? (item.po.startsWith('PO-') ? item.po : 'PO-' + item.po) : '<span class="text-zinc-400 italic">--</span>'}</td>
+            <td class="p-2 font-semibold w-[12%]">${item.po ? (item.po.startsWith('PO') ? item.po : 'PO' + item.po) : '<span class="text-zinc-400 italic">--</span>'}</td>
             <td class="p-2 text-right w-[6%]">
               <button onclick="removeACItem('${jobId}', ${idx})" class="text-red-500 hover:underline">Remove</button>
             </td>
@@ -680,17 +692,17 @@
         container.innerHTML += `
           <div class="bg-zinc-100 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 rounded-lg overflow-hidden">
             <div class="bg-zinc-900 text-white text-xs font-bold px-3 py-2 flex justify-between items-center">
-              <span><i class="fa-solid fa-folder-closed mr-2 text-red-500"></i>JOB ID: ${jobId}</span>
-              <span class="text-[10px] bg-red-600 px-2 py-0.5 rounded">${jobDataMap[jobId].length} AC Entries</span>
+              <span><i class="fa-solid fa-folder-closed mr-2 text-red-500"></i>JOB ID: ${jobId} <span class="text-red-400 font-normal ml-2">${group.description ? '— ' + group.description : ''}</span></span>
+              <span class="text-[10px] bg-red-600 px-2 py-0.5 rounded">${group.items.length} AC Entries</span>
             </div>
             <table class="w-full text-left border-collapse table-fixed">
               <thead>
                 <tr class="bg-zinc-200 dark:bg-zinc-900 text-[11px] text-zinc-600 dark:text-zinc-400 border-b border-zinc-300 dark:border-zinc-700">
-                  <th class="p-2 w-[11%]">AC Number</th>
-                  <th class="p-2 w-[29%]">Drawing Reference</th>
-                  <th class="p-2 w-[22%]">Material</th>
+                  <th class="p-2 w-[12%]">AC Number</th>
+                  <th class="p-2 w-[30%]">Part / Description</th>
+                  <th class="p-2 w-[18%]">Material</th>
                   <th class="p-2 w-[22%]">Supplier Name</th>
-                  <th class="p-2 w-[10%]">PO</th>
+                  <th class="p-2 w-[12%]">PO Number</th>
                   <th class="p-2 text-right w-[6%]">Action</th>
                 </tr>
               </thead>
@@ -719,37 +731,40 @@
       const jobKeys = Object.keys(jobDataMap);
       if (jobKeys.length > 0) {
         jobKeys.forEach(jobId => {
-          let rowsHtml = jobDataMap[jobId].map(item => {
-            const formattedPo = item.po ? (item.po.startsWith('PO-') ? item.po : 'PO-' + item.po) : '';
+          const group = jobDataMap[jobId];
+          let rowsHtml = group.items.map(item => {
+            const formattedPo = item.po ? (item.po.startsWith('PO') ? item.po : 'PO' + item.po) : '';
             return `
               <tr>
-                <td style="font-weight: bold; color: #dc2626; width: 11%;">${item.num}</td>
-                <td style="width: 29%;">${item.drawingRef || '&nbsp;'}</td>
-                <td style="width: 25%;">${item.material || '&nbsp;'}</td>
-                <td style="width: 25%;">${item.supplier || '&nbsp;'}</td>
-                <td style="font-weight: bold; width: 10%;">${formattedPo}</td>
+                <td style="font-weight: bold; color: #dc2626; width: 12%;">${item.num}</td>
+                <td style="width: 30%; font-weight: bold;">${item.drawingRef || '&nbsp;'}</td>
+                <td style="width: 20%;">${item.material || '&nbsp;'}</td>
+                <td style="width: 26%;">${item.supplier || '&nbsp;'}</td>
+                <td style="font-weight: bold; width: 12%;">${formattedPo}</td>
               </tr>
             `;
           }).join('');
 
           printGroupsContainer.innerHTML += `
             <div style="margin-bottom: 8px;">
-              <div style="background-color: #111827; color: #ffffff; font-weight: bold; font-size: 8pt; padding: 3px 6px;" class="print-header-banner">JOB ID: ${jobId}</div>
+              <div style="background-color: #111827; color: #ffffff; font-weight: bold; font-size: 8pt; padding: 4px 6px;" class="print-header-banner">
+                JOB ID: ${jobId} ${group.description ? '&nbsp;&nbsp;—&nbsp;&nbsp;' + group.description : ''}
+              </div>
               <table style="width: 100%; table-layout: fixed;">
                 <colgroup>
-                  <col style="width: 11%;">
-                  <col style="width: 29%;">
-                  <col style="width: 25%;">
-                  <col style="width: 25%;">
-                  <col style="width: 10%;">
+                  <col style="width: 12%;">
+                  <col style="width: 30%;">
+                  <col style="width: 20%;">
+                  <col style="width: 26%;">
+                  <col style="width: 12%;">
                 </colgroup>
                 <thead>
                   <tr class="print-table-header" style="font-size: 8pt;">
                     <th style="text-align: left; font-weight: bold;">AC Number</th>
-                    <th style="text-align: left; font-weight: bold;">Drawing Reference</th>
+                    <th style="text-align: left; font-weight: bold;">Part / Description</th>
                     <th style="text-align: left; font-weight: bold;">Material</th>
                     <th style="text-align: left; font-weight: bold;">Supplier Name</th>
-                    <th style="text-align: left; font-weight: bold;">PO</th>
+                    <th style="text-align: left; font-weight: bold;">PO Number</th>
                   </tr>
                 </thead>
                 <tbody>${rowsHtml}</tbody>
