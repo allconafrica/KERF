@@ -169,9 +169,10 @@
           <span class="text-[10px] font-bold px-1 text-zinc-500 dark:text-red-500">DARK</span>
         </div>
 
-        <nav class="flex bg-zinc-900 p-1 rounded-lg border border-zinc-800 text-xs font-semibold">
+        <nav class="flex flex-wrap bg-zinc-900 p-1 rounded-lg border border-zinc-800 text-xs font-semibold gap-1">
           <button id="tab-suppliers" onclick="switchTab('suppliers')" class="px-3 py-1.5 rounded-md text-zinc-400 hover:text-white">Suppliers</button>
           <button id="tab-generator" onclick="switchTab('generator')" class="px-3 py-1.5 rounded-md bg-red-600 text-white">Project Transmittal</button>
+          <button id="tab-bom" onclick="switchTab('bom')" class="px-3 py-1.5 rounded-md text-zinc-400 hover:text-white">BOM Calculator</button>
           <button id="tab-staff" onclick="switchTab('staff')" class="px-3 py-1.5 rounded-md text-zinc-400 hover:text-white">Staff</button>
         </nav>
       </div>
@@ -307,7 +308,79 @@
       </div>
     </section>
 
-    <!-- VIEW 3: STAFF DIRECTORY -->
+    <!-- VIEW 3: BOM CALCULATOR -->
+    <section id="view-bom" class="hidden">
+      <div class="builder-frame bg-white rounded-2xl shadow-xl border border-zinc-300 p-6 mb-6 transition-colors duration-200">
+        <h2 class="text-xl font-bold mb-2 text-red-600 dark:text-red-500 flex items-center gap-2">
+          <i class="fa-solid fa-calculator"></i> BOM & Material Requirement Calculator
+        </h2>
+        <p class="text-xs text-zinc-500 dark:text-zinc-400 mb-6">Capture drawing measurements on the fly. Linear items are automatically aggregated per material type to calculate stock bar requirements, and plates are dynamically calculated with a 25% kerf/waste line dimension.</p>
+
+        <!-- BOM ENTRY FORM -->
+        <div class="builder-section bg-red-950/20 p-4 rounded-xl border border-red-200 dark:border-zinc-700 mb-6 relative pb-16">
+          <h3 class="text-xs font-bold uppercase mb-3 text-red-600 dark:text-red-400"><i class="fa-solid fa-plus-circle mr-2"></i>Add Material Item</h3>
+          
+          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-6 gap-3 mb-4 bg-zinc-200 dark:bg-zinc-900 p-3 rounded-lg text-xs">
+            <div>
+              <label class="block font-bold mb-1 text-zinc-700 dark:text-zinc-300">Material Type *</label>
+              <select id="bom-type" onchange="toggleBomInputs()" class="w-full p-2 rounded-lg font-bold">
+                <option value="LINEAR">Linear (Angle/Pipe/Tube)</option>
+                <option value="PLATE">Plate</option>
+                <option value="HARDWARE">Hardware (Bolts/Nuts)</option>
+              </select>
+            </div>
+            <div class="md:col-span-2">
+              <label class="block font-bold mb-1 text-zinc-700 dark:text-zinc-300">Subject / Material Name *</label>
+              <input type="text" id="bom-subject" placeholder="e.g. 50X50X6 ANGLE IRON" class="w-full p-2 rounded-lg font-bold uppercase">
+            </div>
+            <div>
+              <label class="block font-bold mb-1 text-zinc-700 dark:text-zinc-300">Item / Mark</label>
+              <input type="text" id="bom-mark" placeholder="e.g. 1A or Gusset" class="w-full p-2 rounded-lg">
+            </div>
+            <div>
+              <label class="block font-bold mb-1 text-zinc-700 dark:text-zinc-300">Quantity *</label>
+              <input type="number" id="bom-qty" placeholder="e.g. 5" class="w-full p-2 rounded-lg font-bold">
+            </div>
+            <div id="wrapper-length" class="block">
+              <label class="block font-bold mb-1 text-zinc-700 dark:text-zinc-300">Length (mm)</label>
+              <input type="number" id="bom-length" placeholder="e.g. 1050" class="w-full p-2 rounded-lg">
+            </div>
+            <div id="wrapper-width" class="hidden">
+              <label class="block font-bold mb-1 text-zinc-700 dark:text-zinc-300">Width (mm)</label>
+              <input type="number" id="bom-width" placeholder="e.g. 110" class="w-full p-2 rounded-lg">
+            </div>
+            <div id="wrapper-notes" class="hidden sm:col-span-2">
+              <label class="block font-bold mb-1 text-zinc-700 dark:text-zinc-300">Size / Notes</label>
+              <input type="text" id="bom-notes" placeholder="e.g. 50mm Long / Standard" class="w-full p-2 rounded-lg">
+            </div>
+            <div id="wrapper-stock" class="block">
+              <label class="block font-bold mb-1 text-zinc-700 dark:text-zinc-300">Stock Bar (mm)</label>
+              <input type="number" id="bom-stock-len" value="6000" class="w-full p-2 rounded-lg font-bold">
+            </div>
+          </div>
+
+          <!-- STATIC BOTTOM RIGHT BUTTON -->
+          <div class="absolute right-4 bottom-4">
+            <button onclick="addBomItem()" class="bg-red-600 hover:bg-red-700 text-white font-bold px-5 py-2.5 rounded-lg text-xs transition shadow flex items-center gap-1.5">
+              <i class="fa-solid fa-plus"></i> Add to BOM
+            </button>
+          </div>
+        </div>
+
+        <!-- BOM TABLES CONTAINER -->
+        <div class="space-y-6" id="bom-tables-container">
+          <div class="text-xs text-zinc-400 italic text-center p-6">No materials added to the BOM calculator yet.</div>
+        </div>
+
+        <div class="flex justify-end mt-6">
+          <button onclick="triggerPrintBOM()" class="bg-red-600 hover:bg-red-700 text-white font-bold px-6 py-3 rounded-lg text-sm flex items-center gap-2 shadow-md transition">
+            <i class="fa-solid fa-print"></i> Print / Export BOM Sheet
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW 4: STAFF DIRECTORY -->
     <section id="view-staff" class="hidden">
       <div class="bg-white dark:bg-zinc-900 p-4 rounded-xl border border-zinc-300 dark:border-zinc-800 mb-6 flex flex-col md:flex-row justify-between items-center gap-4">
         <div class="w-full md:w-1/2 relative">
@@ -334,7 +407,7 @@
           <div style="margin-bottom: 4px;">
             <img src="./ALLCON-Logo.jpg" alt="ALLCON Logo" style="height: 44px; width: auto; max-width: 260px; object-fit: contain;" onerror="this.onerror=null; this.outerHTML='<div class=\'print-header-banner\' style=\'font-weight: 900; font-size: 20pt; padding: 4px 12px; display: inline-block; letter-spacing: 2px;\'>ALLCON</div>';">
           </div>
-          <div style="font-size: 8.5pt; color: #000000; text-transform: uppercase; font-weight: bold; margin-top: 6px;">PROJECT TRANSMITTAL</div>
+          <div style="font-size: 8.5pt; color: #000000; text-transform: uppercase; font-weight: bold; margin-top: 6px;" id="print-doc-title">PROJECT TRANSMITTAL</div>
         </td>
         <td style="vertical-align: top; text-align: right; width: 40%;">
           <div style="font-size: 8.5pt; color: #000000; font-weight: bold;" id="print-out-gen-date"></div>
@@ -343,7 +416,7 @@
     </table>
 
     <!-- METADATA TABLE -->
-    <table style="width: 100%; margin-bottom: 12px;">
+    <table style="width: 100%; margin-bottom: 12px;" id="print-meta-table">
       <colgroup>
         <col style="width: 18%;">
         <col style="width: 32%;">
@@ -367,7 +440,7 @@
     </table>
 
     <!-- INCLUSIONS & EXCLUSIONS -->
-    <table style="width: 100%; margin-bottom: 12px;">
+    <table style="width: 100%; margin-bottom: 12px;" id="print-incexc-table">
       <colgroup>
         <col style="width: 18%;">
         <col style="width: 82%;">
@@ -384,7 +457,7 @@
       </tbody>
     </table>
 
-    <!-- LINKED AC SCHEDULE -->
+    <!-- LINKED AC SCHEDULE / BOM CONTAINER -->
     <div id="print-job-groups-container" style="margin-bottom: 12px;"></div>
 
   </div>
@@ -395,6 +468,7 @@
     const SUPPLIERS_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSNynT5Snb9PgJp6ti3QpuHUr9fX8bGKEG10H8kjkbCna_ZfkEC7aM06QrwkjHwxR1n6uu3ZgvvaKu6/pub?gid=0&single=true&output=csv";
 
     let jobDataMap = {}; // Structure: { jobId: { acList: [], supList: [] } }
+    let bomItemsList = []; // Structure: [{type, subject, mark, qty, length, width, notes, stockLen}]
     let liveStaffData = [];
     let liveSupplierData = [];
     let collapsedSuppliers = {}; // Tracks open/closed state per letter group
@@ -581,10 +655,8 @@
         return;
       }
 
-      // Sort alphabetically by supplierName
       filtered.sort((a, b) => (a.supplierName || '').localeCompare(b.supplierName || ''));
 
-      // Group by first letter
       const groups = {};
       filtered.forEach(s => {
         const name = s.supplierName || '';
@@ -602,7 +674,6 @@
 
       container.innerHTML = sortedKeys.map(letter => {
         const suppliersInGroup = groups[letter];
-        // If there's an active search query, automatically expand groups to show results
         const isCollapsed = query ? false : (collapsedSuppliers[letter] !== false);
         const iconClass = isCollapsed ? "fa-chevron-right" : "fa-chevron-down";
 
@@ -681,7 +752,321 @@
       `).join('');
     }
 
-    // BUILDER FUNCTIONS
+    // BOM CALCULATOR LOGIC
+    function toggleBomInputs() {
+      const type = document.getElementById('bom-type').value;
+      const wrapLen = document.getElementById('wrapper-length');
+      const wrapWidth = document.getElementById('wrapper-width');
+      const wrapNotes = document.getElementById('wrapper-notes');
+      const wrapStock = document.getElementById('wrapper-stock');
+
+      if (type === 'LINEAR') {
+        wrapLen.classList.remove('hidden');
+        wrapWidth.classList.add('hidden');
+        wrapNotes.classList.add('hidden');
+        wrapStock.classList.remove('hidden');
+      } else if (type === 'PLATE') {
+        wrapLen.classList.remove('hidden'); // acts as Length
+        wrapWidth.classList.remove('hidden'); // acts as Width
+        wrapNotes.classList.add('hidden');
+        wrapStock.classList.add('hidden');
+      } else if (type === 'HARDWARE') {
+        wrapLen.classList.add('hidden');
+        wrapWidth.classList.add('hidden');
+        wrapNotes.classList.remove('hidden');
+        wrapStock.classList.add('hidden');
+      }
+    }
+
+    function addBomItem() {
+      const type = document.getElementById('bom-type').value;
+      const subject = document.getElementById('bom-subject').value.trim().toUpperCase();
+      const mark = document.getElementById('bom-mark').value.trim();
+      const qty = parseFloat(document.getElementById('bom-qty').value);
+
+      if (!subject) return alert('Please enter a Subject / Material Name.');
+      if (isNaN(qty) || qty <= 0) return alert('Please enter a valid quantity.');
+
+      let length = parseFloat(document.getElementById('bom-length').value) || 0;
+      let width = parseFloat(document.getElementById('bom-width').value) || 0;
+      let notes = document.getElementById('bom-notes').value.trim();
+      let stockLen = parseFloat(document.getElementById('bom-stock-len').value) || 6000;
+
+      bomItemsList.push({ type, subject, mark, qty, length, width, notes, stockLen });
+
+      // Reset inputs
+      document.getElementById('bom-subject').value = '';
+      document.getElementById('bom-mark').value = '';
+      document.getElementById('bom-qty').value = '';
+      document.getElementById('bom-length').value = '';
+      document.getElementById('bom-width').value = '';
+      document.getElementById('bom-notes').value = '';
+
+      renderBomTables();
+    }
+
+    function removeBomItem(index) {
+      bomItemsList.splice(index, 1);
+      renderBomTables();
+    }
+
+    function renderBomTables() {
+      const container = document.getElementById('bom-tables-container');
+      if (bomItemsList.length === 0) {
+        container.innerHTML = `<div class="text-xs text-zinc-400 italic text-center p-6">No materials added to the BOM calculator yet.</div>`;
+        return;
+      }
+
+      // Group items by type
+      const linearItems = bomItemsList.map((item, idx) => ({ ...item, originalIndex: idx })).filter(i => i.type === 'LINEAR');
+      const plateItems = bomItemsList.map((item, idx) => ({ ...item, originalIndex: idx })).filter(i => i.type === 'PLATE');
+      const hardwareItems = bomItemsList.map((item, idx) => ({ ...item, originalIndex: idx })).filter(i => i.type === 'HARDWARE');
+
+      let html = '';
+
+      // 1. LINEAR SECTION
+      if (linearItems.length > 0) {
+        // Group linear items by subject for summary calculation
+        const groupedLinear = {};
+        linearItems.forEach(item => {
+          if (!groupedLinear[item.subject]) {
+            groupedLinear[item.subject] = { totalLen: 0, stockLen: item.stockLen || 6000, rows: [] };
+          }
+          const totalLineLen = item.qty * item.length;
+          groupedLinear[item.subject].totalLen += totalLineLen;
+          groupedLinear[item.subject].rows.push(item);
+        });
+
+        let linearRowsHtml = '';
+        Object.keys(groupedLinear).forEach(subj => {
+          const group = groupedLinear[subj];
+          const stockNeeded = Math.ceil(group.totalLen / group.stockLen);
+
+          group.rows.forEach(r => {
+            const totalLen = r.qty * r.length;
+            linearRowsHtml += `
+              <tr class="border-b border-zinc-200 dark:border-zinc-800 text-xs">
+                <td class="p-2.5 font-bold text-red-600 dark:text-red-400">${r.subject}</td>
+                <td class="p-2.5">${r.mark || '--'}</td>
+                <td class="p-2.5">${r.qty}</td>
+                <td class="p-2.5">${r.length} mm</td>
+                <td class="p-2.5 font-semibold">${totalLen} mm</td>
+                <td class="p-2.5 text-right"><button onclick="removeBomItem(${r.originalIndex})" class="text-red-500 hover:underline">Remove</button></td>
+              </tr>
+            `;
+          });
+
+          // Summary sub-row for this linear material
+          linearRowsHtml += `
+            <tr class="bg-red-50 dark:bg-red-950/30 font-bold text-xs border-b-2 border-red-200 dark:border-red-900">
+              <td colspan="4" class="p-2.5 text-right uppercase">Total Required for ${subj}: ${group.totalLen} mm (${stockNeeded} x ${group.stockLen}mm Bars Needed)</td>
+              <td colspan="2" class="p-2.5 text-red-600 dark:text-red-400">Order Stock: ${stockNeeded} Bar(s)</td>
+            </tr>
+          `;
+        });
+
+        html += `
+          <div class="bg-zinc-100 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 rounded-lg overflow-hidden p-3">
+            <div class="bg-zinc-900 text-white text-xs font-bold px-3 py-2 rounded mb-2 uppercase">Structural & Linear Materials</div>
+            <table class="w-full text-left border-collapse">
+              <thead>
+                <tr class="bg-zinc-200 dark:bg-zinc-900 text-[10px] text-zinc-600 dark:text-zinc-400">
+                  <th class="p-2">Subject / Material</th>
+                  <th class="p-2">Item / Mark</th>
+                  <th class="p-2">Qty</th>
+                  <th class="p-2">Length per Piece</th>
+                  <th class="p-2">Total Length</th>
+                  <th class="p-2 text-right">Action</th>
+                </tr>
+              </thead>
+              <tbody>${linearRowsHtml}</tbody>
+            </table>
+          </div>
+        `;
+      }
+
+      // 2. PLATE SECTION
+      if (plateItems.length > 0) {
+        let plateRowsHtml = plateItems.map(r => {
+          const scaledLen = Math.round(r.qty * r.length * 1.25);
+          return `
+            <tr class="border-b border-zinc-200 dark:border-zinc-800 text-xs">
+              <td class="p-2.5 font-bold text-red-600 dark:text-red-400">${r.subject}</td>
+              <td class="p-2.5">${r.mark || '--'}</td>
+              <td class="p-2.5">${r.qty}</td>
+              <td class="p-2.5">${r.width} mm</td>
+              <td class="p-2.5">${r.length} mm</td>
+              <td class="p-2.5 font-semibold text-zinc-800 dark:text-zinc-200">${scaledLen} x ${r.width} mm (Line + 25%)</td>
+              <td class="p-2.5 text-right"><button onclick="removeBomItem(${r.originalIndex})" class="text-red-500 hover:underline">Remove</button></td>
+            </tr>
+          `;
+        }).join('');
+
+        html += `
+          <div class="bg-zinc-100 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 rounded-lg overflow-hidden p-3">
+            <div class="bg-zinc-900 text-white text-xs font-bold px-3 py-2 rounded mb-2 uppercase">Plates & Sheets</div>
+            <table class="w-full text-left border-collapse">
+              <thead>
+                <tr class="bg-zinc-200 dark:bg-zinc-900 text-[10px] text-zinc-600 dark:text-zinc-400">
+                  <th class="p-2">Subject / Material</th>
+                  <th class="p-2">Item / Mark</th>
+                  <th class="p-2">Qty</th>
+                  <th class="p-2">Width mm</th>
+                  <th class="p-2">Length mm</th>
+                  <th class="p-2">Total Area Required (Line + 25%)</th>
+                  <th class="p-2 text-right">Action</th>
+                </tr>
+              </thead>
+              <tbody>${plateRowsHtml}</tbody>
+            </table>
+          </div>
+        `;
+      }
+
+      // 3. HARDWARE SECTION
+      if (hardwareItems.length > 0) {
+        let hwRowsHtml = hardwareItems.map(r => `
+          <tr class="border-b border-zinc-200 dark:border-zinc-800 text-xs">
+            <td class="p-2.5 font-bold text-red-600 dark:text-red-400">${r.subject}</td>
+            <td class="p-2.5">${r.mark || '--'}</td>
+            <td class="p-2.5 font-bold">${r.qty}</td>
+            <td class="p-2.5">${r.notes || '--'}</td>
+            <td class="p-2.5 text-right"><button onclick="removeBomItem(${r.originalIndex})" class="text-red-500 hover:underline">Remove</button></td>
+          </tr>
+        `).join('');
+
+        html += `
+          <div class="bg-zinc-100 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 rounded-lg overflow-hidden p-3">
+            <div class="bg-zinc-900 text-white text-xs font-bold px-3 py-2 rounded mb-2 uppercase">Hardware & Loose Items</div>
+            <table class="w-full text-left border-collapse">
+              <thead>
+                <tr class="bg-zinc-200 dark:bg-zinc-900 text-[10px] text-zinc-600 dark:text-zinc-400">
+                  <th class="p-2">Subject / Material</th>
+                  <th class="p-2">Item / Mark</th>
+                  <th class="p-2">Qty</th>
+                  <th class="p-2">Notes / Size</th>
+                  <th class="p-2 text-right">Action</th>
+                </tr>
+              </thead>
+              <tbody>${hwRowsHtml}</tbody>
+            </table>
+          </div>
+        `;
+      }
+
+      container.innerHTML = html;
+    }
+
+    function triggerPrintBOM() {
+      if (bomItemsList.length === 0) return alert('No BOM items to print.');
+
+      document.getElementById('print-doc-title').innerText = "BOM & MATERIAL REQUIREMENT CALCULATOR";
+      document.getElementById('print-meta-table').style.display = 'none';
+      document.getElementById('print-incexc-table').style.display = 'none';
+
+      const printGroupsContainer = document.getElementById('print-job-groups-container');
+      
+      const linearItems = bomItemsList.filter(i => i.type === 'LINEAR');
+      const plateItems = bomItemsList.filter(i => i.type === 'PLATE');
+      const hardwareItems = bomItemsList.filter(i => i.type === 'HARDWARE');
+
+      let printHtml = '';
+
+      if (linearItems.length > 0) {
+        const groupedLinear = {};
+        linearItems.forEach(item => {
+          if (!groupedLinear[item.subject]) {
+            groupedLinear[item.subject] = { totalLen: 0, stockLen: item.stockLen || 6000, rows: [] };
+          }
+          groupedLinear[item.subject].totalLen += (item.qty * item.length);
+          groupedLinear[item.subject].rows.push(item);
+        });
+
+        let rows = '';
+        Object.keys(groupedLinear).forEach(subj => {
+          const group = groupedLinear[subj];
+          const stockNeeded = Math.ceil(group.totalLen / group.stockLen);
+          group.rows.forEach(r => {
+            rows += `<tr><td>${r.subject}</td><td>${r.mark || '&nbsp;'}</td><td>${r.qty}</td><td>${r.length} mm</td><td>${r.qty * r.length} mm</td></tr>`;
+          });
+          rows += `<tr style="background-color: #fef2f2; font-weight: bold;"><td colspan="4" style="text-align: right;">TOTAL FOR ${subj} (${stockNeeded} x ${group.stockLen}mm BARS):</td><td>${group.totalLen} mm</td></tr>`;
+        });
+
+        printHtml += `
+          <div style="margin-bottom: 12px;">
+            <div style="background-color: #dc2626; color: #ffffff; font-weight: bold; font-size: 8pt; padding: 4px 6px;" class="print-header-banner">STRUCTURAL & LINEAR MATERIALS</div>
+            <table style="width: 100%; table-layout: fixed; margin-top: 0 !important;">
+              <colgroup><col style="width: 30%;"><col style="width: 20%;"><col style="width: 10%;"><col style="width: 20%;"><col style="width: 20%;"></colgroup>
+              <thead>
+                <tr class="print-table-header" style="font-size: 8pt;">
+                  <th>SUBJECT / MATERIAL</th><th>MARK</th><th>QTY</th><th>LENGTH / PC</th><th>TOTAL LENGTH</th>
+                </tr>
+              </thead>
+              <tbody>${rows}</tbody>
+            </table>
+          </div>
+        `;
+      }
+
+      if (plateItems.length > 0) {
+        let rows = plateItems.map(r => `
+          <tr>
+            <td>${r.subject}</td>
+            <td>${r.mark || '&nbsp;'}</td>
+            <td>${r.qty}</td>
+            <td>${r.width} mm</td>
+            <td>${r.length} mm</td>
+            <td style="font-weight: bold;">${Math.round(r.qty * r.length * 1.25)} x ${r.width} mm (Line + 25%)</td>
+          </tr>
+        `).join('');
+
+        printHtml += `
+          <div style="margin-bottom: 12px;">
+            <div style="background-color: #dc2626; color: #ffffff; font-weight: bold; font-size: 8pt; padding: 4px 6px;" class="print-header-banner">PLATES & SHEETS</div>
+            <table style="width: 100%; table-layout: fixed; margin-top: 0 !important;">
+              <colgroup><col style="width: 25%;"><col style="width: 15%;"><col style="width: 10%;"><col style="width: 15%;"><col style="width: 15%;"><col style="width: 20%;"></colgroup>
+              <thead>
+                <tr class="print-table-header" style="font-size: 8pt;">
+                  <th>SUBJECT / MATERIAL</th><th>MARK</th><th>QTY</th><th>WIDTH</th><th>LENGTH</th><th>TOTAL REQ (LINE + 25%)</th>
+                </tr>
+              </thead>
+              <tbody>${rows}</tbody>
+            </table>
+          </div>
+        `;
+      }
+
+      if (hardwareItems.length > 0) {
+        let rows = hardwareItems.map(r => `
+          <tr>
+            <td>${r.subject}</td>
+            <td>${r.mark || '&nbsp;'}</td>
+            <td style="font-weight: bold;">${r.qty}</td>
+            <td>${r.notes || '&nbsp;'}</td>
+          </tr>
+        `).join('');
+
+        printHtml += `
+          <div style="margin-bottom: 12px;">
+            <div style="background-color: #dc2626; color: #ffffff; font-weight: bold; font-size: 8pt; padding: 4px 6px;" class="print-header-banner">HARDWARE & LOOSE ITEMS</div>
+            <table style="width: 100%; table-layout: fixed; margin-top: 0 !important;">
+              <colgroup><col style="width: 35%;"><col style="width: 25%;"><col style="width: 15%;"><col style="width: 25%;"></colgroup>
+              <thead>
+                <tr class="print-table-header" style="font-size: 8pt;">
+                  <th>SUBJECT / MATERIAL</th><th>MARK</th><th>QTY</th><th>NOTES / SIZE</th>
+                </tr>
+              </thead>
+              <tbody>${rows}</tbody>
+            </table>
+          </div>
+        `;
+      }
+
+      printGroupsContainer.innerHTML = printHtml;
+      window.print();
+    }
+
+    // BUILDER FUNCTIONS (PROJECT TRANSMITTAL)
     function addLinkedACLine() {
       const jobId = document.getElementById('input-job-id').value.trim();
       const acNum = document.getElementById('input-ac-num').value.trim();
@@ -789,6 +1174,10 @@
     }
 
     function triggerPrintPDF() {
+      document.getElementById('print-doc-title').innerText = "PROJECT TRANSMITTAL";
+      document.getElementById('print-meta-table').style.display = 'table';
+      document.getElementById('print-incexc-table').style.display = 'table';
+
       document.getElementById('print-out-client').innerText = document.getElementById('meta-client').value.trim() || "N/A";
       document.getElementById('print-out-project').innerText = document.getElementById('meta-project').value.trim() || "N/A";
       
@@ -890,7 +1279,7 @@
     }
 
     function switchTab(tab) {
-      ['suppliers', 'generator', 'staff'].forEach(t => {
+      ['suppliers', 'generator', 'bom', 'staff'].forEach(t => {
         document.getElementById(`view-${t}`).classList.add('hidden');
         document.getElementById(`tab-${t}`).className = "px-3 py-1.5 rounded-md text-zinc-400 hover:text-white";
       });
