@@ -326,19 +326,27 @@
         </h2>
         <p class="text-xs text-zinc-500 dark:text-zinc-400 mb-6">Capture drawing measurements on the fly. Linear items are automatically aggregated per material type to calculate stock bar requirements, and plates are dynamically calculated with a 25% kerf/waste line dimension.</p>
 
-        <!-- BOM METADATA FORM -->
-        <div class="builder-section grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 bg-zinc-100 p-4 rounded-xl text-xs border border-zinc-200">
+        <!-- BOM METADATA FORM (INCLUDING JOB ID & AC NUMBER) -->
+        <div class="builder-section grid grid-cols-1 md:grid-cols-5 gap-3 mb-6 bg-zinc-100 p-4 rounded-xl text-xs border border-zinc-200">
           <div>
             <label class="block font-semibold mb-1 text-zinc-700 dark:text-zinc-300">Client Name</label>
-            <input type="text" id="bom-meta-client" placeholder="e.g. NCP International" class="w-full p-2.5 rounded-lg text-sm">
+            <input type="text" id="bom-meta-client" placeholder="e.g. NCP International" class="w-full p-2 rounded-lg text-sm">
           </div>
-          <div>
+          <div class="md:col-span-2">
             <label class="block font-semibold mb-1 text-zinc-700 dark:text-zinc-300">Project Name</label>
-            <input type="text" id="bom-meta-project" placeholder="e.g. SHANTA NEW - CHOCKEY BLOCKS" class="w-full p-2.5 rounded-lg text-sm">
+            <input type="text" id="bom-meta-project" placeholder="e.g. SHANTA NEW - CHOCKEY BLOCKS" class="w-full p-2 rounded-lg text-sm">
           </div>
           <div>
+            <label class="block font-semibold mb-1 text-zinc-700 dark:text-zinc-300">Job ID *</label>
+            <input type="text" id="bom-meta-jobid" placeholder="e.g. 5276" class="w-full p-2 rounded-lg font-bold text-sm">
+          </div>
+          <div>
+            <label class="block font-semibold mb-1 text-zinc-700 dark:text-zinc-300">AC Number *</label>
+            <input type="text" id="bom-meta-acnum" placeholder="e.g. AC2902" class="w-full p-2 rounded-lg font-bold text-sm">
+          </div>
+          <div class="md:col-span-2">
             <label class="block font-semibold mb-1 text-zinc-700 dark:text-zinc-300">Technical Buyer</label>
-            <input type="text" id="bom-meta-buyer" placeholder="Enter Buyer Name" class="w-full p-2.5 rounded-lg font-semibold text-sm">
+            <input type="text" id="bom-meta-buyer" placeholder="Enter Buyer Name" class="w-full p-2 rounded-lg font-semibold text-sm">
           </div>
         </div>
 
@@ -506,7 +514,7 @@
       </tr>
     </table>
 
-    <!-- METADATA TABLE (CLIENT, PROJECT, BUYER ONLY) -->
+    <!-- METADATA TABLE (CLIENT, PROJECT, JOB ID, AC NUMBER, BUYER) -->
     <table style="width: 100%; margin-bottom: 12px;">
       <colgroup>
         <col style="width: 18%;">
@@ -518,12 +526,18 @@
         <tr>
           <td style="font-weight: bold;">CLIENT:</td>
           <td id="print-bom-client">N/A</td>
-          <td style="font-weight: bold;">TECHNICAL BUYER:</td>
-          <td id="print-bom-buyer">N/A</td>
+          <td style="font-weight: bold;">JOB ID:</td>
+          <td style="font-weight: bold;" id="print-bom-jobid">N/A</td>
         </tr>
         <tr>
           <td style="font-weight: bold;">PROJECT NAME:</td>
-          <td id="print-bom-project" colspan="3">N/A</td>
+          <td id="print-bom-project">N/A</td>
+          <td style="font-weight: bold;">AC NUMBER:</td>
+          <td style="font-weight: bold;" id="print-bom-acnum">N/A</td>
+        </tr>
+        <tr>
+          <td style="font-weight: bold;">TECHNICAL BUYER:</td>
+          <td id="print-bom-buyer" colspan="3">N/A</td>
         </tr>
       </tbody>
     </table>
@@ -1040,6 +1054,8 @@
 
       document.getElementById('print-bom-client').innerText = document.getElementById('bom-meta-client').value.trim() || "N/A";
       document.getElementById('print-bom-project').innerText = document.getElementById('bom-meta-project').value.trim() || "N/A";
+      document.getElementById('print-bom-jobid').innerText = document.getElementById('bom-meta-jobid').value.trim() || "N/A";
+      document.getElementById('print-bom-acnum').innerText = document.getElementById('bom-meta-acnum').value.trim() || "N/A";
       document.getElementById('print-bom-buyer').innerText = document.getElementById('bom-meta-buyer').value.trim() || "N/A";
 
       const printGroupsContainer = document.getElementById('print-bom-groups-container');
@@ -1211,9 +1227,9 @@
           <tr class="border-b border-zinc-200 dark:border-zinc-800 text-xs">
             <td class="p-2 font-bold w-[25%]">${item.category || '--'}</td>
             <td class="p-2 w-[25%]"">${item.subCategory || '--'}</td>
-            <td class="p-2 w-[30%]">${item.supplier || '--'}</td>
+            <td class="p-2 w-[30%]"">${item.supplier || '--'}</td>
             <td class="p-2 w-[15%]" font-bold>${item.po || '--'}</td>
-            <td class="p-2 text-right w-[5%]"">
+            <td class="p-2 text-right w-[5%]">
               <button onclick="removeACItem('${jobId}', 'supList', ${idx})" class="text-red-500 hover:underline">Remove</button>
             </td>
           </tr>
