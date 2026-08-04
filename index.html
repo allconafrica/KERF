@@ -54,8 +54,8 @@
       box-shadow: 0 0 0 1px #dc2626;
     }
 
-    /* Hide Print Preview Template on Screen */
-    #print-template {
+    /* Hide Print Templates on Screen */
+    #print-template, #print-template-bom {
       display: none;
     }
 
@@ -86,8 +86,18 @@
         display: none !important;
       }
 
-      /* Display print template exclusively with safety buffer */
-      #print-template {
+      /* Display active print template exclusively */
+      body.printing-transmittal #print-template {
+        display: block !important;
+        width: calc(100% - 2px) !important;
+        margin: 0 auto !important;
+        font-family: Arial, Helvetica, sans-serif !important;
+        font-size: 8.5pt;
+        color: #000000 !important;
+        background-color: #ffffff !important;
+      }
+
+      body.printing-bom #print-template-bom {
         display: block !important;
         width: calc(100% - 2px) !important;
         margin: 0 auto !important;
@@ -112,7 +122,7 @@
       }
 
       /* Table Structure & Border Lockdown */
-      #print-template table {
+      .print-container table {
         display: table !important;
         width: 100% !important;
         border-collapse: collapse !important;
@@ -122,12 +132,12 @@
         box-sizing: border-box !important;
       }
 
-      #print-template tr { 
+      .print-container tr { 
         display: table-row !important; 
       }
 
-      #print-template th, 
-      #print-template td { 
+      .print-container th, 
+      .print-container td { 
         display: table-cell !important;
         border: 1px solid #000000 !important;
         padding: 5px 8px !important;
@@ -138,8 +148,8 @@
       }
 
       /* Remove outer borders for clean top header table */
-      #print-template table.no-border, 
-      #print-template table.no-border td {
+      .print-container table.no-border, 
+      .print-container table.no-border td {
         border: none !important;
       }
     }
@@ -316,6 +326,22 @@
         </h2>
         <p class="text-xs text-zinc-500 dark:text-zinc-400 mb-6">Capture drawing measurements on the fly. Linear items are automatically aggregated per material type to calculate stock bar requirements, and plates are dynamically calculated with a 25% kerf/waste line dimension.</p>
 
+        <!-- BOM METADATA FORM -->
+        <div class="builder-section grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 bg-zinc-100 p-4 rounded-xl text-xs border border-zinc-200">
+          <div>
+            <label class="block font-semibold mb-1 text-zinc-700 dark:text-zinc-300">Client Name</label>
+            <input type="text" id="bom-meta-client" placeholder="e.g. NCP International" class="w-full p-2.5 rounded-lg text-sm">
+          </div>
+          <div>
+            <label class="block font-semibold mb-1 text-zinc-700 dark:text-zinc-300">Project Name</label>
+            <input type="text" id="bom-meta-project" placeholder="e.g. SHANTA NEW - CHOCKEY BLOCKS" class="w-full p-2.5 rounded-lg text-sm">
+          </div>
+          <div>
+            <label class="block font-semibold mb-1 text-zinc-700 dark:text-zinc-300">Technical Buyer</label>
+            <input type="text" id="bom-meta-buyer" placeholder="Enter Buyer Name" class="w-full p-2.5 rounded-lg font-semibold text-sm">
+          </div>
+        </div>
+
         <!-- BOM ENTRY FORM -->
         <div class="builder-section bg-red-950/20 p-4 rounded-xl border border-red-200 dark:border-zinc-700 mb-6 relative pb-16">
           <h3 class="text-xs font-bold uppercase mb-3 text-red-600 dark:text-red-400"><i class="fa-solid fa-plus-circle mr-2"></i>Add Material Item</h3>
@@ -397,8 +423,8 @@
 
   </main>
 
-  <!-- PRINT TEMPLATE -->
-  <div id="print-template">
+  <!-- PRINT TEMPLATE 1: PROJECT TRANSMITTAL -->
+  <div id="print-template" class="print-container">
     
     <!-- HEADER -->
     <table class="no-border" style="width: 100%; border-bottom: 2px solid #dc2626 !important; padding-bottom: 8px; margin-bottom: 12px;">
@@ -407,7 +433,7 @@
           <div style="margin-bottom: 4px;">
             <img src="./ALLCON-Logo.jpg" alt="ALLCON Logo" style="height: 44px; width: auto; max-width: 260px; object-fit: contain;" onerror="this.onerror=null; this.outerHTML='<div class=\'print-header-banner\' style=\'font-weight: 900; font-size: 20pt; padding: 4px 12px; display: inline-block; letter-spacing: 2px;\'>ALLCON</div>';">
           </div>
-          <div style="font-size: 8.5pt; color: #000000; text-transform: uppercase; font-weight: bold; margin-top: 6px;" id="print-doc-title">PROJECT TRANSMITTAL</div>
+          <div style="font-size: 8.5pt; color: #000000; text-transform: uppercase; font-weight: bold; margin-top: 6px;">PROJECT TRANSMITTAL</div>
         </td>
         <td style="vertical-align: top; text-align: right; width: 40%;">
           <div style="font-size: 8.5pt; color: #000000; font-weight: bold;" id="print-out-gen-date"></div>
@@ -416,7 +442,7 @@
     </table>
 
     <!-- METADATA TABLE -->
-    <table style="width: 100%; margin-bottom: 12px;" id="print-meta-table">
+    <table style="width: 100%; margin-bottom: 12px;">
       <colgroup>
         <col style="width: 18%;">
         <col style="width: 32%;">
@@ -440,7 +466,7 @@
     </table>
 
     <!-- INCLUSIONS & EXCLUSIONS -->
-    <table style="width: 100%; margin-bottom: 12px;" id="print-incexc-table">
+    <table style="width: 100%; margin-bottom: 12px;">
       <colgroup>
         <col style="width: 18%;">
         <col style="width: 82%;">
@@ -457,8 +483,53 @@
       </tbody>
     </table>
 
-    <!-- LINKED AC SCHEDULE / BOM CONTAINER -->
+    <!-- LINKED AC SCHEDULE CONTAINER -->
     <div id="print-job-groups-container" style="margin-bottom: 12px;"></div>
+
+  </div>
+
+  <!-- PRINT TEMPLATE 2: SEPARATE BOM CALCULATOR PRINT LAYOUT -->
+  <div id="print-template-bom" class="print-container">
+    
+    <!-- HEADER -->
+    <table class="no-border" style="width: 100%; border-bottom: 2px solid #dc2626 !important; padding-bottom: 8px; margin-bottom: 12px;">
+      <tr>
+        <td style="vertical-align: top; width: 60%; text-align: left;">
+          <div style="margin-bottom: 4px;">
+            <img src="./ALLCON-Logo.jpg" alt="ALLCON Logo" style="height: 44px; width: auto; max-width: 260px; object-fit: contain;" onerror="this.onerror=null; this.outerHTML='<div class=\'print-header-banner\' style=\'font-weight: 900; font-size: 20pt; padding: 4px 12px; display: inline-block; letter-spacing: 2px;\'>ALLCON</div>';">
+          </div>
+          <div style="font-size: 8.5pt; color: #000000; text-transform: uppercase; font-weight: bold; margin-top: 6px;">BOM & MATERIAL REQUIREMENT CALCULATOR</div>
+        </td>
+        <td style="vertical-align: top; text-align: right; width: 40%;">
+          <div style="font-size: 8.5pt; color: #000000; font-weight: bold;" id="print-bom-gen-date"></div>
+        </td>
+      </tr>
+    </table>
+
+    <!-- METADATA TABLE (CLIENT, PROJECT, BUYER ONLY) -->
+    <table style="width: 100%; margin-bottom: 12px;">
+      <colgroup>
+        <col style="width: 18%;">
+        <col style="width: 32%;">
+        <col style="width: 22%;">
+        <col style="width: 28%;">
+      </colgroup>
+      <tbody>
+        <tr>
+          <td style="font-weight: bold;">CLIENT:</td>
+          <td id="print-bom-client">N/A</td>
+          <td style="font-weight: bold;">TECHNICAL BUYER:</td>
+          <td id="print-bom-buyer">N/A</td>
+        </tr>
+        <tr>
+          <td style="font-weight: bold;">PROJECT NAME:</td>
+          <td id="print-bom-project" colspan="3">N/A</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- BOM TABLES CONTAINER -->
+    <div id="print-bom-groups-container" style="margin-bottom: 12px;"></div>
 
   </div>
 
@@ -826,7 +897,6 @@
 
       // 1. LINEAR SECTION
       if (linearItems.length > 0) {
-        // Group linear items by subject for summary calculation
         const groupedLinear = {};
         linearItems.forEach(item => {
           if (!groupedLinear[item.subject]) {
@@ -856,7 +926,6 @@
             `;
           });
 
-          // Summary sub-row for this linear material
           linearRowsHtml += `
             <tr class="bg-red-50 dark:bg-red-950/30 font-bold text-xs border-b-2 border-red-200 dark:border-red-900">
               <td colspan="4" class="p-2.5 text-right uppercase">Total Required for ${subj}: ${group.totalLen} mm (${stockNeeded} x ${group.stockLen}mm Bars Needed)</td>
@@ -960,11 +1029,20 @@
     function triggerPrintBOM() {
       if (bomItemsList.length === 0) return alert('No BOM items to print.');
 
-      document.getElementById('print-doc-title').innerText = "BOM & MATERIAL REQUIREMENT CALCULATOR";
-      document.getElementById('print-meta-table').style.display = 'none';
-      document.getElementById('print-incexc-table').style.display = 'none';
+      // Set body print class to target print-template-bom
+      document.body.className = document.body.className.replace(' printing-transmittal', '') + ' printing-bom';
 
-      const printGroupsContainer = document.getElementById('print-job-groups-container');
+      const today = new Date();
+      const yyyy = today.getFullYear();
+      const mm = String(today.getMonth() + 1).padStart(2, '0');
+      const dd = String(today.getDate()).padStart(2, '0');
+      document.getElementById('print-bom-gen-date').innerText = `Generated: ${yyyy}-${mm}-${dd}`;
+
+      document.getElementById('print-bom-client').innerText = document.getElementById('bom-meta-client').value.trim() || "N/A";
+      document.getElementById('print-bom-project').innerText = document.getElementById('bom-meta-project').value.trim() || "N/A";
+      document.getElementById('print-bom-buyer').innerText = document.getElementById('bom-meta-buyer').value.trim() || "N/A";
+
+      const printGroupsContainer = document.getElementById('print-bom-groups-container');
       
       const linearItems = bomItemsList.filter(i => i.type === 'LINEAR');
       const plateItems = bomItemsList.filter(i => i.type === 'PLATE');
@@ -1135,7 +1213,9 @@
             <td class="p-2 w-[25%]"">${item.subCategory || '--'}</td>
             <td class="p-2 w-[30%]">${item.supplier || '--'}</td>
             <td class="p-2 w-[15%]" font-bold>${item.po || '--'}</td>
-            <td class="p-2 text-right w-[5%]"><button onclick="removeACItem('${jobId}', 'supList', ${idx})" class="text-red-500 hover:underline">Remove</button></td>
+            <td class="p-2 text-right w-[5%]"">
+              <button onclick="removeACItem('${jobId}', 'supList', ${idx})" class="text-red-500 hover:underline">Remove</button>
+            </td>
           </tr>
         `).join('');
 
@@ -1174,9 +1254,8 @@
     }
 
     function triggerPrintPDF() {
-      document.getElementById('print-doc-title').innerText = "PROJECT TRANSMITTAL";
-      document.getElementById('print-meta-table').style.display = 'table';
-      document.getElementById('print-incexc-table').style.display = 'table';
+      // Set body print class to target print-template (Project Transmittal)
+      document.body.className = document.body.className.replace(' printing-bom', '') + ' printing-transmittal';
 
       document.getElementById('print-out-client').innerText = document.getElementById('meta-client').value.trim() || "N/A";
       document.getElementById('print-out-project').innerText = document.getElementById('meta-project').value.trim() || "N/A";
@@ -1235,7 +1314,7 @@
                 <tbody>${acRows || '<tr><td colspan="2">&nbsp;</td></tr>'}</tbody>
               </table>
 
-              <!-- SEPARATION GAP BETWEEN AC TABLE AND MATERIAL/SUPPLIER TABLE -->
+              <!-- SEPARATION GAP -->
               <div style="height: 10px; font-size: 0; line-height: 0;">&nbsp;</div>
 
               <table style="width: 100%; table-layout: fixed; margin-top: 0 !important;">
