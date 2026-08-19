@@ -414,7 +414,7 @@
           </div>
         </div>
 
-        <!-- JOB ID SCHEDULE BUILDER -->
+        <!-- SIMPLIFIED JOB ID SCHEDULE BUILDER -->
         <div class="builder-section bg-red-950/10 p-4 rounded-xl border border-red-900/30 mb-6 relative pb-16">
           <h3 class="text-xs font-bold uppercase mb-3 text-red-400"><i class="fa-solid fa-diagram-project mr-2"></i>Job ID Schedule Builder</h3>
           
@@ -460,7 +460,7 @@
 
           <div class="absolute right-4 bottom-4">
             <button onclick="addLinkedACLine()" class="bg-red-600 hover:bg-red-700 text-white font-bold px-5 py-2.5 rounded-lg text-xs transition shadow flex items-center gap-1.5">
-              <i class="fa-solid fa-plus"></i> Add Entry
+              <i class="fa-solid fa-plus"></i> Add Line Entry
             </button>
           </div>
 
@@ -758,6 +758,7 @@ Thank you in advance.</div>
     const STAFF_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSNynT5Snb9PgJp6ti3QpuHUr9fX8bGKEG10H8kjkbCna_ZfkEC7aM06QrwkjHwxR1n6uu3ZgvvaKu6/pub?gid=1666500445&single=true&output=csv";
     const SUPPLIERS_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSNynT5Snb9PgJp6ti3QpuHUr9fX8bGKEG10H8kjkbCna_ZfkEC7aM06QrwkjHwxR1n6uu3ZgvvaKu6/pub?gid=0&single=true&output=csv";
 
+    // SIMPLIFIED DATA ARCHITECTURE
     let jobDataMap = {}; 
     let bomItemsList = []; 
     let liveStaffData = [];
@@ -1096,7 +1097,7 @@ Thank you in advance.</div>
       document.getElementById('bom-notes').value = '';
 
       renderBomTables();
-      pullFromBOM(); // Auto sync BOM items to RFQ Generator
+      pullFromBOM();
     }
 
     function removeBomItem(index) {
@@ -1443,7 +1444,7 @@ Thank you in advance.</div>
       window.location.href = `mailto:${emailAddress}?subject=${subject}&body=${body}`;
     }
 
-    // BUILDER FUNCTIONS (PROJECT TRANSMITTAL)
+    // UPDATED & SIMPLIFIED BUILDER FUNCTIONS (PROJECT TRANSMITTAL)
     function addLinkedACLine() {
       const jobId = document.getElementById('input-job-id').value.trim();
       const acNum = document.getElementById('input-ac-num').value.trim();
@@ -1456,17 +1457,19 @@ Thank you in advance.</div>
       if (!jobId) return alert('Please enter a Job ID.');
 
       if (!jobDataMap[jobId]) {
-        jobDataMap[jobId] = { acList: [], supList: [] };
+        jobDataMap[jobId] = [];
       }
 
-      if (acNum || description) {
-        jobDataMap[jobId].acList.push({ num: acNum, desc: description });
-      }
+      jobDataMap[jobId].push({
+        num: acNum,
+        desc: description,
+        category: category,
+        subCategory: subCategory,
+        supplier: supplier,
+        po: poNum
+      });
 
-      if (category || supplier || poNum) {
-        jobDataMap[jobId].supList.push({ category, subCategory, supplier, po: poNum });
-      }
-
+      // Clear input fields for next line entry
       document.getElementById('input-ac-num').value = '';
       document.getElementById('input-ac-desc').value = '';
       document.getElementById('input-ac-category').value = '';
@@ -1477,10 +1480,10 @@ Thank you in advance.</div>
       renderGroupedACTable();
     }
 
-    function removeACItem(jobId, type, index) {
+    function removeACItem(jobId, index) {
       if (jobDataMap[jobId]) {
-        jobDataMap[jobId][type].splice(index, 1);
-        if (jobDataMap[jobId].acList.length === 0 && jobDataMap[jobId].supList.length === 0) {
+        jobDataMap[jobId].splice(index, 1);
+        if (jobDataMap[jobId].length === 0) {
           delete jobDataMap[jobId];
         }
         renderGroupedACTable();
@@ -1498,22 +1501,16 @@ Thank you in advance.</div>
 
       container.innerHTML = '';
       jobKeys.forEach(jobId => {
-        let acRows = jobDataMap[jobId].acList.map((item, idx) => `
+        let lineRows = jobDataMap[jobId].map((item, idx) => `
           <tr class="border-b border-zinc-800 text-xs">
-            <td class="p-2 font-bold text-red-400 w-[30%]">${item.num || '--'}</td>
-            <td class="p-2 w-[60%] text-zinc-300">${item.desc || '--'}</td>
-            <td class="p-2 text-right w-[10%]"><button onclick="removeACItem('${jobId}', 'acList', ${idx})" class="text-red-500 hover:underline">Remove</button></td>
-          </tr>
-        `).join('');
-
-        let supRows = jobDataMap[jobId].supList.map((item, idx) => `
-          <tr class="border-b border-zinc-800 text-xs">
-            <td class="p-2 font-bold w-[25%]">${item.category || '--'}</td>
-            <td class="p-2 w-[25%]">${item.subCategory || '--'}</td>
-            <td class="p-2 w-[30%]">${item.supplier || '--'}</td>
-            <td class="p-2 w-[15%] font-bold">${item.po || '--'}</td>
-            <td class="p-2 text-right w-[5%]">
-              <button onclick="removeACItem('${jobId}', 'supList', ${idx})" class="text-red-500 hover:underline">Remove</button>
+            <td class="p-2 font-bold text-red-400">${item.num || '--'}</td>
+            <td class="p-2 text-zinc-300">${item.desc || '--'}</td>
+            <td class="p-2 font-semibold">${item.category || '--'}</td>
+            <td class="p-2">${item.subCategory || '--'}</td>
+            <td class="p-2">${item.supplier || '--'}</td>
+            <td class="p-2 font-bold">${item.po || '--'}</td>
+            <td class="p-2 text-right">
+              <button onclick="removeACItem('${jobId}', ${idx})" class="text-red-500 hover:underline">Remove</button>
             </td>
           </tr>
         `).join('');
@@ -1522,22 +1519,11 @@ Thank you in advance.</div>
           <div class="bg-[#27272a]/60 border border-zinc-800 rounded-lg overflow-hidden p-3 mb-4">
             <div class="bg-[#121215] text-white text-xs font-bold px-3 py-2 rounded mb-2">JOB ID: ${jobId}</div>
             
-            <div class="text-[11px] font-semibold mb-1 text-zinc-400">AC & Description Schedule</div>
-            <table class="w-full text-left border-collapse mb-3">
+            <table class="w-full text-left border-collapse">
               <thead>
                 <tr class="bg-[#18181b] text-[10px] text-zinc-400">
                   <th class="p-1.5">AC Number</th>
                   <th class="p-1.5">Description</th>
-                  <th class="p-1.5 text-right">Action</th>
-                </tr>
-              </thead>
-              <tbody>${acRows || '<tr><td colspan="3" class="p-2 italic text-zinc-400">No AC items added</td></tr>'}</tbody>
-            </table>
-
-            <div class="text-[11px] font-semibold mb-1 text-zinc-400">Category & Supplier Schedule</div>
-            <table class="w-full text-left border-collapse">
-              <thead>
-                <tr class="bg-[#18181b] text-[10px] text-zinc-400">
                   <th class="p-1.5">Category</th>
                   <th class="p-1.5">Sub-Category</th>
                   <th class="p-1.5">Supplier</th>
@@ -1545,7 +1531,7 @@ Thank you in advance.</div>
                   <th class="p-1.5 text-right">Action</th>
                 </tr>
               </thead>
-              <tbody>${supRows || '<tr><td colspan="5" class="p-2 italic text-zinc-400">No supplier items added</td></tr>'}</tbody>
+              <tbody>${lineRows}</tbody>
             </table>
           </div>
         `;
@@ -1578,19 +1564,14 @@ Thank you in advance.</div>
       const jobKeys = Object.keys(jobDataMap);
       if (jobKeys.length > 0) {
         jobKeys.forEach(jobId => {
-          let acRows = jobDataMap[jobId].acList.map(item => `
+          let lineRows = jobDataMap[jobId].map(item => `
             <tr>
-              <td style="width: 30%;">${item.num || '&nbsp;'}</td>
-              <td style="width: 70%;">${item.desc || '&nbsp;'}</td>
-            </tr>
-          `).join('');
-
-          let supRows = jobDataMap[jobId].supList.map(item => `
-            <tr>
-              <td style="width: 25%;">${item.category || '&nbsp;'}</td>
-              <td style="width: 25%;">${item.subCategory || '&nbsp;'}</td>
-              <td style="width: 30%;">${item.supplier || '&nbsp;'}</td>
-              <td style="width: 20%; font-weight: bold;">${item.po || '&nbsp;'}</td>
+              <td style="width: 15%; font-weight: bold;">${item.num || '&nbsp;'}</td>
+              <td style="width: 30%;">${item.desc || '&nbsp;'}</td>
+              <td style="width: 15%;">${item.category || '&nbsp;'}</td>
+              <td style="width: 15%;">${item.subCategory || '&nbsp;'}</td>
+              <td style="width: 15%;">${item.supplier || '&nbsp;'}</td>
+              <td style="width: 10%; font-weight: bold;">${item.po || '&nbsp;'}</td>
             </tr>
           `).join('');
 
@@ -1600,36 +1581,24 @@ Thank you in advance.</div>
               
               <table style="width: 100%; table-layout: fixed; margin-bottom: 0 !important;">
                 <colgroup>
+                  <col style="width: 15%;">
                   <col style="width: 30%;">
-                  <col style="width: 70%;">
+                  <col style="width: 15%;">
+                  <col style="width: 15%;">
+                  <col style="width: 15%;">
+                  <col style="width: 10%;">
                 </colgroup>
                 <thead>
                   <tr class="print-table-header" style="font-size: 8pt;">
                     <th style="text-align: left; font-weight: bold;">AC NUMBER</th>
                     <th style="text-align: left; font-weight: bold;">DESCRIPTION</th>
-                  </tr>
-                </thead>
-                <tbody>${acRows || '<tr><td colspan="2">&nbsp;</td></tr>'}</tbody>
-              </table>
-
-              <div style="height: 10px; font-size: 0; line-height: 0;">&nbsp;</div>
-
-              <table style="width: 100%; table-layout: fixed; margin-top: 0 !important;">
-                <colgroup>
-                  <col style="width: 25%;">
-                  <col style="width: 25%;">
-                  <col style="width: 30%;">
-                  <col style="width: 20%;">
-                </colgroup>
-                <thead>
-                  <tr class="print-table-header" style="font-size: 8pt;">
                     <th style="text-align: left; font-weight: bold;">CATEGORY</th>
-                    <th style="text-align: left; font-weight: bold;">SUB-CATEGORY</th>
+                    <th style="text-align: left; font-weight: bold;">SUB-CAT</th>
                     <th style="text-align: left; font-weight: bold;">SUPPLIER</th>
-                    <th style="text-align: left; font-weight: bold;">PURCHASE ORDER</th>
+                    <th style="text-align: left; font-weight: bold;">PO</th>
                   </tr>
                 </thead>
-                <tbody>${supRows || '<tr><td colspan="4">&nbsp;</td></tr>'}</tbody>
+                <tbody>${lineRows}</tbody>
               </table>
             </div>
           `;
