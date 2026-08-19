@@ -438,99 +438,107 @@
     π
   </button>
 
-  <!-- REVISED EASY-TO-UNDERSTAND PI CALCULATOR MODAL -->
+  <!-- REFINED PI CALCULATOR MODAL (MATCHING DRAWING MIL26.007-DI-2217-04-4) -->
   <div id="pi-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
     <div class="bg-[#18181b] border border-zinc-800 rounded-2xl w-full max-w-lg p-6 shadow-2xl relative max-h-[90vh] overflow-y-auto">
+      
+      <!-- CLOSE BUTTON -->
       <button onclick="togglePiModal()" class="absolute top-4 right-4 text-zinc-400 hover:text-white text-lg">
         <i class="fa-solid fa-xmark"></i>
       </button>
 
-      <div class="flex items-center gap-3 mb-4">
-        <div class="w-10 h-10 rounded-xl icon-badge-red flex items-center justify-center font-black text-lg">
+      <!-- HEADER -->
+      <div class="flex items-center gap-3 mb-5">
+        <div class="w-10 h-10 rounded-xl icon-badge-red flex items-center justify-center font-black text-xl flex-shrink-0">
           π
         </div>
         <div>
-          <h3 class="text-lg font-bold text-white">Rolled Material Cut Length Calculator</h3>
-          <p class="text-xs text-zinc-400">Calculate exact flat length for cylinders, barrel shells, rings & rolled bars</p>
+          <h3 class="text-lg font-bold text-white leading-tight">Rolled Bar & Ring Cut Length Calculator</h3>
+          <p class="text-xs text-zinc-400">Calculate exact unrolled flat length from drawing dimensions</p>
         </div>
       </div>
 
-      <!-- VISUAL EXPLANATION CARD -->
-      <div class="bg-[#27272a] border border-zinc-700/60 p-3 rounded-xl mb-4 text-xs text-zinc-300 flex items-start gap-3">
-        <div class="bg-red-950/40 border border-red-800/40 p-2 rounded-lg text-red-400 text-center font-bold min-w-[70px]">
-          <i class="fa-solid fa-circle-notch text-2xl block mb-1"></i>
-          <span class="text-[9px] uppercase">Mean Line</span>
+      <!-- QUICK EXAMPLE CARD BASED ON DRAWING MIL26.007 -->
+      <div class="bg-red-950/20 border border-red-900/40 p-3 rounded-xl mb-5 text-xs">
+        <div class="flex items-center justify-between mb-1">
+          <span class="font-bold text-red-400 text-[11px] uppercase tracking-wider">
+            <i class="fa-solid fa-file-invoice mr-1"></i> Drawing Example (MIL26.007)
+          </span>
+          <button onclick="applyDrawingExample()" class="text-[10px] bg-red-600 hover:bg-red-700 text-white font-bold px-2 py-0.5 rounded transition">
+            Load Example Values
+          </button>
         </div>
-        <div>
-          <p class="font-semibold text-white mb-0.5">Neutral Axis Rule ($\text{Mean Diameter} \times \pi$)</p>
-          <p class="text-[11px] text-zinc-400 leading-tight">
-            When rolling plate, square bar, or flat bar around a cylinder/barrel, the flat length equals the <strong>Center-Line (Mean) Diameter</strong> multiplied by $\pi$.
-          </p>
-        </div>
+        <p class="text-zinc-300 text-[11px] leading-snug">
+          Drawing calls for <strong>1830mm Inside Diameter</strong> wrapped with <strong>70mm × 70mm Square Bar</strong>. Centerline diameter is 1900mm ($1830 + 70$).
+        </p>
       </div>
 
       <div class="space-y-4 text-xs">
         
-        <!-- SECTION 1: MATERIAL PRESET -->
-        <div class="grid grid-cols-2 gap-3">
+        <!-- INPUT GROUP 1: STOCK TYPE & MEASUREMENT BASE -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
-            <label class="block font-bold text-zinc-300 mb-1">Stock Type</label>
-            <select id="pi-stock-type" onchange="updatePiPreset(); calculateFlatLength();" class="w-full p-2.5 rounded-lg bg-[#27272a] text-white border border-zinc-700 font-semibold">
-              <option value="plate">Plate / Sheet Metal Shell</option>
+            <label class="block font-bold text-zinc-300 mb-1">1. Steel Section Type</label>
+            <select id="pi-stock-type" onchange="updatePiPreset(); calculateFlatLength();" class="w-full p-2.5 rounded-lg bg-[#27272a] text-white border border-zinc-700 font-semibold focus:border-red-500">
               <option value="square">Square Bar / Heavy Section Ring</option>
-              <option value="flat">Flat Bar (On Edge / Flat)</option>
-              <option value="round">Round Tube / Pipe Shell</option>
+              <option value="flat">Flat Bar (Rolled on Edge/Flat)</option>
+              <option value="plate">Plate / Sheet Shell</option>
+              <option value="round">Round Tube / Pipe</option>
             </select>
           </div>
 
           <div>
-            <label class="block font-bold text-zinc-300 mb-1">Diameter Dimension Given</label>
-            <select id="pi-mode" onchange="calculateFlatLength()" class="w-full p-2.5 rounded-lg bg-[#27272a] text-white border border-zinc-700 font-semibold">
-              <option value="id">Inside Diameter (ID) - Barrel OD</option>
-              <option value="od">Outside Diameter (OD) - Finished Shell</option>
-              <option value="mean">Mean / Neutral Axis Diameter (MD)</option>
+            <label class="block font-bold text-zinc-300 mb-1">2. Drawing Dimension Base</label>
+            <select id="pi-mode" onchange="calculateFlatLength()" class="w-full p-2.5 rounded-lg bg-[#27272a] text-white border border-zinc-700 font-semibold focus:border-red-500">
+              <option value="id">Inside Diameter (ID) — Barrel / Shell Size</option>
+              <option value="od">Outside Diameter (OD) — Finished Outer Ring</option>
+              <option value="mean">Centerline Diameter (Mean Pitch)</option>
             </select>
           </div>
         </div>
 
-        <!-- SECTION 2: DIMENSION INPUTS -->
-        <div class="bg-[#27272a]/50 p-4 rounded-xl border border-zinc-800 space-y-3">
-          <div class="grid grid-cols-2 gap-3">
+        <!-- INPUT GROUP 2: CORE DIMENSIONS -->
+        <div class="bg-[#27272a]/40 p-4 rounded-xl border border-zinc-800 space-y-3">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
-              <label class="block font-bold text-zinc-200 mb-1" id="pi-dia-label">Barrel / Mandrel Dia (mm)</label>
-              <input type="number" id="pi-dia" oninput="calculateFlatLength()" placeholder="e.g. 2000" class="w-full p-2.5 rounded-lg bg-[#18181b] text-white border border-zinc-700 font-bold">
+              <label class="block font-bold text-zinc-200 mb-1" id="pi-dia-label">Diameter Dimension (mm)</label>
+              <input type="number" id="pi-dia" oninput="calculateFlatLength()" placeholder="e.g. 1830" class="w-full p-2.5 rounded-lg bg-[#18181b] text-white border border-zinc-700 font-bold focus:border-red-500">
             </div>
 
             <div>
-              <label class="block font-bold text-zinc-200 mb-1" id="pi-thk-label">Material Thickness / Radial Width (mm)</label>
-              <input type="number" id="pi-thk" oninput="calculateFlatLength()" placeholder="e.g. 35" class="w-full p-2.5 rounded-lg bg-[#18181b] text-white border border-zinc-700 font-bold">
-              <p class="text-[10px] text-zinc-400 mt-1" id="pi-thk-help">For 200mm x 35mm bar wrapped around barrel, enter 35mm (radial depth).</p>
+              <label class="block font-bold text-zinc-200 mb-1" id="pi-thk-label">Radial Thickness / Depth (mm)</label>
+              <input type="number" id="pi-thk" oninput="calculateFlatLength()" placeholder="e.g. 70" class="w-full p-2.5 rounded-lg bg-[#18181b] text-white border border-zinc-700 font-bold focus:border-red-500">
             </div>
           </div>
 
+          <!-- HELPER TEXT FOR BUYERS -->
+          <p class="text-[11px] text-zinc-400 bg-[#18181b] p-2.5 rounded-lg border border-zinc-800/80 leading-relaxed" id="pi-thk-help">
+            <i class="fa-solid fa-circle-info text-red-400 mr-1"></i> For a <strong>70mm × 70mm</strong> square bar rolled around a barrel, enter <strong>70mm</strong> as the thickness coming off the barrel surface.
+          </p>
+
           <div>
-            <label class="block font-bold text-zinc-300 mb-1">Cylinder Width / Barrel Height (mm) <span class="text-zinc-500 font-normal">(Optional for Weight/Area)</span></label>
-            <input type="number" id="pi-width" oninput="calculateFlatLength()" placeholder="e.g. 2000" class="w-full p-2.5 rounded-lg bg-[#18181b] text-white border border-zinc-700">
+            <label class="block font-bold text-zinc-300 mb-1">Axial Width / Height (mm) <span class="text-zinc-500 font-normal">(Optional)</span></label>
+            <input type="number" id="pi-width" oninput="calculateFlatLength()" placeholder="e.g. 70" class="w-full p-2.5 rounded-lg bg-[#18181b] text-white border border-zinc-700 focus:border-red-500">
           </div>
         </div>
 
-        <!-- CALCULATION RESULT BOX -->
+        <!-- CALCULATION RESULT DISPLAY -->
         <div class="bg-[#27272a] p-4 rounded-xl border border-red-900/40 shadow-inner">
           <div class="flex justify-between items-center mb-1">
-            <span class="text-[10px] font-bold text-zinc-400 uppercase tracking-wider">CUT LENGTH BEFORE ROLLING</span>
-            <span class="text-[10px] bg-red-950/60 text-red-400 font-mono px-2 py-0.5 rounded border border-red-800/40">CUT FLAT FIRST</span>
+            <span class="text-[10px] font-bold text-zinc-400 uppercase tracking-wider">CUT FLAT LENGTH BEFORE ROLLING</span>
+            <span class="text-[10px] bg-red-950/80 text-red-400 font-mono font-bold px-2 py-0.5 rounded border border-red-800/50">RAW CUT</span>
           </div>
           
-          <div class="text-3xl font-black text-red-500" id="pi-result">0.00 mm</div>
+          <div class="text-3xl font-black text-red-500 tracking-tight" id="pi-result">0.00 mm</div>
           
-          <div class="text-[11px] text-zinc-300 mt-2 border-t border-zinc-700/60 pt-2 space-y-0.5 font-mono">
-            <div id="pi-formula">Mean Dia: 0.00 mm × π</div>
+          <div class="text-[11px] text-zinc-300 mt-2 border-t border-zinc-700/60 pt-2 space-y-1 font-mono">
+            <div id="pi-formula" class="text-zinc-200">Centerline Dia: 0.00 mm × π</div>
             <div id="pi-area-result" class="text-zinc-400 text-[10px]">Unrolled Surface Area: --</div>
           </div>
         </div>
 
         <div class="text-[10px] text-zinc-500 italic">
-          * Note: standard mill rolling allowance or stretch allowance should be verified with the rolling shop prior to cutting high-cost forgings or heavy sections.
+          * Always confirm with the bending/rolling workshop if extra trim ends are required prior to ordering stock.
         </div>
 
       </div>
@@ -890,10 +898,20 @@
       `).join('');
     }
 
-    // REVISED PI CALCULATOR LOGIC
+    // PI CALCULATOR FUNCTIONS
     function togglePiModal() {
       const modal = document.getElementById('pi-modal');
       if (modal) modal.classList.toggle('hidden');
+    }
+
+    function applyDrawingExample() {
+      document.getElementById('pi-stock-type').value = 'square';
+      document.getElementById('pi-mode').value = 'id';
+      document.getElementById('pi-dia').value = 1830;
+      document.getElementById('pi-thk').value = 70;
+      document.getElementById('pi-width').value = 70;
+      updatePiPreset();
+      calculateFlatLength();
     }
 
     function updatePiPreset() {
@@ -901,11 +919,13 @@
       const thkHelp = document.getElementById('pi-thk-help');
       
       if (type === 'square') {
-        thkHelp.innerText = "For 200mm x 35mm bar wrapped around barrel, enter 35mm (radial thickness off barrel).";
+        thkHelp.innerHTML = `<i class="fa-solid fa-circle-info text-red-400 mr-1"></i> For a <strong>70mm × 70mm</strong> bar rolled around a barrel, enter <strong>70mm</strong> (the radial thickness extending off the barrel surface).`;
       } else if (type === 'flat') {
-        thkHelp.innerText = "Enter material thickness measured radially from cylinder center.";
+        thkHelp.innerHTML = `<i class="fa-solid fa-circle-info text-red-400 mr-1"></i> Enter the thickness of the bar measured radially from the center of the bend.`;
+      } else if (type === 'plate') {
+        thkHelp.innerHTML = `<i class="fa-solid fa-circle-info text-red-400 mr-1"></i> Enter the plate thickness in mm.`;
       } else {
-        thkHelp.innerText = "Enter plate or wall thickness in mm.";
+        thkHelp.innerHTML = `<i class="fa-solid fa-circle-info text-red-400 mr-1"></i> Enter the wall thickness of the pipe or tube.`;
       }
     }
 
@@ -927,13 +947,15 @@
       const flatLength = meanDia * Math.PI;
 
       document.getElementById('pi-result').innerText = `${flatLength.toFixed(2)} mm`;
-      document.getElementById('pi-formula').innerText = `Mean Dia: ${meanDia.toFixed(2)} mm (${dia} ${mode.toUpperCase()} ${mode === 'id' ? '+' : mode === 'od' ? '-' : ''} ${mode !== 'mean' ? thk : ''}) × π`;
+      
+      const modeLabel = mode === 'id' ? 'ID + Thickness' : mode === 'od' ? 'OD - Thickness' : 'Centerline';
+      document.getElementById('pi-formula').innerText = `Centerline Dia: ${meanDia.toFixed(2)} mm (${modeLabel}) × π`;
 
       if (width > 0) {
         const areaM2 = (flatLength * width) / 1000000;
-        document.getElementById('pi-area-result').innerText = `Unrolled Surface Area: ${areaM2.toFixed(3)} m² (${flatLength.toFixed(0)}mm × ${width}mm width)`;
+        document.getElementById('pi-area-result').innerText = `Unrolled Surface Area: ${areaM2.toFixed(3)} m² (${flatLength.toFixed(0)}mm cut × ${width}mm width)`;
       } else {
-        document.getElementById('pi-area-result').innerText = `Unrolled Surface Area: -- (Enter width above for m²)`;
+        document.getElementById('pi-area-result').innerText = `Unrolled Surface Area: -- (Enter width above to compute m²)`;
       }
     }
 
