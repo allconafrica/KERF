@@ -122,7 +122,7 @@
         width: 100% !important;
         border-collapse: collapse !important;
         table-layout: fixed !important;
-        margin-bottom: 8px !important;
+        margin-bottom: 12px !important;
         border: 1px solid #000000 !important;
         box-sizing: border-box !important;
       }
@@ -133,7 +133,7 @@
       .print-container td { 
         display: table-cell !important;
         border: 1px solid #000000 !important;
-        padding: 5px 8px !important;
+        padding: 6px 8px !important;
         word-wrap: break-word !important;
         overflow-wrap: break-word !important;
         vertical-align: middle !important;
@@ -257,7 +257,7 @@
                 <i class="fa-solid fa-file-pdf"></i>
               </div>
               <h4 class="font-bold text-sm text-white mb-1">Project Transmittal</h4>
-              <p class="text-[11px] text-zinc-400 leading-snug">Build and print professional transmittal sheets & job schedules.</p>
+              <p class="text-[11px] text-zinc-400 leading-snug">Build and print professional transmittal sheets & job schedules matching official PDF layout.</p>
             </div>
             <div class="text-xs font-bold text-red-500 group-hover:translate-x-1 transition-transform flex items-center gap-1">
               Open Tool <i class="fa-solid fa-arrow-right text-[10px]"></i>
@@ -316,85 +316,83 @@
       </div>
     </section>
 
-    <!-- VIEW 2: PROJECT TRANSMITTAL -->
+    <!-- VIEW 2: PROJECT TRANSMITTAL (LAYOUT MATCHES PDF FORM) -->
     <section id="view-generator" class="hidden">
       <div class="builder-frame bg-[#18181b] rounded-2xl border border-zinc-800 p-6 mb-6">
-        <h2 class="text-xl font-bold mb-5 text-red-500 flex items-center gap-2">
-          <i class="fa-solid fa-file-pdf"></i> Project Transmittal Builder
-        </h2>
+        <div class="flex justify-between items-center mb-5 border-b border-zinc-800 pb-4">
+          <h2 class="text-xl font-bold text-red-500 flex items-center gap-2">
+            <i class="fa-solid fa-file-pdf"></i> Project Transmittal Sheet
+          </h2>
+          <span class="text-xs text-zinc-400 font-mono">ALLCON TRANSMITTAL FORM</span>
+        </div>
 
-        <!-- METADATA FORM -->
-        <div class="builder-section grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 p-4 rounded-xl text-xs border border-zinc-800">
+        <!-- 1. TOP METADATA FIELDS (MATCHING PDF ORDER) -->
+        <div class="builder-section grid grid-cols-1 md:grid-cols-2 gap-4 mb-6 p-4 rounded-xl text-xs border border-zinc-800">
           <div>
-            <label class="block font-semibold mb-1 text-zinc-300">Client Name</label>
-            <input type="text" id="meta-client" placeholder="e.g. NCP International" class="w-full p-2.5 rounded-lg text-sm">
+            <label class="block font-bold mb-1 text-zinc-300">CLIENT:</label>
+            <input type="text" id="meta-client" placeholder="e.g. NCP International" class="w-full p-2.5 rounded-lg text-sm font-medium">
           </div>
           <div>
-            <label class="block font-semibold mb-1 text-zinc-300">Project Name</label>
-            <input type="text" id="meta-project" placeholder="e.g. SHANTA NEW - CHOCKEY BLOCKS" class="w-full p-2.5 rounded-lg text-sm">
+            <label class="block font-bold mb-1 text-zinc-300">PROJECT NAME:</label>
+            <input type="text" id="meta-project" placeholder="e.g. SHANTA NEW - CHOCKEY BLOCKS" class="w-full p-2.5 rounded-lg text-sm font-medium">
           </div>
           <div>
-            <label class="block font-semibold mb-1 text-zinc-300">Date Received</label>
-            <input type="date" id="meta-date-gen" class="w-full p-2.5 rounded-lg text-sm">
+            <label class="block font-bold mb-1 text-zinc-300">INCLUSIONS:</label>
+            <textarea id="meta-inclusions" rows="2" placeholder="e.g. MATERIAL S355, FABRICATION, MACHINING..." class="w-full p-2.5 rounded-lg text-sm"></textarea>
           </div>
           <div>
-            <label class="block font-semibold mb-1 text-red-400">Completion Date</label>
-            <input type="text" id="meta-date-comp" placeholder="e.g. 11 SEPT 2026" class="w-full p-2.5 rounded-lg text-sm border-red-900/50">
+            <label class="block font-bold mb-1 text-zinc-300">EXCLUSIONS:</label>
+            <textarea id="meta-exclusions" rows="2" placeholder="e.g. SAND BLAST & PAINT, MPI, WELDING..." class="w-full p-2.5 rounded-lg text-sm"></textarea>
           </div>
           <div>
-            <label class="block font-semibold mb-1 text-zinc-300">Technical Buyer</label>
-            <input type="text" id="meta-buyer" placeholder="Enter Buyer Name" class="w-full p-2.5 rounded-lg font-semibold text-sm">
+            <label class="block font-bold mb-1 text-zinc-300">DATE RECEIVED:</label>
+            <input type="date" id="meta-date-gen" class="w-full p-2.5 rounded-lg text-sm font-medium">
+          </div>
+          <div>
+            <label class="block font-bold mb-1 text-red-400">COMPLETION DATE:</label>
+            <input type="text" id="meta-date-comp" placeholder="e.g. 11 SEPT 2026" class="w-full p-2.5 rounded-lg text-sm font-medium border-red-900/50">
+          </div>
+          <div class="md:col-span-2">
+            <label class="block font-bold mb-1 text-zinc-300">TECHNICAL BUYER:</label>
+            <input type="text" id="meta-buyer" placeholder="Enter Buyer Name" class="w-full p-2.5 rounded-lg font-bold text-sm">
           </div>
         </div>
 
-        <!-- INCLUSIONS, EXCLUSIONS & NOTES -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 text-xs">
-          <div>
-            <label class="block font-semibold mb-1 text-zinc-300">Inclusions</label>
-            <textarea id="meta-inclusions" rows="3" placeholder="e.g. MATERIAL S355, FABRICATION, MACHINING..." class="w-full p-2.5 rounded-lg text-sm"></textarea>
-          </div>
-          <div>
-            <label class="block font-semibold mb-1 text-zinc-300">Exclusions</label>
-            <textarea id="meta-exclusions" rows="3" placeholder="e.g. SAND BLAST & PAINT, MPI, WELDING..." class="w-full p-2.5 rounded-lg text-sm"></textarea>
-          </div>
-          <div>
-            <label class="block font-semibold mb-1 text-zinc-300">Notes / Comments</label>
-            <textarea id="meta-notes" rows="3" placeholder="Enter general comments or delivery notes..." class="w-full p-2.5 rounded-lg text-sm"></textarea>
-          </div>
-        </div>
-
-        <!-- TRANSMITTAL ITEMS ENTRY -->
+        <!-- 2. TRANSMITTAL SCHEDULE TABLE (MIDDLE SECTION) -->
         <div class="builder-section bg-red-950/10 p-4 rounded-xl border border-red-900/30 mb-6 relative pb-16">
-          <h3 class="text-xs font-bold uppercase mb-3 text-red-400"><i class="fa-solid fa-list-check mr-2"></i>Transmittal Item Schedule</h3>
+          <h3 class="text-xs font-bold uppercase mb-3 text-red-400 flex items-center justify-between">
+            <span><i class="fa-solid fa-list-check mr-2"></i>Transmittal Item Schedule</span>
+            <span class="text-[10px] text-zinc-400 lowercase font-normal">(matches AC Number | Job ID | Description | Supplier | PO Number)</span>
+          </h3>
           
           <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-3 mb-4 bg-[#18181b] p-3 rounded-lg text-xs border border-zinc-800">
             <div>
-              <label class="block font-bold mb-1 text-zinc-300">AC Number</label>
+              <label class="block font-bold mb-1 text-zinc-300">AC NUMBER</label>
               <input type="text" id="input-ac-num" placeholder="e.g. AC2902" class="w-full p-2 rounded-lg font-bold">
             </div>
             <div>
-              <label class="block font-bold mb-1 text-zinc-300">Job ID *</label>
+              <label class="block font-bold mb-1 text-zinc-300">JOB ID *</label>
               <input type="text" id="input-job-id" placeholder="e.g. 5276" class="w-full p-2 rounded-lg font-bold">
             </div>
             <div>
-              <label class="block font-bold mb-1 text-zinc-300">Description</label>
-              <input type="text" id="input-ac-desc" placeholder="e.g. PINION" class="w-full p-2 rounded-lg">
+              <label class="block font-bold mb-1 text-zinc-300">DESCRIPTION</label>
+              <input type="text" id="input-ac-desc" placeholder="e.g. PINION BARREL" class="w-full p-2 rounded-lg">
             </div>
             <div>
-              <label class="block font-bold mb-1 text-zinc-300">Supplier Name</label>
+              <label class="block font-bold mb-1 text-zinc-300">SUPPLIER</label>
               <select id="input-ac-supplier" class="w-full p-2 rounded-lg">
                 <option value="">-- Select Supplier --</option>
               </select>
             </div>
             <div>
-              <label class="block font-bold mb-1 text-zinc-300">PO Number</label>
-              <input type="text" id="input-ac-po" placeholder="PO18008" class="w-full p-2 rounded-lg font-bold">
+              <label class="block font-bold mb-1 text-zinc-300">PO NUMBER</label>
+              <input type="text" id="input-ac-po" placeholder="e.g. PO18008" class="w-full p-2 rounded-lg font-bold">
             </div>
           </div>
 
           <div class="absolute right-4 bottom-4">
             <button onclick="addTransmittalLine()" class="bg-red-600 hover:bg-red-700 text-white font-bold px-5 py-2.5 rounded-lg text-xs transition shadow flex items-center gap-1.5">
-              <i class="fa-solid fa-plus"></i> Add Entry
+              <i class="fa-solid fa-plus"></i> Add Line Item
             </button>
           </div>
 
@@ -403,9 +401,16 @@
           </div>
         </div>
 
-        <div class="flex justify-end">
-          <button onclick="triggerPrintPDF()" class="bg-red-600 hover:bg-red-700 text-white font-bold px-6 py-3 rounded-lg text-sm flex items-center gap-2 shadow-md transition">
-            <i class="fa-solid fa-print"></i> Generate / Print Official PDF Transmittal Sheet
+        <!-- 3. NOTES / COMMENTS (BOTTOM SECTION - MATCHING PDF) -->
+        <div class="mb-6 text-xs">
+          <label class="block font-bold mb-1 text-zinc-300 uppercase tracking-wider">NOTES / COMMENTS:</label>
+          <textarea id="meta-notes" rows="4" placeholder="Enter general project notes, manufacturing remarks, or delivery comments..." class="w-full p-3 rounded-xl text-sm border border-zinc-800 bg-[#27272a]"></textarea>
+        </div>
+
+        <!-- GENERATE / PRINT ACTION -->
+        <div class="flex justify-end pt-2 border-t border-zinc-800">
+          <button onclick="triggerPrintPDF()" class="bg-red-600 hover:bg-red-700 text-white font-bold px-6 py-3 rounded-xl text-sm flex items-center gap-2 shadow-lg transition">
+            <i class="fa-solid fa-print"></i> Generate / Print Transmittal PDF
           </button>
         </div>
       </div>
@@ -433,9 +438,9 @@
     π
   </button>
 
-  <!-- PI CALCULATOR POPUP SHEET / MODAL -->
-  <div id="pi-modal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
-    <div class="bg-[#18181b] border border-zinc-800 rounded-2xl w-full max-w-md p-6 shadow-2xl relative">
+  <!-- REVISED EASY-TO-UNDERSTAND PI CALCULATOR MODAL -->
+  <div id="pi-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
+    <div class="bg-[#18181b] border border-zinc-800 rounded-2xl w-full max-w-lg p-6 shadow-2xl relative max-h-[90vh] overflow-y-auto">
       <button onclick="togglePiModal()" class="absolute top-4 right-4 text-zinc-400 hover:text-white text-lg">
         <i class="fa-solid fa-xmark"></i>
       </button>
@@ -445,43 +450,97 @@
           π
         </div>
         <div>
-          <h3 class="text-lg font-bold text-white">Plate Flat Length Calculator</h3>
-          <p class="text-xs text-zinc-400">Calculate total flat plate length for rolled cylinders</p>
+          <h3 class="text-lg font-bold text-white">Rolled Material Cut Length Calculator</h3>
+          <p class="text-xs text-zinc-400">Calculate exact flat length for cylinders, barrel shells, rings & rolled bars</p>
+        </div>
+      </div>
+
+      <!-- VISUAL EXPLANATION CARD -->
+      <div class="bg-[#27272a] border border-zinc-700/60 p-3 rounded-xl mb-4 text-xs text-zinc-300 flex items-start gap-3">
+        <div class="bg-red-950/40 border border-red-800/40 p-2 rounded-lg text-red-400 text-center font-bold min-w-[70px]">
+          <i class="fa-solid fa-circle-notch text-2xl block mb-1"></i>
+          <span class="text-[9px] uppercase">Mean Line</span>
+        </div>
+        <div>
+          <p class="font-semibold text-white mb-0.5">Neutral Axis Rule ($\text{Mean Diameter} \times \pi$)</p>
+          <p class="text-[11px] text-zinc-400 leading-tight">
+            When rolling plate, square bar, or flat bar around a cylinder/barrel, the flat length equals the <strong>Center-Line (Mean) Diameter</strong> multiplied by $\pi$.
+          </p>
         </div>
       </div>
 
       <div class="space-y-4 text-xs">
-        <div>
-          <label class="block font-bold text-zinc-300 mb-1">Calculation Method</label>
-          <select id="pi-mode" onchange="calculateFlatLength()" class="w-full p-2.5 rounded-lg bg-[#27272a] text-white border border-zinc-700">
-            <option value="id">Inside Diameter (ID) + Thickness</option>
-            <option value="od">Outside Diameter (OD) - Thickness</option>
-            <option value="mean">Mean Diameter (MD)</option>
-          </select>
-        </div>
-
+        
+        <!-- SECTION 1: MATERIAL PRESET -->
         <div class="grid grid-cols-2 gap-3">
           <div>
-            <label class="block font-bold text-zinc-300 mb-1" id="pi-dia-label">Diameter (mm)</label>
-            <input type="number" id="pi-dia" oninput="calculateFlatLength()" placeholder="e.g. 500" class="w-full p-2.5 rounded-lg bg-[#27272a] text-white border border-zinc-700">
+            <label class="block font-bold text-zinc-300 mb-1">Stock Type</label>
+            <select id="pi-stock-type" onchange="updatePiPreset(); calculateFlatLength();" class="w-full p-2.5 rounded-lg bg-[#27272a] text-white border border-zinc-700 font-semibold">
+              <option value="plate">Plate / Sheet Metal Shell</option>
+              <option value="square">Square Bar / Heavy Section Ring</option>
+              <option value="flat">Flat Bar (On Edge / Flat)</option>
+              <option value="round">Round Tube / Pipe Shell</option>
+            </select>
           </div>
+
           <div>
-            <label class="block font-bold text-zinc-300 mb-1">Plate Thickness (mm)</label>
-            <input type="number" id="pi-thk" oninput="calculateFlatLength()" placeholder="e.g. 10" class="w-full p-2.5 rounded-lg bg-[#27272a] text-white border border-zinc-700">
+            <label class="block font-bold text-zinc-300 mb-1">Diameter Dimension Given</label>
+            <select id="pi-mode" onchange="calculateFlatLength()" class="w-full p-2.5 rounded-lg bg-[#27272a] text-white border border-zinc-700 font-semibold">
+              <option value="id">Inside Diameter (ID) - Barrel OD</option>
+              <option value="od">Outside Diameter (OD) - Finished Shell</option>
+              <option value="mean">Mean / Neutral Axis Diameter (MD)</option>
+            </select>
           </div>
         </div>
 
-        <div class="bg-[#27272a] p-4 rounded-xl border border-zinc-700/60 mt-4">
-          <div class="text-[10px] font-bold text-zinc-400 uppercase tracking-wider mb-1">CALCULATED FLAT LENGTH</div>
-          <div class="text-2xl font-black text-red-500" id="pi-result">0.00 mm</div>
-          <div class="text-[10px] text-zinc-400 mt-1 font-mono" id="pi-formula">Mean Dia: 0.00 mm × π</div>
+        <!-- SECTION 2: DIMENSION INPUTS -->
+        <div class="bg-[#27272a]/50 p-4 rounded-xl border border-zinc-800 space-y-3">
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block font-bold text-zinc-200 mb-1" id="pi-dia-label">Barrel / Mandrel Dia (mm)</label>
+              <input type="number" id="pi-dia" oninput="calculateFlatLength()" placeholder="e.g. 2000" class="w-full p-2.5 rounded-lg bg-[#18181b] text-white border border-zinc-700 font-bold">
+            </div>
+
+            <div>
+              <label class="block font-bold text-zinc-200 mb-1" id="pi-thk-label">Material Thickness / Radial Width (mm)</label>
+              <input type="number" id="pi-thk" oninput="calculateFlatLength()" placeholder="e.g. 35" class="w-full p-2.5 rounded-lg bg-[#18181b] text-white border border-zinc-700 font-bold">
+              <p class="text-[10px] text-zinc-400 mt-1" id="pi-thk-help">For 200mm x 35mm bar wrapped around barrel, enter 35mm (radial depth).</p>
+            </div>
+          </div>
+
+          <div>
+            <label class="block font-bold text-zinc-300 mb-1">Cylinder Width / Barrel Height (mm) <span class="text-zinc-500 font-normal">(Optional for Weight/Area)</span></label>
+            <input type="number" id="pi-width" oninput="calculateFlatLength()" placeholder="e.g. 2000" class="w-full p-2.5 rounded-lg bg-[#18181b] text-white border border-zinc-700">
+          </div>
         </div>
+
+        <!-- CALCULATION RESULT BOX -->
+        <div class="bg-[#27272a] p-4 rounded-xl border border-red-900/40 shadow-inner">
+          <div class="flex justify-between items-center mb-1">
+            <span class="text-[10px] font-bold text-zinc-400 uppercase tracking-wider">CUT LENGTH BEFORE ROLLING</span>
+            <span class="text-[10px] bg-red-950/60 text-red-400 font-mono px-2 py-0.5 rounded border border-red-800/40">CUT FLAT FIRST</span>
+          </div>
+          
+          <div class="text-3xl font-black text-red-500" id="pi-result">0.00 mm</div>
+          
+          <div class="text-[11px] text-zinc-300 mt-2 border-t border-zinc-700/60 pt-2 space-y-0.5 font-mono">
+            <div id="pi-formula">Mean Dia: 0.00 mm × π</div>
+            <div id="pi-area-result" class="text-zinc-400 text-[10px]">Unrolled Surface Area: --</div>
+          </div>
+        </div>
+
+        <div class="text-[10px] text-zinc-500 italic">
+          * Note: standard mill rolling allowance or stretch allowance should be verified with the rolling shop prior to cutting high-cost forgings or heavy sections.
+        </div>
+
       </div>
     </div>
   </div>
 
-  <!-- PRINT TEMPLATE: PROJECT TRANSMITTAL SHEET (MATCHING PDF STRUCTURE) -->
+  <!-- PRINT TEMPLATE: PROJECT TRANSMITTAL SHEET (STRICT PDF LAYOUT) -->
   <div id="print-template" class="print-container">
+    
+    <!-- 1. HEADER LOGO & COMPANY NAME -->
     <table class="no-border" style="width: 100%; border-bottom: 2px solid #dc2626 !important; padding-bottom: 8px; margin-bottom: 12px;">
       <tr>
         <td style="vertical-align: top; width: 60%; text-align: left;">
@@ -493,6 +552,7 @@
       </tr>
     </table>
 
+    <!-- 2. TOP METADATA FIELDS (MATCHING PDF ORDER) -->
     <table style="width: 100%; margin-bottom: 12px;">
       <colgroup><col style="width: 22%;"><col style="width: 78%;"></colgroup>
       <tbody>
@@ -506,6 +566,7 @@
       </tbody>
     </table>
 
+    <!-- 3. SCHEDULE TABLE (MIDDLE SECTION) -->
     <table style="width: 100%; margin-bottom: 12px;">
       <colgroup>
         <col style="width: 16%;">
@@ -528,12 +589,13 @@
       </tbody>
     </table>
 
+    <!-- 4. NOTES / COMMENTS (BOTTOM SECTION - MATCHING PDF EXACTLY) -->
     <table style="width: 100%;">
       <colgroup><col style="width: 22%;"><col style="width: 78%;"></colgroup>
       <tbody>
         <tr>
-          <td style="font-weight: bold; vertical-align: top;">NOTES/COMMENTS:</td>
-          <td id="print-out-notes" style="min-height: 40px; vertical-align: top;">None</td>
+          <td style="font-weight: bold; vertical-align: top;">NOTES/COMMENTS</td>
+          <td id="print-out-notes" style="min-height: 60px; vertical-align: top;">None</td>
         </tr>
       </tbody>
     </table>
@@ -828,16 +890,30 @@
       `).join('');
     }
 
-    // PI CALCULATOR FUNCTIONS
+    // REVISED PI CALCULATOR LOGIC
     function togglePiModal() {
       const modal = document.getElementById('pi-modal');
       if (modal) modal.classList.toggle('hidden');
+    }
+
+    function updatePiPreset() {
+      const type = document.getElementById('pi-stock-type').value;
+      const thkHelp = document.getElementById('pi-thk-help');
+      
+      if (type === 'square') {
+        thkHelp.innerText = "For 200mm x 35mm bar wrapped around barrel, enter 35mm (radial thickness off barrel).";
+      } else if (type === 'flat') {
+        thkHelp.innerText = "Enter material thickness measured radially from cylinder center.";
+      } else {
+        thkHelp.innerText = "Enter plate or wall thickness in mm.";
+      }
     }
 
     function calculateFlatLength() {
       const mode = document.getElementById('pi-mode').value;
       const dia = parseFloat(document.getElementById('pi-dia').value) || 0;
       const thk = parseFloat(document.getElementById('pi-thk').value) || 0;
+      const width = parseFloat(document.getElementById('pi-width').value) || 0;
 
       let meanDia = 0;
       if (mode === 'id') {
@@ -851,7 +927,14 @@
       const flatLength = meanDia * Math.PI;
 
       document.getElementById('pi-result').innerText = `${flatLength.toFixed(2)} mm`;
-      document.getElementById('pi-formula').innerText = `Mean Dia: ${meanDia.toFixed(2)} mm × π`;
+      document.getElementById('pi-formula').innerText = `Mean Dia: ${meanDia.toFixed(2)} mm (${dia} ${mode.toUpperCase()} ${mode === 'id' ? '+' : mode === 'od' ? '-' : ''} ${mode !== 'mean' ? thk : ''}) × π`;
+
+      if (width > 0) {
+        const areaM2 = (flatLength * width) / 1000000;
+        document.getElementById('pi-area-result').innerText = `Unrolled Surface Area: ${areaM2.toFixed(3)} m² (${flatLength.toFixed(0)}mm × ${width}mm width)`;
+      } else {
+        document.getElementById('pi-area-result').innerText = `Unrolled Surface Area: -- (Enter width above for m²)`;
+      }
     }
 
     // PROJECT TRANSMITTAL FUNCTIONS
@@ -894,7 +977,7 @@
           <td class="p-2 text-zinc-300">${item.desc || '--'}</td>
           <td class="p-2 text-zinc-300">${item.supplier || '--'}</td>
           <td class="p-2 font-bold text-zinc-200">${item.poNum || '--'}</td>
-          <td class="p-2 text-right"><button onclick="removeTransmittalLine(${idx})" class="text-red-500 hover:underline">Remove</button></td>
+          <td class="p-2 text-right"><button onclick="removeTransmittalLine(${idx})" class="text-red-500 hover:underline font-semibold">Remove</button></td>
         </tr>
       `).join('');
 
@@ -902,7 +985,7 @@
         <div class="bg-[#27272a]/60 border border-zinc-800 rounded-lg overflow-hidden p-3">
           <table class="w-full text-left border-collapse">
             <thead>
-              <tr class="bg-[#18181b] text-[10px] text-zinc-400">
+              <tr class="bg-[#18181b] text-[10px] text-zinc-400 uppercase">
                 <th class="p-2">AC Number</th>
                 <th class="p-2">Job ID</th>
                 <th class="p-2">Description</th>
